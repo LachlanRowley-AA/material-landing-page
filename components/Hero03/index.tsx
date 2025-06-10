@@ -57,16 +57,14 @@ export const Hero03 = ({
           style={{ zIndex: 1 }}
         >
           {badge && (
-              <Badge
+              <Image
                 variant="default"
                 p="md"
                 bg="var(--mantine-color-body)"
-                size="xl"
+                src="/Pretend_logo_black.png"
                 mb="lg"
                 style={{ textTransform: 'none' }}
-              >
-                {badge}
-              </Badge>
+              />
           )}
               <motion.div
       initial={{ opacity: 0.0, scale: 0.9 }}
