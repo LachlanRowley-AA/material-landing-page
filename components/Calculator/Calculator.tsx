@@ -55,7 +55,7 @@ const ExampleCard = ({
     transition={{ duration: 0.6, ease: 'easeInOut' }}
   >
     <Card 
-      padding="xl" 
+      padding="md" 
       radius="md" 
       bg={highlight ? "rgba(1, 225, 148, 0.1)" : "rgba(255, 255, 255, 0.05)"}
       style={{ 
@@ -67,7 +67,7 @@ const ExampleCard = ({
         <Text size="sm" c="rgba(255, 255, 255, 0.7)" ta="center" fw={500}>
           {title}
         </Text>
-        <Text size={rem(36)} fw="bold" c={highlight ? "#01E194" : "white"} ta="center">
+        <Text fz={{base: rem(24), md: rem(36)}} fw="bold" c={highlight ? "#01E194" : "white"} ta="center">
           {amount}
         </Text>
         {period && (
@@ -192,7 +192,7 @@ export const Calculator = () => {
     <Box
       bg="black"
       py="xl"
-      px={{ base: "md", md: "xl" }}
+      px={{ base: "xs", md: "xl" }}
       style={{ minHeight: "80vh" }}
     >
       <Container size="lg" ta="center">

@@ -15,6 +15,7 @@ import {
   Stack,
   Text,
   TextInput,
+  Button
 } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'motion/react';
@@ -84,24 +85,21 @@ export const Hero03 = ({
             >
               {description}
             </Text>
-            <TextInput
-              w={400}
-              px="md"
-              my="lg"
-              maw="100vw"
-              placeholder="Email address"
-              size="xl"
-              radius="xl"
-              inputMode="email"
-              type="email"
-              autoComplete="email"
-              rightSection={
-                <ActionIcon className={classes['cta-icon']} radius="xl" size="lg">
-                  <IconArrowRight />
-                </ActionIcon>
-              }
-              classNames={{ input: classes.input }}
-            />
+            <Button
+              size="lg"
+              bg="rgba(1, 225, 148, 0.2)"
+              mt="xl"
+              c="#01E194"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#01E194';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(1, 225, 148, 0.2)';
+                e.currentTarget.style.color = '#01E194';
+              }}>
+              Get Started
+            </Button>
         </Stack>
       </Flex>
     </Container>

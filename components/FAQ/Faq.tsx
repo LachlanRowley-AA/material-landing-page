@@ -312,6 +312,7 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
                 flexDirection: "column",
                 alignItems: "center",
                 gap: rem(12),
+                whiteSpace: "normal"
               }
             }}
             onMouseEnter={(e) => {
@@ -326,7 +327,7 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
               <Text size="xl" fw={600} c="#01E194" ta="center">
                 Still have questions?
               </Text>
-                <Text size="md" c="rgba(255, 255, 255, 0.8)" ta="center" w="100%" >
+                <Text size="md" c="rgba(255, 255, 255, 0.8)" w="100%" ta="center" style={{wordWrap: "break-word", }}>
                 Our team is here to help you understand how we can work for your specific situation.
                 </Text>
             </Stack>

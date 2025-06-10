@@ -88,7 +88,7 @@ const ProblemSolutionCard = ({
       >
         <Card
           radius="lg"
-          p="xl"
+          p={{base: "xs", md:"xl"}}
           h="100%"
           style={{
             backgroundColor: 'white',
@@ -132,7 +132,7 @@ const ProblemSolutionCard = ({
       </motion.div>
 
       {/* Arrow in Gap */}
-      <Flex justify="center" align="center" style={{ minWidth: '60px' }}>
+      <Flex justify="center" align="center" style={{ minWidth: '20px' }}>
         <motion.div
           animate={{ x: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
@@ -149,7 +149,7 @@ const ProblemSolutionCard = ({
       >
         <Card
           radius="lg"
-          p="xl"
+          p={{base: "sm", md:"xl"}}
           h="100%"
           style={{
             backgroundColor: 'white',
@@ -291,11 +291,11 @@ export const UseCases = ({
       </motion.div>
     </Container>
     
-    <Container size="lg" p={0} mt="xl">
+    <Container size="lg" p={0} mt="xl" px={{base: "xs", md: "md"}}>
       {style === 'timeline' ? (
         <Timeline useCases={useCases} />
       ) : (
-        <Grid gutter="xl">
+        <Grid gutter="xl" px={{base: "0px", md: "md"}}>
           {useCases.map((useCase, index) => (
             <Grid.Col key={useCase.problem} span={{ base: 12 }}>
               <ProblemSolutionCard

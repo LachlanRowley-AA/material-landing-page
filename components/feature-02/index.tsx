@@ -45,11 +45,6 @@ const FEATURES: Feature[] = [
     description: 'Fully online application with 2–3 day turnaround.',
   },
   {
-    icon: <IconBuildingBank size={28} stroke={1.5} />,
-    title: 'Supplier Paid Directly',
-    description: 'Funds go straight to your supplier, helping build trust and credit.',
-  },
-  {
     icon: <IconTrendingUp size={28} stroke={1.5} />,
     title: 'Scale Confidently',
     description: 'Take on bigger projects without large upfront costs.',
@@ -175,19 +170,39 @@ export const Feature02 = ({
       </motion.div>
     </Container>
     
-    <Container size="lg" p={0} mt="xl">
-      <Grid gutter="xl">
-        {features.map((feature, index) => (
-          <Grid.Col key={feature.title} span={{ base: 12, xs: 6, md: 4 }}>
-            <FeatureCell
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-              index={index}
-            />
-          </Grid.Col>
-        ))}
-      </Grid>
+    <Container size="xl" p={0} mt="xl">
+      {/* Mobile: Stack all cards */}
+      <Box hiddenFrom="md">
+        <Grid gutter="xl">
+          {features.map((feature, index) => (
+            <Grid.Col key={feature.title} span={12}>
+              <FeatureCell
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+                index={index}
+              />
+            </Grid.Col>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Desktop: 2-3-2 layout with offsets */}
+      <Box visibleFrom="md">
+        {/* First row: 2 cards with offset */}
+        <Grid gutter="xl" mb="xl">
+          {features.map((feature, index) => (
+            <Grid.Col key={feature.title} span={4}>
+              <FeatureCell
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+                index={index}
+                />
+            </Grid.Col>
+          ))}
+        </Grid>
+      </Box>
     </Container>
   </Container>
 );
