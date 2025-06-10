@@ -89,6 +89,7 @@ const FeatureCell = ({
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       style={{ height: '100%' }}
+      viewport={{ once: true }}
     >
       <Card
         radius="lg"

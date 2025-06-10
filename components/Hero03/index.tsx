@@ -38,8 +38,8 @@ export const Hero03 = ({
   description = 'No financials required, Approvals in 24-28 hours. Credit score safe ',
   ...containerProps
 }: Hero03Props) => (
-  <Container pos="relative" h="100vh" mah={950} style={{ overflow: 'hidden' }} fluid>
-    <Container component="section" h="100vh" mah={950} mx="auto" size="xl" {...containerProps}>
+  <Container pos="relative" h="80vh" mah={950} style={{ overflow: 'hidden' }} fluid>
+    <Container component="section" h="80vh" mah={950} mx="auto" size="xl" {...containerProps}>
       <Box
         pos="absolute"
         top={0}
@@ -66,12 +66,12 @@ export const Hero03 = ({
                 style={{ textTransform: 'none' }}
               />
           )}
-              <motion.div
-      initial={{ opacity: 0.0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: 'easeInOut' }}
-    >
-
+          <motion.div
+            initial={{ opacity: 0.0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            viewport={{ once: true }}
+          >
             <JumboTitle ta="center" order={1} fz="lg" style={{ textWrap: 'balance' }}>
               {title}
             </JumboTitle>

@@ -268,7 +268,7 @@ export const UseCases = ({
   useCases = USE_CASES,
 }: UseCasesProps) => (
   <Container
-    py={{ base: 60, xs: 80, lg: 100 }}
+    py={{ base: 40, xs: 60, lg: 80 }}
     fluid
     style={{ backgroundColor: '#f6f6f6' }}
   >

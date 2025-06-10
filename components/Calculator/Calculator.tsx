@@ -93,6 +93,7 @@ const CalculationBreakdown = () => {
           initial={{ opacity: 0.0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
+          viewport={{ once: true }}
         >
           <Box ta="center" mb="xl">
             <Badge 
@@ -199,6 +200,7 @@ export const Calculator = () => {
           initial={{ opacity: 0.0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
+          viewport={{ once: true }}
         >
           <Stack align="center" gap="lg" mb="xl">
             <JumboTitle 

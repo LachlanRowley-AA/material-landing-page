@@ -69,6 +69,7 @@ const FAQItem = ({
     initial={{ opacity: 0.0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, ease: 'easeInOut', delay: index * 0.1 }}
+    viewport={{ once: true }}
   >
     <Card 
       padding="xl" 
@@ -178,6 +179,7 @@ const AccordionFAQ = () => {
           initial={{ opacity: 0.0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeInOut', delay: index * 0.08 }}
+          viewport={{ once: true }}
         >
           <Accordion.Item value={`faq-${index}`}>
             <Accordion.Control>
@@ -224,11 +226,12 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
           initial={{ opacity: 0.0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
+          viewport={{ once: true }}
         >
           <Stack align="center" gap="lg" mb={{ base: rem(40), md: rem(60) }}>
             <JumboTitle 
               order={2} 
-              fz={{ base: rem(32), md: rem(48) }} 
+              fz="md"
               ta="center" 
               style={{ textWrap: 'balance' }} 
               c="white"
@@ -238,7 +241,7 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
             </JumboTitle>
             <JumboTitle 
               order={2} 
-              fz={{ base: rem(32), md: rem(48) }} 
+              fz="md" 
               ta="center" 
               style={{ textWrap: 'balance' }} 
               c="#01E194"
@@ -280,6 +283,7 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
           initial={{ opacity: 0.0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.6 }}
+          viewport={{ once: true }}
         >
           <Button
             size="xl"
