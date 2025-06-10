@@ -44,9 +44,15 @@ const USE_CASES: UseCase[] = [
   },
 ] as const;
 
-const JumboTitle = ({ children, order = 2, fz = 'md', style = {} }) => (
+type JumboTitleProps = {
+  children: ReactNode;
+  order?: number;
+  fz?: string;
+  style?: React.CSSProperties;
+};
+
+const JumboTitle = ({ children, fz = 'md', style = {} }: JumboTitleProps) => (
   <Text
-    component={`h${order}`}
     size={fz === 'md' ? '3rem' : fz}
     fw={700}
     ta="center"
@@ -114,7 +120,7 @@ const ProblemSolutionCard = ({
               >
                 {icon}
               </Flex>
-              <Text size="sm" fw={500} c="#ff6b6b" tt="uppercase" ls="0.5px">
+              <Text size="sm" fw={500} c="#ff6b6b" tt="uppercase">
                 Problem
               </Text>
             </Group>
@@ -175,7 +181,7 @@ const ProblemSolutionCard = ({
               >
                 <Box w={8} h={8} style={{ backgroundColor: '#01E194', borderRadius: '50%' }} />
               </Flex>
-              <Text size="sm" fw={500} c="#01E194" tt="uppercase" ls="0.5px">
+              <Text size="sm" fw={500} c="#01E194" tt="uppercase">
                 Solution
               </Text>
             </Group>
@@ -189,7 +195,7 @@ const ProblemSolutionCard = ({
   </motion.div>
 );
 
-const Timeline = ({ useCases }) => (
+const Timeline = ({ useCases }: { useCases: UseCase[] }) => (
   <Container size="md" px={0}>
     {useCases.map((useCase, index) => (
       <motion.div

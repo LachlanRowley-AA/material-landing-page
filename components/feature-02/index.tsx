@@ -56,9 +56,18 @@ const FEATURES: Feature[] = [
   },
 ] as const;
 
-const JumboTitle = ({ children, order = 2, fz = 'md', style = {} }) => (
+const JumboTitle = ({
+  children,
+  order = 2,
+  fz = 'md',
+  style = {},
+}: {
+  children: ReactNode;
+  order?: number;
+  fz?: string;
+  style?: React.CSSProperties;
+}) => (
   <Text
-    component={`h${order}`}
     size={fz === 'md' ? '3rem' : fz}
     fw={700}
     ta="center"
