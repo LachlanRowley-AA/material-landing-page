@@ -53,6 +53,7 @@ const ExampleCard = ({
     initial={{ opacity: 0.0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, ease: 'easeInOut' }}
+    viewport={{ once: true }}
   >
     <Card 
       padding="md" 
