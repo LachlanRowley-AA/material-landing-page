@@ -17,7 +17,7 @@ export default function HomePage() {
       <UseCases />
       <FAQ />
       <ContactForm />
-      <Footer01 />
+      <section id ="footer"><Footer01 /></section>
     </>
   );
 }

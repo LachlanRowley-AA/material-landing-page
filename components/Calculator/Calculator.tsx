@@ -203,10 +203,10 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
           color: 'black',
           font: {
             size: isMobile ? 20 : 24,
-            weight: 'bold'
+            weight: "bold"
           },
         }
-      }
+      } as const
     },
     plugins: {
       datalabels: {

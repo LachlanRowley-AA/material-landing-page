@@ -33,6 +33,17 @@ type Hero03Props = ContainerProps & {
   ratingLabel?: string;
 };
 
+const scrollToSection = (id: string) => {
+    const section = document.getElementById(id);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+    else {
+      console.log('section not found');
+    }
+  };
+
+
 export const Hero03 = ({
   badge = 'Build faster with AI-powered tools',
   title = 'Pay Over Time \n Not Upfont',
@@ -97,7 +108,8 @@ export const Hero03 = ({
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(1, 225, 148, 0.2)';
                 e.currentTarget.style.color = '#01E194';
-              }}>
+              }}
+              onClick={(e:any)=>{e.preventDefault;scrollToSection('footer')}}>
               Get Started
             </Button>
         </Stack>
