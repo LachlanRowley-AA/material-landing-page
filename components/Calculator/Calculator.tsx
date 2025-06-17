@@ -75,8 +75,8 @@ const StatCell = ({
       transition={{ duration: 0.8, ease: 'easeInOut' }}
     >
       <Box {...boxProps}>
-        <AnimatedCounter ta="center" fz={rem(64)} fw="bold" c={{base: "white",md:"#01E194"}} endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)}  />
-        <Text fz="lg" inline ta="center" c={{base: "white",md:"black"}}>
+        <AnimatedCounter ta="center" fz={rem(50)} fw="bold" c={{base: "01E194",md:"#01E194"}} endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)}  />
+        <Text fz="lg" inline ta="center" c={{base: "01E194",md:"black"}}>
           {description}
         </Text>
       </Box>
@@ -313,10 +313,10 @@ export const Calculator = () => {
             style={{ width: '100%' }}
           >
             <span>
-              <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "black",md:"#01E194"}}>
+              <JumboTitle order={3} fz="md" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "black",md:"#01E194"}}>
                 Calculate your estimated
               </JumboTitle>
-              <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "#01E194",md:"#01E194"}}>
+              <JumboTitle order={3} fz="md" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "#01E194",md:"#01E194"}}>
                 {isWeekly ? 'weekly' : 'monthly'} repayment
               </JumboTitle>
             </span>
