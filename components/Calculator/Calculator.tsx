@@ -176,7 +176,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
   };
 
   const options= {
-    barPercentage: 1.25,
+    barPercentage: 1.1,
     categoryPercenage: 1.0,
     maintainAspectRatio: false,
     responsive: true,
@@ -184,8 +184,6 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
     borderRadius: 10,
     layout: {
       padding: {
-        left: 0,
-        right: 0
       }
     },
     scales: {
@@ -195,7 +193,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
         },
         ticks: { 
           display: false,
-        }
+        },
       },
       y: {
         grid: {
@@ -238,12 +236,12 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
   
           @media (max-width: 768px) {
             .chart-container {
-              padding: 0 8px;
+              padding: 0 0px;
             }
           }
           
           .chart-wrapper {
-            width: 100%;
+            width: 110%;
             height: 300px;
           }
           
