@@ -3,7 +3,7 @@
 import { AnimatedCounter, AnimatedCounterProps } from './AnimatedCounter';
 import { JumboTitle } from '../JumboTitle/JumboTitle';
 import { Box, BoxProps, Container, Grid, Stack, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch } from '@mantine/core';
-import { motion } from 'motion/react';
+import { m, motion } from 'motion/react';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'chart.js/auto';
@@ -101,10 +101,9 @@ const StatCell = ({
     >
       <Box {...boxProps}
         style={{
-            border:"2px solid #01E194",
             radius: '1rem',
             borderRadius: '1rem',
-            padding: '10px'
+            padding: '0px'
         }}
       >
         <AnimatedCounter c="white" ta="center" fz={rem(32)} fw="bold" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)} />
@@ -126,6 +125,9 @@ const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), {
 });
 
 const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number, interestRate: number, isWeekly: boolean }) => {
+  const theme = useMantineTheme();
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
+  
   // Convert periods to appropriate time units
   const periodMultiplier = isWeekly ? 4.33 : 1; // Approximate weeks per month
   const periods = isWeekly ? 
@@ -137,7 +139,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
   );
 
   const data = {
-    labels: ['30', '60', '90', '120'],
+    labels: ['30 days', '60 days', '90 days', '120 days'],
     datasets: [
       {
         label: 'Total Interest Cost',
@@ -179,6 +181,13 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
     maintainAspectRatio: false,
     responsive: true,
     indexAxis: 'y' as const,
+    borderRadius: 10,
+    layout: {
+      padding: {
+        left: 0,
+        right: 0
+      }
+    },
     scales: {
       x: {
         grid: {
@@ -195,16 +204,8 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
         ticks: {
           color: 'white',
           font: {
-            size: 24,
+            size: isMobile ? 20 : 24,
           },
-        },
-        title: {
-          text: 'Days',
-          display: true,
-          color: 'white',
-          font: {
-            size: 24,
-          }
         }
       }
     },
@@ -215,7 +216,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
           return `$${  Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         },
         font: {
-          size: 18
+          size: isMobile ? 18 : 18
         }
       },
       legend: {
@@ -230,15 +231,25 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
         {`
           .chart-container {
             width: 100%;
-            height: 80%;
             background-color: black;
-            padding-left: 2vw;
-            min-height: 10px;
+            padding: 0;
+            height: auto;
           }
   
           @media (max-width: 768px) {
             .chart-container {
-              min-height: 200px;
+              padding: 0 8px;
+            }
+          }
+          
+          .chart-wrapper {
+            width: 100%;
+            height: 300px;
+          }
+          
+          @media (max-width: 768px) {
+            .chart-wrapper {
+              height: 250px;
             }
           }
         `}
@@ -249,7 +260,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
         >
-          <JumboTitle ta="center" fz="xs" order={1} fw="bold" c="#01E194" mt="xl" pt={0} visibleFrom='md'>
+          <JumboTitle ta="center" fz="xs" order={1} fw="bold" c="#01E194" mt={isMobile ? "md" : "xl"} pt={0} mb="md">
             Total Interest Cost if Paid Out Early
           </JumboTitle>
         </motion.div>
@@ -257,14 +268,9 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
           initial={{ opacity: 0.0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          style={{
-            width: '100%',
-            height: '100%'
-          }}
+          className="chart-wrapper"
         >
-        <Container style={{ width: '100%', height: '100%', maxHeight: '400px' }} p={0} visibleFrom='md'>
           <Bar data={data} plugins={[ChartDataLabels]} options={options} />
-        </Container>
         </motion.div>
       </div>
     </>
@@ -283,24 +289,25 @@ export const Calculator = () => {
   
   return (
     <Grid
-      gutter='xl'
-      my={{
-        base: 'calc(var(--mantine-spacing-lg) * 1)',
-        xs: 'calc(var(--mantine-spacing-lg) * 1)',
-        lg: 'calc(var(--mantine-spacing-lg) * 1)',
+      gutter={isMobile ? 'sm' : 'xl'}
+      my={0}
+      mx={0}
+      px='0px'
+      style={{ 
+        marginTop: '0px', 
+        paddingTop: '0px',
+        minHeight: '100%',
+        height: 'auto'
       }}
-      px={{
-        base: "xl"
-      }}
-      style={ { marginTop: '0px', paddingTop: '0px' }}
       bg="black"
     >
-      <Grid.Col span={{ base: 12, md: 12}} bg="black" mb="md">
-        <Stack align="center" gap="xs" my="xl">
+      <Grid.Col span={12} bg="black" pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ minHeight: '100%' }}>
+        <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
           <motion.div
             initial={{ opacity: 0.0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: 'easeInOut' }}
+            style={{ width: '100%' }}
           >
             <span>
               <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "white",md:"#01E194"}}>
@@ -325,9 +332,9 @@ export const Calculator = () => {
           </motion.div>
         </Stack>
         
-        <Container size="lg" mt="calc(var(--mantine-spacing-md) * 1)" ta="center" px={{base:'0px', md:"xs"}}>
+        <Container size="lg" mt="md" ta="center" pt={isMobile ? 0 : 'md'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
           <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <Stack>
+            <Stack gap={isMobile ? 'sm' : 'md'}>
               <TextInput
                 label="Loan Amount"
                 type="text"
@@ -341,9 +348,9 @@ export const Calculator = () => {
                 leftSection="$"
                 size='xl'
                 styles={{
-                  input: { fontSize: rem(40), color: isMobile? 'white': 'white'},
-                  label: { fontSize: rem(40), color: isMobile? 'white': 'white'},
-                  section:  { fontSize: rem(40), color: isMobile? 'white': 'white'} 
+                  input: { fontSize: isMobile ? rem(28) : rem(40), color: 'white'},
+                  label: { fontSize: isMobile ? rem(28) : rem(40), color: 'white'},
+                  section:  { fontSize: isMobile ? rem(28) : rem(40), color: 'white'} 
                 }}
                 ta="center"
                 c={{base: "white", md:"#01E194"}}
@@ -356,12 +363,13 @@ export const Calculator = () => {
                 value={baseValue}
                 onChange={(value) => setBaseValue(Math.max(0, value))}
                 c={{base: "white",md:"#01E194"}}
+                mx={isMobile ? 'xs' : 0}
               />              
               </Stack>
           </motion.div>
           
-          <Grid gutter="calc(var(--mantine-spacing-lg) * 4)" align="center" px={0}>
-            <Grid.Col span={{ base: 12, md: 12 }} mx={0} px={0}>
+          <Grid gutter={isMobile ? 'md' : 'calc(var(--mantine-spacing-lg) * 4)'} align="center" px={0} mt={isMobile ? 'md' : 'xl'}>
+            <Grid.Col span={12} mx={0} px={0}>
               <StatCell 
                 startValue={baseValue} 
                 endValue={repayment} 
@@ -371,72 +379,28 @@ export const Calculator = () => {
             </Grid.Col>
           </Grid>
           
-          <Box>
+          <Box mt={isMobile ? 'md' : 'xl'} pb={isMobile ? 'md' : 'xl'}>
             <motion.div
               initial={{ opacity: 0.0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: 'easeInOut' }}
             >  
-              <JumboTitle ta="center" fz="xs" order={1}  fw="bold" c="#01E194" mt="xl" mb="xl" pt="xl">
+              {/* <JumboTitle ta="center" fz="xs" order={1}  fw="bold" c="#01E194" mt="xl" mb="xl" pt="xl">
                 Payout Options
-              </JumboTitle>
+              </JumboTitle> */}
               {/* <JumboTitle ta="center" fz="xxs" order={3}  fw="bold" c="#01E194" mt="xl" mb="xl" textWrap='balance'>
                 Save money with no penalties for early payout 
-              </JumboTitle> */}
-            </motion.div>
-            
-            <Grid gutter="calc(var(--mantine-spacing-lg) * 1)" align="center">
-              <Grid.Col span={{ base: 6, sm: 6, md: 3 }}> {/* 3 month payout */}
-                <PayoutCell
-                  startValue={baseValue}
-                  endValue={calculateInterestCost(baseValue, isWeekly ? 4.25 : 1, interestRate, isWeekly)} // 3 months
-                  payoutStartValue={baseValue}
-                  payoutEndValue={calculateRemainingPrincipal(baseValue, isWeekly ? 4.25 : 1, interestRate, isWeekly)}
-                  title="3 Month Balance"
-                  description="if paid out in full within 30 days "
-                  payout='Principal Remaining'
-                />
-              </Grid.Col>
-              <Grid.Col span={{ base: 6, sm: 6, md: 3 }}> {/* 6 month payout */}
-                <PayoutCell
-                  startValue={baseValue}
-                  endValue={calculateInterestCost(baseValue, isWeekly ? 26 : 2, interestRate, isWeekly)}
-                  payoutStartValue={baseValue}
-                  payoutEndValue={calculateRemainingPrincipal(baseValue, isWeekly ? 8.5 : 2, interestRate, isWeekly)}
-                  title="6 Month Balance"
-                  description="if paid out in full within 60 days"
-                  payout='Principal Remaining'
-                />
-              </Grid.Col>
-              <Grid.Col span={{ base: 6, sm: 6, md: 3 }}> {/* 12 month payout */}
-                <PayoutCell
-                  startValue={baseValue}
-                  endValue={calculateInterestCost(baseValue, isWeekly ? 52 : 3, interestRate, isWeekly)}
-                  payoutStartValue={baseValue}
-                  payoutEndValue={calculateRemainingPrincipal(baseValue, isWeekly ? 52 : 3, interestRate, isWeekly)}
-                  title="12 Month Balance"
-                  description="if paid out in full within 90 days "
-                  payout='Principal Remaining'
-                />
-              </Grid.Col>
-              <Grid.Col span={{ base: 6, sm: 6, md: 3 }}> {/* 12 month payout */}
-                <PayoutCell
-                  startValue={baseValue}
-                  endValue={calculateInterestCost(baseValue, isWeekly ? 52 : 4, interestRate, isWeekly)}
-                  payoutStartValue={baseValue}
-                  payoutEndValue={calculateRemainingPrincipal(baseValue, isWeekly ? 52 : 4, interestRate, isWeekly)}
-                  title="12 Month Balance"
-                  description="if paid out in full within 120 days"
-                  payout='Principal Remaining'
-                />
+              </JumboTitle>
+              */}
+              </motion.div>
+            <Grid gutter={isMobile ? 'sm' : 'calc(var(--mantine-spacing-lg) * 1)'} align="center">
+              <Grid.Col span={12}>
+                <LineChart loanAmount={baseValue} interestRate={interestRate} isWeekly={isWeekly}/>
               </Grid.Col>
             </Grid>
           </Box>
         </Container>
       </Grid.Col>
-      {/* <Grid.Col span={{ base: 12, md: 6 }} visibleFrom='md'>
-        <LineChart loanAmount={baseValue} interestRate={interestRate} isWeekly={isWeekly}/>
-      </Grid.Col> */}
     </Grid>
   );
 };
