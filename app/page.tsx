@@ -16,8 +16,8 @@ export default function HomePage() {
       <Calculator />
       <UseCases />
       <FAQ />
-      <ContactForm />
-      <section id ="footer"><Footer01 /></section>
+      <section id ="footer"><ContactForm /></section>
+      <Footer01 />
     </>
   );
 }
