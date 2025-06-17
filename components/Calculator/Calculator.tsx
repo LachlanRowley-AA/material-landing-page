@@ -76,7 +76,7 @@ const StatCell = ({
     >
       <Box {...boxProps}>
         <AnimatedCounter ta="center" fz={rem(64)} fw="bold" c={{base: "white",md:"#01E194"}} endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)}  />
-        <Text fz="lg" inline ta="center" c={{base: "white",md:"white"}}>
+        <Text fz="lg" inline ta="center" c={{base: "white",md:"black"}}>
           {description}
         </Text>
       </Box>
@@ -106,12 +106,12 @@ const StatCell = ({
             padding: '0px'
         }}
       >
-        <AnimatedCounter c="white" ta="center" fz={rem(32)} fw="bold" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)} />
+        <AnimatedCounter c="black" ta="center" fz={rem(32)} fw="bold" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)} />
         <Group justify="center" gap={5}>
           <Text c="#01E194" fz="lg">
             How Much Interest You'll Pay if Paid Out in:
           </Text>
-          <Text fz="lg" c="white" fw="500">
+          <Text fz="lg" c="black" fw="500">
             {description}
           </Text>
         </Group>
@@ -200,18 +200,19 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
           display: false,
         },
         ticks: {
-          color: 'white',
+          color: 'black',
           font: {
             size: isMobile ? 20 : 24,
+            weight: 'bold'
           },
         }
       }
     },
     plugins: {
       datalabels: {
-        color: 'white',
+        color: 'black',
         formatter(value : number, context: Context) {
-          return `$${  Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          return `$${  Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
         },
         font: {
           size: isMobile ? 18 : 18
@@ -229,7 +230,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
         {`
           .chart-container {
             width: 100%;
-            background-color: black;
+            background-color: white;
             padding: 0;
             height: auto;
           }
@@ -241,7 +242,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
           }
           
           .chart-wrapper {
-            width: 110%;
+            width: 100%;
             height: 300px;
           }
           
@@ -280,7 +281,7 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
 
 
 export const Calculator = () => {
-  const [baseValue, setBaseValue] = useState(5000);
+  const [baseValue, setBaseValue] = useState(10000);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [isWeekly, setIsWeekly] = useState(false);
   
@@ -300,9 +301,10 @@ export const Calculator = () => {
         minHeight: '100%',
         height: 'auto'
       }}
-      bg="black"
+      overflow='hidden'
+      bg="white"
     >
-      <Grid.Col span={12} bg="black" pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ minHeight: '100%' }}>
+      <Grid.Col span={12} bg="white" pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ minHeight: '100%' }}>
         <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
           <motion.div
             initial={{ opacity: 0.0, y: 40 }}
@@ -311,7 +313,7 @@ export const Calculator = () => {
             style={{ width: '100%' }}
           >
             <span>
-              <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "white",md:"#01E194"}}>
+              <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "black",md:"#01E194"}}>
                 Calculate your estimated
               </JumboTitle>
               <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "#01E194",md:"#01E194"}}>
@@ -321,7 +323,7 @@ export const Calculator = () => {
             <Grid align="center" visibleFrom='lg' gutter="xl">
               <Grid.Col span={12}>
                 <span>
-                  <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "white",md:"white"}} fw={600}>
+                  <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "black",md:"black"}} fw={600}>
                     Calculate your
                   </JumboTitle>
                   <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "01E194",md:"#01E194"}} fw={600}>
@@ -349,16 +351,16 @@ export const Calculator = () => {
                 leftSection="$"
                 size='xl'
                 styles={{
-                  input: { fontSize: isMobile ? rem(28) : rem(40), color: 'white'},
-                  label: { fontSize: isMobile ? rem(28) : rem(40), color: 'white'},
-                  section:  { fontSize: isMobile ? rem(28) : rem(40), color: 'white'} 
+                  input: { fontSize: isMobile ? rem(28) : rem(40), color: 'black'},
+                  label: { fontSize: isMobile ? rem(28) : rem(40), color: 'black'},
+                  section:  { fontSize: isMobile ? rem(28) : rem(40), color: 'black'} 
                 }}
                 ta="center"
                 c={{base: "white", md:"#01E194"}}
               />
               <Slider
                 label="Loan Amount"
-                min={5000}
+                min={10000}
                 max={200000}
                 step={1000}
                 value={baseValue}
