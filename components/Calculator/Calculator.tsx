@@ -109,7 +109,7 @@ const StatCell = ({
         <AnimatedCounter c="white" ta="center" fz={rem(32)} fw="bold" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)} />
         <Group justify="center" gap={5}>
           <Text c="#01E194" fz="lg">
-            Total Interest Cost
+            How Much Interest You'll Pay if Paid Out in:
           </Text>
           <Text fz="lg" c="white" fw="500">
             {description}
@@ -259,7 +259,10 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
           transition={{ duration: 0.8, ease: 'easeInOut' }}
         >
           <JumboTitle ta="center" fz="xs" order={1} fw="bold" c="#01E194" mt={isMobile ? "md" : "xl"} pt={0} mb="md">
-            Total Interest Cost if Paid Out Early
+            How Much Interest You'll Pay if Paid Out in:
+          </JumboTitle>
+          <JumboTitle ta="center" fz="xxs" order={3} fw="bold" c="#01E194" mt={isMobile ? "md" : "md"} pt={0} mb="md">
+            (inclusive of already paid interest):
           </JumboTitle>
         </motion.div>
         <motion.div
