@@ -78,7 +78,7 @@ export const Hero03 = ({
                 style={{ textTransform: 'none' }}
               />
           )}
-          <Image src="/subheading.png" pt={0} mt={0} pb="xl"/>
+          <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={600}/>
           <motion.div
             initial={{ opacity: 0.0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
