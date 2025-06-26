@@ -76,6 +76,8 @@ export const Hero03 = ({
                 src="/dbm.png"
                 mb={0}
                 style={{ textTransform: 'none' }}
+                maw={900}
+                mt="xl"
               />
           )}
           <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={600}/>
