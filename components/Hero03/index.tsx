@@ -15,7 +15,7 @@ import {
   Stack,
   Text,
   TextInput,
-  Button
+  Button,
 } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'motion/react';
@@ -60,24 +60,25 @@ export const Hero03 = ({
         w="100%"
         className={classes['vertical-backdrop']}
       />
-      <Flex h="100%" align="center" pos="relative" justify="center">
+      <Flex h="100%" pos="relative" justify="center">
         <Stack
           pt={{ base: 'xl', sm: 0 }}
           maw="var(--mantine-breakpoint-md)"
           align="center"
-          gap="lg"
+          gap="sm"
           style={{ zIndex: 1 }}
         >
           {badge && (
               <Image
                 variant="default"
-                p="md"
+                p="xs"
                 bg="var(--mantine-color-body)"
-                src="/Pretend_logo_black.png"
-                mb="lg"
+                src="/dbm.png"
+                mb={0}
                 style={{ textTransform: 'none' }}
               />
           )}
+          <Image src="/subheading.png" pt={0} mt={0} pb="xl"/>
           <motion.div
             initial={{ opacity: 0.0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -88,7 +89,7 @@ export const Hero03 = ({
               {title}
             </JumboTitle>
             </motion.div>
-            <Text
+          <Text
               ta="center"
               maw="var(--mantine-breakpoint-xs)"
               fz="xl"
