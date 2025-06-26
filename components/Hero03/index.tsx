@@ -45,7 +45,7 @@ const scrollToSection = (id: string) => {
 
 
 export const Hero03 = ({
-  badge = 'Build faster with AI-powered tools',
+  badge = ' ',
   title = 'Pay Over Time \n Not Upfont',
   description = 'No financials required, Approvals in 24-28 hours. Credit score safe ',
   ...containerProps
@@ -80,7 +80,7 @@ export const Hero03 = ({
                 mt="xl"
               />
           )}
-          <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={600}/>
+          <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={450}/>
           <motion.div
             initial={{ opacity: 0.0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
