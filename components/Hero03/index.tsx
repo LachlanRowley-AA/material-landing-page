@@ -47,7 +47,7 @@ const scrollToSection = (id: string) => {
 export const Hero03 = ({
   badge = ' ',
   title = 'Pay Over Time \n Not Upfont',
-  description = 'No financials required, Approvals in 24-28 hours. Credit score safe ',
+  description = 'No financials required, Approvals in 24-48 hours. Credit score safe ',
   ...containerProps
 }: Hero03Props) => (
   <Container pos="relative" h="80vh" mah={950} style={{ overflow: 'hidden' }} fluid>
