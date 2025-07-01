@@ -3,7 +3,7 @@
 import { AnimatedCounter, AnimatedCounterProps } from './AnimatedCounter';
 import { JumboTitle } from '../JumboTitle/JumboTitle';
 import { Box, BoxProps, Container, Grid, Stack, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch } from '@mantine/core';
-import { m, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'chart.js/auto';
@@ -280,17 +280,21 @@ const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number,
     </>
   );
 };
-
-
-export const Calculator = () => {
-  const [baseValue, setBaseValue] = useState(10000);
+type CalculatorProps = {
+  startingAmount?: number;
+}
+export const Calculator = ({
+  startingAmount = 20000
+}: CalculatorProps) => {
+  console.log(startingAmount);
+  const [baseValue, setBaseValue] = useState(startingAmount ? startingAmount : 10000);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [isWeekly, setIsWeekly] = useState(false);
   
   const repayment = calculateRepayment(baseValue, interestRate, isWeekly);
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
-  
+
   return (
     <Grid
       gutter={isMobile ? 'sm' : 'xl'}
@@ -362,14 +366,14 @@ export const Calculator = () => {
               />
               <Slider
                 label="Loan Amount"
-                min={10000}
+                min={startingAmount}
                 max={200000}
                 step={1000}
-                value={baseValue}
+                value={startingAmount}
                 onChange={(value) => setBaseValue(Math.max(0, value))}
                 c={{base: "white",md:"#01E194"}}
                 mx={isMobile ? 'xs' : 0}
-              />              
+              />
               </Stack>
           </motion.div>
           
