@@ -76,11 +76,11 @@ export const Hero03 = ({
                 src="/dbm.png"
                 mb={0}
                 style={{ textTransform: 'none' }}
-                maw={900}
+                maw={{base: "80vw", md: "60vw"}}
                 mt="xl"
               />
           )}
-          <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={450}/>
+          <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={450} maw={{base: "80vw", md: "60vw"}}/>
           <motion.div
             initial={{ opacity: 0.0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
