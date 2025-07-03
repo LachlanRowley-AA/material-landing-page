@@ -369,7 +369,7 @@ export const Calculator = ({
                 min={startingAmount}
                 max={200000}
                 step={1000}
-                value={startingAmount}
+                value={baseValue}
                 onChange={(value) => setBaseValue(Math.max(0, value))}
                 c={{base: "white",md:"#01E194"}}
                 mx={isMobile ? 'xs' : 0}

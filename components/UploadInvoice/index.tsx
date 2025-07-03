@@ -13,10 +13,14 @@ import {
   ActionIcon,
   Image,
   Tooltip,
-  Card
+  Card,
+  Button
 } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconUpload, IconFile, IconX, IconTrash, IconFileTypePdf } from '@tabler/icons-react';
+import { createClient } from '@supabase/supabase-js';
+
+// const supabase = createClient("https://hfsysehrdshrbtmjsgcx.supabase.co")
 
 export function UploadInvoice() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -40,6 +44,12 @@ export function UploadInvoice() {
 
   // Check if file is PDF
   const isPdf = (file: File) => file.type === 'application/pdf';
+
+  // const handleSubmit = async () => {
+  //   try {
+
+  //   }
+  // }
 
   return (
     <Card radius="md" padding="lg" withBorder m="xl">
@@ -187,6 +197,9 @@ export function UploadInvoice() {
           </Dropzone>
         </Stack>
       </Box>
+      <Button>
+        Upload files
+      </Button>
     </Flex>
     </Card>
   );
