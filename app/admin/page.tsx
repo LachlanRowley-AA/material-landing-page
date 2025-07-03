@@ -568,14 +568,24 @@ const uploadQr = async (customerName: string) => {
                           },
                         }}
                       />
-                      <ActionIcon
-                        variant="filled"
-                        color="blue"
-                        size="lg"
-                        onClick={() => downloadQRCode(qr.customerName)}
-                      >
-                        <IconDownload size={16} />
-                      </ActionIcon>
+                      <Group>
+                        <ActionIcon
+                          variant="filled"
+                          color="green"
+                          size="lg"
+                          onClick={() => downloadQRCode(qr.customerName)}
+                        >
+                          <IconDownload size={16} />
+                        </ActionIcon>
+                        <ActionIcon
+                          variant="filled"
+                          color="blue"
+                          size="lg"
+                          onClick={() => uploadQr(qr.customerName)}
+                        >
+                          <IconUpload size={16} />
+                        </ActionIcon>
+                      </Group>
                     </Flex>
                   </Card>
                 ))}
