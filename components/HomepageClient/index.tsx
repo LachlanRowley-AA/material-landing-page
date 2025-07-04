@@ -8,7 +8,8 @@ import { FAQ } from '@/components/FAQ/Faq';
 import { ContactForm } from '@/components/Contact/Contact';
 import {UserDataDisplay} from '@/components/AccountData';
 import { UseCases } from '@/components/UseCases/Usecases';
-import { UploadInvoice } from '../UploadInvoice';
+import { UploadInvoice } from '@/components/UploadInvoice';
+import { AgreementWidget } from '@/components/AgreementWidget';
 
 type UserDetails = {
     name: string;
@@ -173,6 +174,7 @@ export default function HomepageClient() {
             <div className="fade-in-container">
                 <UserDataDisplay userDetails={userDetails}/>
                 <UploadInvoice />
+                <AgreementWidget />
                 <Calculator startingAmount={parsedBalance ?? 80000}/>
                 <Feature02 />
                 <UseCases />
