@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useCallback} from 'react';
-import { Loader } from '@mantine/core'
+import { Grid, Loader } from '@mantine/core'
 import { Feature02 } from '@/components/feature-02';
-import { Calculator } from '@/components/Calculator/Calculator';
+import  {Calculator}  from '@/components/Calculator/Calculator';
 import { Footer01 } from '@/components/footer/footer';
 import { FAQ } from '@/components/FAQ/Faq';
 import { ContactForm } from '@/components/Contact/Contact';
@@ -173,9 +173,15 @@ export default function HomepageClient() {
             `}</style>
             <div className="fade-in-container">
                 <UserDataDisplay userDetails={userDetails}/>
-                <UploadInvoice />
-                <AgreementWidget />
-                <Calculator startingAmount={parsedBalance ?? 80000}/>
+                {/* <UploadInvoice /> */}
+                <Grid style={{overflow: 'hidden'}} m="xl">
+                    <Grid.Col span={{ md: 9}}>
+                        <Calculator startingAmount={parsedBalance ?? 80000}/>
+                    </Grid.Col>
+                    <Grid.Col span={{ md: 3}} mx={0}>
+                        <AgreementWidget />
+                    </Grid.Col>
+                </Grid>
                 <Feature02 />
                 <UseCases />
                 <FAQ />
