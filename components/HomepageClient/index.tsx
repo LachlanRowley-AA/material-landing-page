@@ -26,7 +26,6 @@ export default function HomepageClient() {
     const [error, setError] = useState<string | null>(null);
     const [parsedBalance, setBalance] = useState<number>(0);
 
-    // Memoize fetchUserData to avoid useEffect dependency issues
     const fetchUserData = useCallback(async () => {
         if (!apiKey) return;
         
@@ -50,6 +49,7 @@ export default function HomepageClient() {
 
             console.log('User data fetched successfully:', data);
             setUserDetails(data.data);
+            sessionStorage.setItem('userData', JSON.stringify(data.data));
             setIsPageReady(true);
         } catch (err) {
             console.error('Error fetching user data:', err);

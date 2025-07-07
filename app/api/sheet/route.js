@@ -45,6 +45,8 @@ export async function GET(req) {
     let emailCol = -1;
     let balanceCol = -1;
     let phoneCol = -1;
+    let firstNameCol = -1;
+    let lastNameCol = -1;
 
     // Find column indices
     for (let i = 0; i < headers.length; i++) {
@@ -63,6 +65,13 @@ export async function GET(req) {
       if (headers[i] === 'Phone1') {
         phoneCol = i;
       }
+      if (headers[i] === 'LastName') {
+        firstNameCol = i;
+      }
+      if (headers[i] === 'FirstName') {
+        lastNameCol = i;
+      }
+
     }
 
     if (pwCol === -1) {
@@ -81,7 +90,8 @@ export async function GET(req) {
           company: data[i][companyCol] || '',
           email: data[i][emailCol] || '',
           balance: data[i][balanceCol] || '',
-          phoneNumber: data[i][phoneCol] || ''
+          phoneNumber: data[i][phoneCol] || '',
+          name: data[i][firstNameCol] + ' ' + data[i][lastNameCol] || ''
         };
         
         return Response.json({ 

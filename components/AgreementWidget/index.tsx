@@ -18,9 +18,10 @@ export const AgreementWidget = () => {
     }
 
     setError('');
-
+    console.log(sessionStorage.getItem('userData'));
     if (isDesktop) {
-      window.open('/application', '_blank', 'noopener,noreferrer');
+      router.push('/application');
+//      window.open('/application', '_blank', 'noopener,noreferrer');
     } else {
       router.push('/application');
     }
