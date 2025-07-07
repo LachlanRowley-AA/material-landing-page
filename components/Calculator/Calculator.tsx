@@ -11,7 +11,7 @@ import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 import { useMediaQuery } from '@mantine/hooks';
 
 
-const DEFAULT_INTEREST_RATE = 15.95; // 15.95% annual interest
+const DEFAULT_INTEREST_RATE = 16.95; // 16.95% annual interest
 const DAYS_IN_YEAR = 365;
 const WEEKS_IN_YEAR = 52;
 const MONTHS_IN_YEAR = 12;
@@ -366,7 +366,7 @@ export const Calculator = ({
               />
               <Slider
                 label="Loan Amount"
-                min={startingAmount}
+                min={10000}
                 max={200000}
                 step={1000}
                 value={baseValue}
