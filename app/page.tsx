@@ -1,6 +1,6 @@
 import { UseCases } from '@/components/UseCases/Usecases';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
-import { Welcome } from '../components/Welcome/Welcome';
+import { Welcome } from '../components/Welcome';
 import { Hero03 } from '@/components/Hero03/index';
 import { Feature02 } from '@/components/feature-02';
 import { Calculator } from '@/components/Calculator/Calculator';

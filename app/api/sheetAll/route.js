@@ -3,11 +3,12 @@ import keys from "../../../secrets/excel-editor.json";
 
 export async function GET(apiKey) {
   try {
+    const pKey = process.env.GOOGLE_PRIVATE_KEY;
     const auth = await google.auth.getClient({
       projectId: keys.project_id,
       credentials: {
         type: "service_account",
-        private_key: keys.private_key,
+        private_key: pKey,
         client_email: keys.client_email,
         client_id: keys.client_id,
         token_url: keys.token_uri,
