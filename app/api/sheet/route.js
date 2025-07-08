@@ -9,12 +9,15 @@ export async function GET(req) {
     if (!apiKey) {
       return Response.json({ message: 'Missing accountKey', success: false }, { status: 400 });
     }
-
+    const pKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+    console.log(pKey);
+    console.log(keys.private_key);
+    console.log(pKey === keys.private_key);
     const auth = await google.auth.getClient({
       projectId: keys.project_id,
       credentials: {
         type: "service_account",
-        private_key: keys.private_key,
+        private_key: pKey,
         client_email: keys.client_email,
         client_id: keys.client_id,
         token_url: keys.token_uri,
@@ -65,10 +68,10 @@ export async function GET(req) {
       if (headers[i] === 'Phone1') {
         phoneCol = i;
       }
-      if (headers[i] === 'LastName') {
+      if (headers[i] === 'FirstName') {
         firstNameCol = i;
       }
-      if (headers[i] === 'FirstName') {
+      if (headers[i] === 'LastName') {
         lastNameCol = i;
       }
 

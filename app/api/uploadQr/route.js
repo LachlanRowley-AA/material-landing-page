@@ -22,7 +22,7 @@ export async function POST(req) {
       return Response.json({ error: "Missing required field customerName." }, { status: 400 });
     }
 
-    const pKey = process.env.GOOGLE_PRIVATE_KEY;
+    const pKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
     console.log('Authenticating with Google Sheets...');
     const auth = await google.auth.getClient({
       projectId: keys.project_id,
