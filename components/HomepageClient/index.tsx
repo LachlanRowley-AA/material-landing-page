@@ -11,6 +11,8 @@ import { UseCases } from '@/components/UseCases/Usecases';
 import { UploadInvoice } from '@/components/UploadInvoice';
 import { AgreementWidget } from '@/components/AgreementWidget';
 import { Header01 } from '@/components/Header'
+import { Hero02 } from '@/components/Hero02'
+import  Welcome  from '@/components/Welcome'
 
 type UserDetails = {
     name: string;
@@ -180,6 +182,7 @@ export default function HomepageClient() {
                 <div style={{paddingBottom:"40px"}}/>
                 <UserDataDisplay userDetails={userDetails}/>
                 {/* <UploadInvoice /> */}
+                <Welcome />
                 <Grid style={{overflow: 'hidden'}} m="xl">
                     <Grid.Col span={{ md: 9}}>
                         <Calculator startingAmount={parsedBalance ?? 80000}/>
@@ -191,9 +194,6 @@ export default function HomepageClient() {
                 <Feature02 />
                 <UseCases />
                 <FAQ />
-                <section id="footer">
-                    <ContactForm />
-                </section>
                 <Footer01 />    
             </div>
         </>

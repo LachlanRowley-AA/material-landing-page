@@ -21,8 +21,8 @@ type Feature = {
 const FEATURES: Feature[] = [
   {
     icon: <IconCurrencyDollar size={28} stroke={1.5} />,
-    title: 'Finance up to $300k',
-    description: 'Access unsecured funding of up to $300,000 to fuel your business growth.',
+    title: 'Finance up to $500k',
+    description: 'Access unsecured funding of up to $500,000 to fuel your business growth.',
   },
   {
     icon: <IconFileOff size={28} stroke={1.5} />,
@@ -32,7 +32,7 @@ const FEATURES: Feature[] = [
   {
     icon: <IconCalendarTime size={28} stroke={1.5} />,
     title: 'Flexible Terms',
-    description: '5-year loan terms with the option for early payoff.',
+    description: '3-year loan terms with the option for early payoff.',
   },
   {
     icon: <IconBuilding size={28} stroke={1.5} />,

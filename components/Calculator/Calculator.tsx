@@ -313,7 +313,7 @@ export const Calculator = ({
               transition={{ duration: 0.8, ease: 'easeInOut' }}
               style={{ width: '100%' }}
             >
-              <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
+              <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600} mt="xl">
                 Select your payment plan
               </JumboTitle>
             </motion.div>
@@ -366,9 +366,6 @@ export const Calculator = ({
           >
             <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
               Compare payment options
-            </JumboTitle>
-            <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="#01E194" fw={600}>
-              by loan term
             </JumboTitle>
           </motion.div>
         </Stack>

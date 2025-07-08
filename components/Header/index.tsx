@@ -58,9 +58,9 @@ export const Header01 = ({
   style,
   breakpoint = 'xs',
   logo = (
-    <Image src="/eazypay.png" h={30}/>
+    <Image src="/dbm.png" h={30}/>
   ),
-  callToActionTitle = 'Join Now',
+  callToActionTitle = 'Request a Callback',
   callToActionUrl = '#',
   links = HEADER_LINKS,
   onMenuToggle,
