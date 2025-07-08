@@ -10,7 +10,6 @@ import 'chart.js/auto';
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconArrowUp } from '@tabler/icons-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
 const DEFAULT_INTEREST_RATE = 16.95; // 16.95% annual interest
@@ -138,18 +137,29 @@ const StatCell = ({
     </motion.div>
   );
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <Box p="sm" style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <Text fw="500" c="black">{`${label} months`}</Text>
-        <Text c="#01E194">{`Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
-        <Text c="red">{`Total Interest: $${payload[1].value.toLocaleString()}`}</Text>
+const CustomStatCell = ({
+    startValue,
+    endValue,
+    title,
+    description,
+    ...boxProps
+  }: BoxProps & { startValue: AnimatedCounterProps['startValue']; endValue: AnimatedCounterProps['endValue']; title: string; description: string }) => (
+    <motion.div
+      initial={{ opacity: 0.0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8, ease: 'easeInOut' }}
+    >
+      <Box {...boxProps} p="md" style={{ border: '2px solid #01E194', borderRadius: '12px' }}>
+        <Text fz="lg" ta="center" c="black" fw="600" mb="xs">
+          {title}
+        </Text>
+        <AnimatedCounter ta="center" fz={rem(36)} fw="bold" c="#01E194" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)}  />
+        <Text fz="sm" ta="center" c="dimmed" mt="xs">
+          {description}
+        </Text>
       </Box>
-    );
-  }
-  return null;
-};
+    </motion.div>
+  );
 
 
 
@@ -163,22 +173,12 @@ export const Calculator = ({
   const [baseValue, setBaseValue] = useState(startingAmount ? startingAmount : 10000);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [isWeekly, setIsWeekly] = useState(false);
+  const [customTimeframe, setCustomTimeframe] = useState('12');
   
   const repayment = calculateRepayment(baseValue, interestRate, isWeekly);
+  const customRepayment = calculateCustomRepayment(baseValue, interestRate, parseInt(customTimeframe));
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
-
-  // Calculate data for all timeframes
-  const timeframes = [6, 12, 24, 36];
-  const chartData = timeframes.map(months => {
-    const monthlyPayment = calculateCustomRepayment(baseValue, interestRate, months);
-    const totalInterest = (monthlyPayment * months) - baseValue;
-    return {
-      months: months,
-      monthlyPayment: Math.round(monthlyPayment),
-      totalInterest: Math.round(Math.max(0, totalInterest))
-    };
-  });
 
   return (
     <Grid
@@ -287,7 +287,7 @@ export const Calculator = ({
         </Container>
       </Grid.Col>
 
-      {/* Second Column - Chart */}
+      {/* Second Column - Custom Timeframe Calculator */}
       <Grid.Col span={isMobile ? 12 : 6} bg="white" pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ minHeight: '100%' }}>
         <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
           <motion.div
@@ -297,10 +297,10 @@ export const Calculator = ({
             style={{ width: '100%' }}
           >
             <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
-              Compare payment options
+              Pay off your loan in
             </JumboTitle>
             <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="#01E194" fw={600}>
-              by loan term
+              {customTimeframe} months
             </JumboTitle>
           </motion.div>
         </Stack>
@@ -308,72 +308,35 @@ export const Calculator = ({
         <Container size="lg" mt="md" ta="center" pt={isMobile ? 0 : 'md'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
           <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <Stack gap={isMobile ? 'md' : 'xl'}>
-              <Box style={{ height: '400px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={chartData}
-                    margin={{
-                      top: 20,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
-                    }}
-                    layout="horizontal"
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      type="number" 
-                      tickFormatter={(value) => `${value.toLocaleString()}`}
-                      fontSize={12}
-                    />
-                    <YAxis 
-                      type="category" 
-                      dataKey="months"
-                      tickFormatter={(value) => `${value} months`}
-                      fontSize={12}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend />
-                    <Bar 
-                      dataKey="monthlyPayment" 
-                      fill="#01E194" 
-                      name="Monthly Payment"
-                      radius={[0, 4, 4, 0]}
-                    />
-                    <Bar 
-                      dataKey="totalInterest" 
-                      fill="#ff6b6b" 
-                      name="Total Interest"
-                      radius={[0, 4, 4, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </Box>
+              <SegmentedControl
+                value={customTimeframe}
+                onChange={setCustomTimeframe}
+                data={[
+                  { label: '6 months', value: '6' },
+                  { label: '12 months', value: '12' },
+                  { label: '24 months', value: '24' },
+                  { label: '36 months', value: '36' },
+                ]}
+                size="md"
+                styles={{
+                  root: {
+                    backgroundColor: '#f8f9fa',
+                  },
+                  control: {
+                    '&[data-active]': {
+                      backgroundColor: '#01E194',
+                      color: 'white',
+                    },
+                  },
+                }}
+              />
               
-              <Grid gutter="md">
-                {chartData.map((item, index) => (
-                  <Grid.Col span={6} key={index}>
-                    <Box 
-                      p="sm" 
-                      style={{ 
-                        border: '1px solid #e9ecef', 
-                        borderRadius: '8px',
-                        backgroundColor: '#f8f9fa'
-                      }}
-                    >
-                      <Text fw="600" c="black" fz="sm" ta="center">
-                        {item.months} months
-                      </Text>
-                      <Text c="#01E194" fz="lg" fw="bold" ta="center">
-                        ${item.monthlyPayment.toLocaleString()}
-                      </Text>
-                      <Text c="dimmed" fz="xs" ta="center">
-                        monthly payment
-                      </Text>
-                    </Box>
-                  </Grid.Col>
-                ))}
-              </Grid>
+              <CustomStatCell 
+                startValue={repayment} 
+                endValue={customRepayment} 
+                title={`Monthly Payment`}
+                description={`To pay off in ${customTimeframe} months`} 
+              />
             </Stack>
           </motion.div>
         </Container>

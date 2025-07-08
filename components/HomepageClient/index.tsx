@@ -10,6 +10,7 @@ import {UserDataDisplay} from '@/components/AccountData';
 import { UseCases } from '@/components/UseCases/Usecases';
 import { UploadInvoice } from '@/components/UploadInvoice';
 import { AgreementWidget } from '@/components/AgreementWidget';
+import { Header01 } from '@/components/Header'
 
 type UserDetails = {
     name: string;
@@ -62,6 +63,9 @@ export default function HomepageClient() {
         const windowUrl = window.location.search;
         const params = new URLSearchParams(windowUrl);
         const key = params.get('accountKey');
+        if(key) {
+            sessionStorage.setItem('accountKey', key);
+        }
         setApiKey(key);
         console.log('API key set:', key ? 'Present' : 'Not found');
     }, []);
@@ -172,6 +176,8 @@ export default function HomepageClient() {
                 }
             `}</style>
             <div className="fade-in-container">
+                <Header01/>
+                <div style={{paddingBottom:"40px"}}/>
                 <UserDataDisplay userDetails={userDetails}/>
                 {/* <UploadInvoice /> */}
                 <Grid style={{overflow: 'hidden'}} m="xl">

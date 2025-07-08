@@ -2,7 +2,7 @@
 
 import { AnimatedCounter, AnimatedCounterProps } from './AnimatedCounter';
 import { JumboTitle } from '../JumboTitle/JumboTitle';
-import { Box, BoxProps, Container, Grid, Stack, Span, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch } from '@mantine/core';
+import { Box, BoxProps, Container, Grid, Stack, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch, SegmentedControl } from '@mantine/core';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -10,15 +10,16 @@ import 'chart.js/auto';
 import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconArrowUp } from '@tabler/icons-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 
 
-const DEFAULT_INTEREST_RATE = 16.95; // 16.95% annual interest
+const DEFAULT_INTEREST_RATE = 13.95; // 13.95% annual interest
 const DAYS_IN_YEAR = 365;
 const WEEKS_IN_YEAR = 52;
 const MONTHS_IN_YEAR = 12;
 const DAYS_IN_WEEK = 7;
 const DAYS_IN_MONTH = 365 / 12; // Average days per month
-const LOAN_TERM_YEARS = 5;
+const LOAN_TERM_YEARS = 3;
 
 
 const calculateRepayment = (loanAmount: number, interestRate: number, isWeekly: boolean) => {
@@ -36,6 +37,23 @@ const calculateRepayment = (loanAmount: number, interestRate: number, isWeekly: 
     loanAmount *
     ((effectivePeriodRate * (1 + effectivePeriodRate)**totalPayments) /
       ((1 + effectivePeriodRate)**totalPayments - 1))
+  );
+};
+
+const calculateCustomRepayment = (loanAmount: number, interestRate: number, months: number) => {
+  if (loanAmount <= 0) return 0;
+
+  const annualRate = interestRate / 100;
+  const monthlyRate = annualRate / 12;
+  
+  if (monthlyRate === 0) {
+    return loanAmount / months;
+  }
+
+  return (
+    loanAmount *
+    ((monthlyRate * (1 + monthlyRate)**months) /
+      ((1 + monthlyRate)**months - 1))
   );
 };
 
@@ -120,167 +138,24 @@ const StatCell = ({
     </motion.div>
   );
 
-
-const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), {
-  ssr: false,
-});
-
-const LineChart = ({ loanAmount, interestRate, isWeekly }: { loanAmount: number, interestRate: number, isWeekly: boolean }) => {
-  const theme = useMantineTheme();
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
-  
-  // Convert periods to appropriate time units
-  const periodMultiplier = isWeekly ? 4.33 : 1; // Approximate weeks per month
-  const periods = isWeekly ? 
-    [13, 17.3, 21.6, 26] : // weeks
-    [1, 2, 3, 4]; // months
-
-  const interestCosts = periods.map(period => 
-    calculateInterestCost(loanAmount, period, interestRate, isWeekly).toFixed(2)
-  );
-
-  const data = {
-    labels: ['30 days', '60 days', '90 days', '120 days'],
-    datasets: [
-      {
-        label: 'Total Interest Cost',
-        data: interestCosts,
-        backgroundColor: [
-          'rgba(1, 255, 148, 0.4)',
-          'rgba(1, 255, 148, 0.8)',
-          'rgba(1, 255, 148, 0.4)',
-          'rgba(1, 255, 148, 0.8)',
-          'rgba(1, 255, 148, 0.4)',
-          'rgba(1, 255, 148, 0.8)',
-          'rgba(1, 255, 148, 0.4)',
-          'rgba(1, 255, 148, 0.8)',
-          'rgba(1, 255, 148, 0.4)',
-          'rgba(1, 255, 148, 0.8)',
-          'rgba(1, 255, 148, 0.4)',
-        ],
-        borderColor: [
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-          'rgba(1, 255, 148, 1)',
-        ],
-        borderWidth: 0,
-      },
-    ],
-  };
-
-  const options= {
-    barPercentage: 1.1,
-    categoryPercenage: 1.0,
-    maintainAspectRatio: false,
-    responsive: true,
-    indexAxis: 'y' as const,
-    borderRadius: 10,
-    scales: {
-      x: {
-        border: {
-          display: false,
-        },
-        grid: {
-          display: false,
-        },
-        ticks: { 
-          display: false,
-        },
-      },
-      y: {
-        border: {
-          display: false,
-        },
-        grid: {
-          display: false,
-        },
-        ticks: {
-          color: 'black',
-          font: {
-            size: isMobile ? 20 : 24,
-            weight: "bold"
-          },
-        }
-      } as const
-    },
-    plugins: {
-      datalabels: {
-        color: 'black',
-        formatter(value : number, context: Context) {
-          return `$${  Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-        },
-        font: {
-          size: isMobile ? 18 : 18
-        }
-      },
-      legend: {
-        display: false,
-      },
-    }
-  };
-
-  return (
-    <>
-      <style>
-        {`
-          .chart-container {
-            width: 100%;
-            background-color: white;
-            padding: 0;
-            height: auto;
-          }
-  
-          @media (max-width: 768px) {
-            .chart-container {
-              padding: 0 0px;
-            }
-          }
-          
-          .chart-wrapper {
-            width: 100%;
-            height: 300px;
-          }
-          
-          @media (max-width: 768px) {
-            .chart-wrapper {
-              height: 250px;
-            }
-          }
-        `}
-      </style>
-      <div className="chart-container">
-        <motion.div
-          initial={{ opacity: 0.0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-        >
-          <JumboTitle ta="center" fz="xs" order={1} fw="bold" c="#01E194" mt={isMobile ? "md" : "xl"} pt={0} mb="md">
-            How Much Interest You'll Pay if Paid Out in:
-          </JumboTitle>
-          <JumboTitle ta="center" fz="xxs" order={3} fw="bold" c="#01E194" mt={isMobile ? "md" : "md"} pt={0} mb="md">
-            (inclusive of already paid interest):
-          </JumboTitle>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0.0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-          className="chart-wrapper"
-        >
-          <Bar data={data} plugins={[ChartDataLabels]} options={options} />
-        </motion.div>
-      </div>
-    </>
-  );
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <Box p="sm" style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+        <Text fw="500" c="black">{`${label} months`}</Text>
+        <Text c="#01E194">{`Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
+      </Box>
+    );
+  }
+  return null;
 };
+
+// Custom Bar component to handle individual bar colors
+const CustomBar = ({ fill, payload, ...props }: any) => {
+  return <Bar {...props} fill={fill} />;
+};
+
 type CalculatorProps = {
   startingAmount?: number;
 }
@@ -291,10 +166,52 @@ export const Calculator = ({
   const [baseValue, setBaseValue] = useState(startingAmount ? startingAmount : 10000);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [isWeekly, setIsWeekly] = useState(false);
+  const [customTimeframe, setCustomTimeframe] = useState('12');
+  
   
   const repayment = calculateRepayment(baseValue, interestRate, isWeekly);
+  const customRepayment = calculateCustomRepayment(baseValue, interestRate, parseInt(customTimeframe));
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
+
+  // Calculate data for all timeframes
+  const timeframes = [6, 12, 24, 36];
+  const chartData = timeframes.map(months => {
+    const monthlyPayment = calculateCustomRepayment(baseValue, interestRate, months);
+    const totalInterest = (monthlyPayment * months) - baseValue;
+    const isSelected = months === parseInt(customTimeframe);
+    return {
+      months: months,
+      monthlyPayment: Math.round(monthlyPayment),
+      totalInterest: Math.round(Math.max(0, totalInterest)),
+      label: `${months} months`,
+      color: isSelected ? '#FFA500' : '#01E194' // Orange for selected, green for others
+    };
+  });
+
+  const CustomStatCell = ({
+      startValue,
+      endValue,
+      title,
+      description,
+      ...boxProps
+    }: BoxProps & { startValue: AnimatedCounterProps['startValue']; endValue: AnimatedCounterProps['endValue']; title: string; description: string }) => (
+      <motion.div
+        initial={{ opacity: 0.0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: 'easeInOut' }}
+      >
+        <Box {...boxProps} p="md" style={{ border: '2px solid #01E194', borderRadius: '12px' }}>
+          <Text fz="lg" ta="center" c="black" fw="600" mb="xs">
+            {title}
+          </Text>
+          <AnimatedCounter ta="center" fz={rem(36)} fw="bold" c="#01E194" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)}  />
+          <Text fz="sm" ta="center" c="dimmed" mt="xs">
+            {description}
+          </Text>
+        </Box>
+      </motion.div>
+    );
 
   return (
     <Grid
@@ -311,7 +228,8 @@ export const Calculator = ({
       overflow='hidden'
       bg="white"
     >
-      <Grid.Col span={12} bg="white" pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ minHeight: '100%' }}>
+      {/* First Column - Original Calculator */}
+      <Grid.Col span={isMobile ? 12 : 6} bg="white" pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ minHeight: '100%' }}>
         <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
           <motion.div
             initial={{ opacity: 0.0, y: 40 }}
@@ -342,9 +260,9 @@ export const Calculator = ({
           </motion.div>
         </Stack>
         
-        <Container size="lg" mt="md" ta="center" pt={isMobile ? 0 : 'md'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
+        <Container size="lg" mt="xl" ta="center" pt={isMobile ? 0 : 'xs'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
           <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <Stack gap={isMobile ? 'sm' : 'md'}>
+            <Stack gap={isMobile ? 'sm' : 'xl'}>
               <TextInput
                 label="Loan Amount"
                 type="text"
@@ -368,7 +286,7 @@ export const Calculator = ({
               <Slider
                 label="Loan Amount"
                 min={10000}
-                max={500000}
+                max={300000}
                 step={1000}
                 value={baseValue}
                 onChange={(value) => setBaseValue(Math.max(0, value))}
@@ -388,38 +306,144 @@ export const Calculator = ({
               />
               </Stack>
           </motion.div>
-          
-          <Grid gutter={isMobile ? 'md' : 'calc(var(--mantine-spacing-lg) * 4)'} align="center" px={0} mt={isMobile ? 'md' : 'xl'}>
-            <Grid.Col span={12} mx={0} px={0}>
-              <StatCell 
-                startValue={baseValue} 
-                endValue={repayment} 
-                title={isWeekly ? "Weekly Repayment" : "Monthly Repayment"} 
-                description={isWeekly ? "Weekly repayment" : "Monthly repayment"} 
-              />
-            </Grid.Col>
-          </Grid>
-          
-          <Box mt={isMobile ? 'md' : 'xl'} pb={isMobile ? 'md' : 'xl'}>
+          <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
             <motion.div
               initial={{ opacity: 0.0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: 'easeInOut' }}
-            >  
-              {/* <JumboTitle ta="center" fz="xs" order={1}  fw="bold" c="#01E194" mt="xl" mb="xl" pt="xl">
-                Payout Options
-              </JumboTitle> */}
-              {/* <JumboTitle ta="center" fz="xxs" order={3}  fw="bold" c="#01E194" mt="xl" mb="xl" textWrap='balance'>
-                Save money with no penalties for early payout 
+              style={{ width: '100%' }}
+            >
+              <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
+                Select your payment plan
               </JumboTitle>
-              */}
-              </motion.div>
-            {/* <Grid gutter={isMobile ? 'sm' : 'calc(var(--mantine-spacing-lg) * 1)'} align="center">
-              <Grid.Col span={12}>
-                <LineChart loanAmount={baseValue} interestRate={interestRate} isWeekly={isWeekly}/>
-              </Grid.Col>
-            </Grid> */}
-          </Box>
+            </motion.div>
+          </Stack>
+          <Container size="lg" mt="md" ta="center" pt={isMobile ? 0 : 'md'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
+            <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+              <Stack gap={isMobile ? 'md' : 'xl'}>
+                <SegmentedControl
+                  value={customTimeframe}
+                  onChange={setCustomTimeframe}
+                  data={[
+                    { label: '6 months', value: '6' },
+                    { label: '12 months', value: '12' },
+                    { label: '24 months', value: '24' },
+                    { label: '36 months', value: '36' },
+                  ]}
+                  size="md"
+                  styles={{
+                    root: {
+                      backgroundColor: '#f8f9fa',
+                    },
+                    control: {
+                      '&[data-active]': {
+                        backgroundColor: '#01E194',
+                        color: 'white',
+                      },
+                    },
+                  }}
+                />
+                <CustomStatCell 
+                  startValue={repayment} 
+                  endValue={customRepayment} 
+                  title={`Monthly Payment`}
+                  description={`To pay off in ${customTimeframe} months`} 
+                />
+              </Stack>
+            </motion.div>
+          </Container>
+        </Container>
+      </Grid.Col>
+
+      {/* Second Column - Chart */}
+      <Grid.Col span={isMobile ? 12 : 6} bg="white" pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ minHeight: '100%' }}>
+        <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
+          <motion.div
+            initial={{ opacity: 0.0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            style={{ width: '100%' }}
+          >
+            <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
+              Compare payment options
+            </JumboTitle>
+            <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="#01E194" fw={600}>
+              by loan term
+            </JumboTitle>
+          </motion.div>
+        </Stack>
+        
+        <Container size="lg" mt="md" ta="center" pt={isMobile ? 0 : 'md'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
+          <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <Stack gap={isMobile ? 'md' : 'xl'}>
+              <Box style={{ height: '400px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    layout="vertical"
+                    data={chartData}
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 80,
+                      bottom: 20,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    
+                    <XAxis 
+                      type="number" 
+                      tickFormatter={(value) => `${value.toLocaleString()}`} 
+                      fontSize={12} 
+                    />
+                    
+                    <YAxis 
+                      dataKey="label" 
+                      type="category" 
+                      fontSize={12} 
+                      width={100} 
+                    />
+                    
+                    <Tooltip content={<CustomTooltip />} />
+                    
+                    <Bar 
+                      dataKey="monthlyPayment" 
+                      name="Monthly Payment"
+                      radius={[0, 4, 4, 0]}
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </Box>
+              
+              <Grid gutter="md">
+                {chartData.map((item, index) => (
+                  <Grid.Col span={6} key={index}>
+                    <Box 
+                      p="sm" 
+                      style={{ 
+                        border: `1px solid ${item.color}`, 
+                        borderRadius: '8px',
+                        backgroundColor: item.color === '#FFA500' ? '#FFF3E0' : '#f8f9fa'
+                      }}
+                    >
+                      <Text fw="600" c="black" fz="sm" ta="center">
+                        {item.months} months
+                      </Text>
+                      <Text c={item.color} fz="lg" fw="bold" ta="center">
+                        ${item.monthlyPayment.toLocaleString()}
+                      </Text>
+                      <Text c="dimmed" fz="xs" ta="center">
+                        monthly payment
+                      </Text>
+                    </Box>
+                  </Grid.Col>
+                ))}
+              </Grid>
+            </Stack>
+          </motion.div>
         </Container>
       </Grid.Col>
     </Grid>
