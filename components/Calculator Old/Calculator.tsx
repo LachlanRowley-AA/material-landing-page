@@ -2,7 +2,7 @@
 
 import { AnimatedCounter, AnimatedCounterProps } from './AnimatedCounter';
 import { JumboTitle } from '../JumboTitle/JumboTitle';
-import { Box, BoxProps, Container, Grid, Stack, Span, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch } from '@mantine/core';
+import { Box, BoxProps, Container, Grid, Stack, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch } from '@mantine/core';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';

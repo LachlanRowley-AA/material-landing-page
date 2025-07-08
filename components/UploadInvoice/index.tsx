@@ -90,7 +90,7 @@ export function UploadInvoice() {
                   >
                     {/* Preview */}
                     <Box
-                      sx={{
+                      style={{
                         width: rem(60),
                         height: rem(60),
                         borderRadius: rem(4),
@@ -108,7 +108,6 @@ export function UploadInvoice() {
                           alt={file.name}
                           fit="contain"
                           style={{ maxHeight: rem(60), maxWidth: rem(60) }}
-                          withPlaceholder
                         />
                       ) : isPdf(file) ? (
                         <IconFileTypePdf size={rem(40)} color="#E02F2F" />
@@ -121,13 +120,13 @@ export function UploadInvoice() {
                     <Box style={{ flex: 1, overflow: 'hidden' }}>
                       <Text
                         size="sm"
-                        weight={500}
+                        fw={500}
                         lineClamp={1}
-                        sx={{ userSelect: 'none' }}
+                        style={{ userSelect: 'none' }}
                       >
                         {file.name}
                       </Text>
-                      <Text size="xs" color="dimmed" sx={{ userSelect: 'none' }}>
+                      <Text size="xs" color="dimmed" style={{ userSelect: 'none' }}>
                         {(file.size / 1024).toFixed(1)} KB
                       </Text>
                     </Box>

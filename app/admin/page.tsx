@@ -289,7 +289,7 @@ const uploadQr = async (customerName: string) => {
     
   } catch (error) {
     console.error('Upload error:', error);
-    setUploadStatus(`Upload failed: ${error.message}`);
+    setUploadStatus(`Upload failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 };
 

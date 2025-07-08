@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Button, Stack, Text, Title, Anchor, Alert, Loader, Modal, Group } from '@mantine/core';
 import { IconDownload, IconAlertCircle, IconCheck } from '@tabler/icons-react';
+import { UserDetails } from '@/components/HomepageClient';
 
 //Signed pdf imports
 import template from '@/lib/template.json';
@@ -28,14 +29,6 @@ const CONFIG = {
       year: 'numeric' as const
     }
   }
-};
-
-type UserDetails = {
-  name: string;
-  company: string;
-  address: string;
-  phoneNumber: string;
-  balance: number | string;
 };
 
 type LoadingState = {
@@ -144,7 +137,7 @@ export default function Page() {
         plugins: { rectangle, text, multiVariableText } 
       });
 
-      const blob = new Blob([pdf.buffer], { type: 'application/pdf' });
+      const blob = new Blob([new Uint8Array(pdf.buffer)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -236,13 +229,11 @@ export default function Page() {
             icon={<IconAlertCircle size="1rem" />} 
             title="Network Error" 
             color="red"
-            action={
-              <Button variant="light" color="red" size="xs" onClick={retryIPFetch}>
-                Retry
-              </Button>
-            }
           >
             {errors.ip}
+            <Button variant="light" color="red" size="xs" onClick={retryIPFetch} mt="sm">
+              Retry
+            </Button>
           </Alert>
         )}
 

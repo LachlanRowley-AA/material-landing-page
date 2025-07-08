@@ -1,18 +1,14 @@
 'use client';
 import { Card, Text, Title, Stack, Divider, Box, Flex } from '@mantine/core';
 import { useState, useEffect } from 'react';
+import { UserDetails } from '../HomepageClient';
+
 
 type UserAccountProps = {
     userDetails : UserDetails | null;
 };
 
-type UserDetails = {
-    name: string;
-    company: string;
-    address: string;
-    phoneNumber: string;
-    balance: number;
-};
+
 
 const ValueBox = ({
     children,

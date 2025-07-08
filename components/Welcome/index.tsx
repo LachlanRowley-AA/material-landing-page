@@ -29,7 +29,7 @@ export default function Welcome() {
         background: '#f6f6f6',
       }}
     >
-      <Group position="apart" align="center" mb="sm">
+      <Group  align="center" mb="sm">
         <div>
           <Title order={3} style={{ color: '#2d3748' }}>
             {name ? `Hi ${name},` : <Skeleton width={120} height={24} />}
@@ -40,7 +40,7 @@ export default function Welcome() {
         </div>
       </Group>
 
-      <Group mt="sm" spacing="xs">
+      <Group mt="sm">
         <ThemeIcon color="teal" size={20} radius="xl">
           <IconCheck size={14} />
         </ThemeIcon>

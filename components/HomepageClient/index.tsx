@@ -14,7 +14,7 @@ import { Header01 } from '@/components/Header'
 import { Hero02 } from '@/components/Hero02'
 import  Welcome  from '@/components/Welcome'
 
-type UserDetails = {
+export type UserDetails = {
     name: string;
     company: string;
     address: string;

@@ -27,7 +27,6 @@ import {
   IconCheck,
   IconRefresh
 } from '@tabler/icons-react';
-import { createClient } from "@supabase/supabase-js"
 
 interface FormData {
   name: string;
@@ -103,34 +102,34 @@ export const ContactForm = () => {
     setIsSubmitting(true);
     setError(null);
 
-    try {
-      const response = await fetch('/api/createQuery', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          businessName: formData.businessName,
-          price: formData.price,
-          phoneNumber: formData.phoneNumber // Assuming phone number maps to amount
-        }),
-      });
+    // try {
+    //   const response = await fetch('/api/createQuery', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //       name: formData.name,
+    //       email: formData.email,
+    //       businessName: formData.businessName,
+    //       price: formData.price,
+    //       phoneNumber: formData.phoneNumber // Assuming phone number maps to amount
+    //     }),
+    //   });
 
-      const result = await response.json();
+    //   const result = await response.json();
 
-      if (response.ok && result.success) {
-        setIsSuccess(true);
-      } else {
-        setError(result.error || 'Form submission failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Form submission failed', error);
-      setError('Network error. Please check your connection and try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    //   if (response.ok && result.success) {
+    //     setIsSuccess(true);
+    //   } else {
+    //     setError(result.error || 'Form submission failed. Please try again.');
+    //   }
+    // } catch (error) {
+    //   console.error('Form submission failed', error);
+    //   setError('Network error. Please check your connection and try again.');
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
   };
 
   const resetForm = () => {
