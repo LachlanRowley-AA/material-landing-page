@@ -121,7 +121,7 @@ export default function AdminPage() {
       return;
     }
     // Create the URL with customer name and tracking data
-    const baseUrl = 'localhost:3000/prefill?accountKey=';
+    const baseUrl = 'https://demo-easypay.netlify.app/prefill?accountKey=';
     const trackingParams = new URLSearchParams({
       utm_source: 'invoice',
       utm_medium: 'qr',
