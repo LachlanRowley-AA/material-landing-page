@@ -12,9 +12,11 @@ import {
   Image,
   Title,
   Box,
+  Tooltip,
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
+import { BiInfoCircle } from "react-icons/bi";
 
 export const AgreementWidget = () => {
   const router = useRouter();
@@ -45,11 +47,11 @@ export const AgreementWidget = () => {
         border: '1px solid #eee',
       }}
     >
-      <Stack spacing="md" align="center">
+      <Stack align="center">
         <Image src="/assetalley.svg" w={160} alt="Asset Alley Logo" />
 
         <Title order={3} c="#fc8900">
-          Let’s get started
+          Let's get started
         </Title>
 
         <Checkbox
@@ -78,15 +80,18 @@ export const AgreementWidget = () => {
         )}
 
         <Box w="100%">
-          <Button
-            variant="light"
-            fullWidth
-            size="md"
-            color="gray"
-            mt="md"
-          >
-            Lodge your interest – we’ll be in touch
-          </Button>
+          <Tooltip label="Let us know you're interested. We'll follow up soon." withArrow>
+            <Button
+              variant="light"
+              fullWidth
+              size="md"
+              color="gray"
+              mt="md"
+              rightSection={<BiInfoCircle size={14}/>}
+            >
+              Lodge your interest and we'll be in touch
+            </Button>
+          </Tooltip>
         </Box>
 
         <Text size="sm" c="dimmed">
@@ -94,20 +99,23 @@ export const AgreementWidget = () => {
         </Text>
 
         <Box w="100%">
-          <Button
-            fullWidth
-            size="md"
-            color="#fc8900"
-            style={{
-              backgroundColor: '#fc8900',
-              color: '#fff',
-              fontWeight: 600,
-              boxShadow: '0 0 12px rgba(252, 137, 0, 0.5)',
-            }}
-            onClick={handleCompleteApplication}
-          >
-            Complete an application now
-          </Button>
+          <Tooltip label="Jump straight into the full application process." withArrow>
+            <Button
+              fullWidth
+              size="md"
+              color="#fc8900"
+              style={{
+                backgroundColor: '#fc8900',
+                color: '#fff',
+                fontWeight: 600,
+                boxShadow: '0 0 12px rgba(252, 137, 0, 0.5)',
+              }}
+              onClick={handleCompleteApplication}
+              rightSection={<BiInfoCircle size={14}/>}
+>
+              Complete a full application now
+            </Button>
+          </Tooltip>
         </Box>
       </Stack>
     </Card>

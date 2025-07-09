@@ -17,6 +17,7 @@ import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'motion/react';
 import NextLink from 'next/link';
 import classes from './index.module.css';
+import { text } from 'stream/consumers';
 
 export type HeaderLink = {
   label: string;
@@ -126,6 +127,14 @@ export const Header01 = ({
         radius="xl"
         rightSection={<IconArrowRight size={16} />}
         style={{ flexShrink: 0 }}
+        styles={{
+          label: {
+            color:"#fc8900"
+          },
+          section: {
+            color:"#fc8900"
+          }
+      }}
       >
         {callToActionTitle}
       </Button>

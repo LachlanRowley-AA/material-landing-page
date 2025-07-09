@@ -395,7 +395,7 @@ export const Calculator = ({
                             backgroundColor: '#f8f9fa',
                           },
                           control: {
-                            '&[data-active]': {
+                            '&[dataActive]': {
                               backgroundColor: '#01E194',
                               color: 'white',
                             },
