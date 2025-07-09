@@ -146,7 +146,7 @@ export const ContactForm = () => {
 
   return (
     <Box
-      bg="white"
+      bg="#f6f6f6"
       py={{ base: rem(60), md: rem(30) }}
       px={{ base: "0px", md: "xl" }}
       style={{ 

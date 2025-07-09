@@ -58,7 +58,7 @@ export const Header01 = ({
   style,
   breakpoint = 'xs',
   logo = (
-    <Image src="/dbm.png" h={30}/>
+    <Image src="/dbm.png" h={30} maw={200}/>
   ),
   callToActionTitle = 'Request a Callback',
   callToActionUrl = '#',

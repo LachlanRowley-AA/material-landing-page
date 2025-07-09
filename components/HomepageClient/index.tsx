@@ -177,20 +177,22 @@ export default function HomepageClient() {
                     animation: fadeIn 1s ease-in-out forwards;
                 }
             `}</style>
-            <div className="fade-in-container">
+            <div className="fade-in-container" >
                 <Header01/>
                 <div style={{paddingBottom:"40px"}}/>
-                <UserDataDisplay userDetails={userDetails}/>
-                {/* <UploadInvoice /> */}
-                <Welcome />
-                <Grid style={{overflow: 'hidden'}} m="xl">
-                    <Grid.Col span={{ md: 9}}>
-                        <Calculator startingAmount={parsedBalance ?? 80000}/>
-                    </Grid.Col>
-                    <Grid.Col span={{ md: 3}} mx={0}>
-                        <AgreementWidget />
-                    </Grid.Col>
-                </Grid>
+                <div style={{paddingLeft:"50px", paddingRight:"50px"}}>
+                    <Welcome />
+                    <UserDataDisplay userDetails={userDetails}/>
+                    {/* <UploadInvoice /> */}
+                    <Grid style={{overflow: 'hidden'}} m="xl">
+                        <Grid.Col span={{ md: 9}}>
+                            <Calculator startingAmount={parsedBalance ?? 80000}/>
+                        </Grid.Col>
+                        <Grid.Col span={{ md: 3}}>
+                            <AgreementWidget />
+                        </Grid.Col>
+                    </Grid>
+                </div>
                 <Feature02 />
                 <UseCases />
                 <FAQ />

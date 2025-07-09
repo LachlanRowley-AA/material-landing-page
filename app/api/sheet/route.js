@@ -10,9 +10,6 @@ export async function GET(req) {
       return Response.json({ message: 'Missing accountKey', success: false }, { status: 400 });
     }
     const pKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
-    console.log(pKey);
-    console.log(keys.private_key);
-    console.log(pKey === keys.private_key);
     const auth = await google.auth.getClient({
       projectId: keys.project_id,
       credentials: {
