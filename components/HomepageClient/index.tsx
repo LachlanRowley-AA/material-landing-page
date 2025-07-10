@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback} from 'react';
-import { Grid, Loader } from '@mantine/core'
+import { Container, Grid, Loader } from '@mantine/core'
 import { Feature02 } from '@/components/feature-02';
 import  {Calculator}  from '@/components/Calculator/Calculator';
 import { Footer01 } from '@/components/footer/footer';
@@ -180,20 +180,22 @@ export default function HomepageClient() {
             <div className="fade-in-container" >
                 <Header01/>
                 <div style={{paddingBottom:"40px"}}/>
-                <div style={{paddingLeft:"50px", paddingRight:"50px"}}>
-                    <Welcome />
+                <Container px={{base:"0px", md:"20px" ,lg:"40px"}} mx={{base:"0px"}} fluid>
+                    <section id="Home"><Welcome /></section>
                     <UserDataDisplay userDetails={userDetails}/>
                     {/* <UploadInvoice /> */}
-                    <Grid style={{overflow: 'hidden'}} m="xl">
-                        <Grid.Col span={{ md: 9}}>
-                            <Calculator startingAmount={parsedBalance ?? 80000}/>
-                        </Grid.Col>
-                        <Grid.Col span={{ md: 3}}>
-                            <AgreementWidget />
-                        </Grid.Col>
-                    </Grid>
-                </div>
-                <Feature02 />
+                   <section id="contact">
+                        <Grid style={{overflow: 'hidden'}} mx="xl">
+                            <Grid.Col span={{ md: 9}}>
+                                <Calculator startingAmount={parsedBalance ?? 80000}/>
+                            </Grid.Col>
+                            <Grid.Col span={{ md: 3}}>
+                                <AgreementWidget />
+                            </Grid.Col>
+                        </Grid>
+                    </section>
+                </Container>
+                <section id="About"><Feature02 /></section>
                 <UseCases />
                 <FAQ />
                 <Footer01 />    

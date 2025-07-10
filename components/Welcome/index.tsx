@@ -69,7 +69,7 @@ export default function Welcome() {
               {name ? `Hi ${name},` : <Skeleton width={120} height={28} />}
             </Title>
             <Text size="xl" mt={4} c="black">
-              Apply for finance to pay your invoice in flexible monthly instalments — no upfront cost required.
+              Apply to pay your invoice in flexible monthly instalments — no upfront cost required.
             </Text>
           </div>
         </Group>

@@ -25,8 +25,8 @@ export type HeaderLink = {
 };
 
 const HEADER_LINKS: HeaderLink[] = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
+  { label: 'Home', href: 'Home' },
+  { label: 'About', href: 'About' },
 ];
 
 type Header01Props = ContainerProps & {
@@ -55,14 +55,28 @@ type Header01Props = ContainerProps & {
   radius?: MantineRadius | number;
 };
 
+const scrollToSection = (id: string) => {
+  const section = document.getElementById(id);
+  if (section) {
+    const yOffset = -30; // scroll 20px above the section
+    const y =
+      section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  } else {
+    console.log('section not found');
+  }
+};
+
+
 export const Header01 = ({
   style,
   breakpoint = 'xs',
   logo = (
     <Image src="/dbm.png" h={30} maw={200}/>
   ),
-  callToActionTitle = 'Request a Callback',
-  callToActionUrl = '#',
+  callToActionTitle = 'Submit an Application',
+  callToActionUrl = 'contact',
   links = HEADER_LINKS,
   onMenuToggle,
   isMenuOpen,
@@ -107,22 +121,28 @@ export const Header01 = ({
           gap="lg"
           className={classes['link-container']}
         >
-          {links.map((link) => (
-            <Anchor
-              key={link.href}
-              className={classes.link}
-              href={link.href}
-              component={NextLink}
-              td="none"
-            >
-              {link.label}
-            </Anchor>
-          ))}
+        {links.map((link) => (
+          <Button
+            key={link.href}
+            className={classes.link}
+            onClick={(e: any) => {
+              e.preventDefault();
+              scrollToSection(link.href);
+            }}
+            td="none"
+            bg="transparent"
+            fz="lg"
+          >
+            {link.label}
+          </Button>
+        ))}
         </Flex>
       </motion.div>
       <Button
-        component={NextLink}
-        href={callToActionUrl}
+        onClick={(e: any) => {
+          e.preventDefault();
+          scrollToSection(callToActionUrl);
+        }}
         className={classes.cta}
         radius="xl"
         rightSection={<IconArrowRight size={16} />}

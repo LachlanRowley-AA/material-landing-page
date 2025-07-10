@@ -13,27 +13,39 @@ import {
   Title,
   Box,
   Tooltip,
+  FileInput,
+  Modal
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import { BiInfoCircle } from "react-icons/bi";
+import { IconUpload } from '@tabler/icons-react';
+import { AskForBankstatement } from "@/components/AskForBankstatement";
+import { useDisclosure } from "@mantine/hooks";
+
 
 export const AgreementWidget = () => {
   const router = useRouter();
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [dataShareTicked, setDataShare] = useState(false);
   const [error, setError] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [opened, {open, close }] = useDisclosure(false);
 
   const handleCompleteApplication = () => {
     if (!dataShareTicked) {
       setError('You must agree to share your data to proceed.');
       return;
     }
-
     setError('');
-    console.log(sessionStorage.getItem('userData'));
-    router.push('/application');
+    if (uploadedFiles.length===0) {
+      open()
+    }
+    else {
+      // router.push('/application');
+    }
   };
+
 
   return (
     <Card
@@ -53,14 +65,15 @@ export const AgreementWidget = () => {
         <Title order={3} c="#fc8900">
           Let's get started
         </Title>
-
         <Checkbox
           label="I agree to share my data with Asset Alley"
           checked={dataShareTicked}
           onChange={(event) => setDataShare(event.currentTarget.checked)}
           size="md"
+          w="100%"
         />
         <Checkbox
+          w="100%"
           size="md"
           label={
             <>
@@ -78,26 +91,6 @@ export const AgreementWidget = () => {
             {error}
           </Text>
         )}
-
-        <Box w="100%">
-          <Tooltip label="Let us know you're interested. We'll follow up soon." withArrow>
-            <Button
-              variant="light"
-              fullWidth
-              size="md"
-              color="gray"
-              mt="md"
-              rightSection={<BiInfoCircle size={14}/>}
-            >
-              Lodge your interest and we'll be in touch
-            </Button>
-          </Tooltip>
-        </Box>
-
-        <Text size="sm" c="dimmed">
-          or
-        </Text>
-
         <Box w="100%">
           <Tooltip label="Jump straight into the full application process." withArrow>
             <Button
@@ -112,12 +105,30 @@ export const AgreementWidget = () => {
               }}
               onClick={handleCompleteApplication}
               rightSection={<BiInfoCircle size={14}/>}
->
-              Complete a full application now
+              >
+              Submit
             </Button>
           </Tooltip>
         </Box>
       </Stack>
-    </Card>
+      <Modal
+        opened={opened}
+        onClose={close}
+        size="auto"
+        withCloseButton={false}
+        styles={{
+          content: {
+            padding: 0,
+            backgroundColor: 'transparent', // Remove background if your Card already has one
+            boxShadow: 'none',
+          },
+          body: {
+            padding: 0,
+          },
+        }}
+      >
+        <AskForBankstatement />
+      </Modal>
+  </Card>
   );
 };

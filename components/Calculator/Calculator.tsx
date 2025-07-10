@@ -238,19 +238,11 @@ export const Calculator = ({
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             style={{ width: '100%' }}
           >
-            <span>
-              <JumboTitle order={3} fz="md" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "black",md:"#01E194"}}>
-                Calculate your estimated
-              </JumboTitle>
-              <JumboTitle order={3} fz="md" ta="center" style={{ textWrap: 'balance' }} hiddenFrom='lg' c={{base: "#01E194",md:"#01E194"}}>
-                {isWeekly ? 'weekly' : 'monthly'} repayment
-              </JumboTitle>
-            </span>
-            <Grid align="center" visibleFrom='lg' gutter="xl">
+            <Grid align="center" gutter="xl">
               <Grid.Col span={12}>
                 <span>
                   <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "black",md:"black"}} fw={600}>
-                    Calculate your
+                    Select your
                   </JumboTitle>
                   <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "01E194",md:"#01E194"}} fw={600}>
                     {isWeekly ? 'weekly' : 'monthly'} repayment
@@ -263,9 +255,8 @@ export const Calculator = ({
         
         <Container size="lg" mt="xl" ta="center" pt={isMobile ? 0 : 'xs'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
           <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <Stack gap={isMobile ? 'sm' : 'xl'}>
+            <Stack gap={isMobile ? 'sm' : 'md'}>
               <TextInput
-                
                 label="Loan Amount"
                 type="text"
                 value={baseValue.toLocaleString()}
@@ -283,78 +274,46 @@ export const Calculator = ({
                 }}
                 ta="center"
                 c={{base: "white", md:"#01E194"}}
+                rightSection={
+                  <Button
+                    size="xs"
+                    variant="subtle"
+                    onClick={() => setBaseValue(startingAmount)}
+                  >
+                    Reset
+                  </Button>
+                }
+                rightSectionWidth={100}
+
               />
-              <Slider
-                px="xl"
-                label="Loan Amount"
-                min={10000}
-                max={300000}
-                step={1000}
-                value={baseValue}
-                onChange={(value) => setBaseValue(Math.max(0, value))}
-                c={{base: "white",md:"#01E194"}}
-                mx={isMobile ? 'xs' : 0}
-                marks={[
-                  { value: startingAmount, label: <div><IconArrowUp style={{marginBottom:"0px", paddingBottom:"0px"}}/>
-                                                    <p style={{margin: "0px"}}>Your balance</p>
-                                                    <p style={{margin: "0px"}}>with DBM</p>
-                                                  </div>}
-                ]}
-                size="xl"
-                styles={{
-                  markLabel: {
-                    color: "orange"
-                  }
-                }}
-              />
-              </Stack>
-          </motion.div>
-          {/* <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
-            <motion.div
-              initial={{ opacity: 0.0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: 'easeInOut' }}
-              style={{ width: '100%' }}
-            >
-              <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600} mt="xl" pt="xl">
-                Select your payment plan
-              </JumboTitle>
-            </motion.div>
-          </Stack>
-          <Container size="lg" mt="md" ta="center" pt={isMobile ? 0 : 'md'} px={isMobile ? 0 : 'md'} pb={isMobile ? 'md' : 'xl'} style={{ height: '100%' }}>
-            <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-              <Stack gap={isMobile ? 'md' : 'xl'}>
-                <SegmentedControl
-                  value={customTimeframe}
-                  onChange={setCustomTimeframe}
-                  data={[
-                    { label: '6 months', value: '6' },
-                    { label: '12 months', value: '12' },
-                    { label: '24 months', value: '24' },
-                    { label: '36 months', value: '36' },
+              <Stack gap={0}>
+                <Text size="sm" fs="italic">Finance available up to $500,000 regardless of outstanding balance</Text>
+                <Slider
+                  px="xl"
+                  label="Loan Amount"
+                  min={10000}
+                  max={500000}
+                  step={1000}
+                  value={baseValue}
+                  onChange={(value) => setBaseValue(Math.max(0, value))}
+                  c={{base: "white",md:"#01E194"}}
+                  mx={isMobile ? 'xs' : 0}
+                  marks={[
+                    { value: startingAmount, label: <div><IconArrowUp style={{marginBottom:"0px", paddingBottom:"0px"}}/>
+                                                      <p style={{margin: "0px"}}>Your balance</p>
+                                                      <p style={{margin: "0px"}}>with DBM</p>
+                                                    </div>}
                   ]}
-                  size="md"
+                  size="xl"
                   styles={{
-                    root: {
-                      backgroundColor: '#f8f9fa',
-                    },
-                    control: {
-                      '&[data-active]': {
-                        backgroundColor: '#01E194',
-                        color: 'white',
-                      },
-                    },
+                    markLabel: {
+                      color: "orange"
+                    }
                   }}
                 />
-                <CustomStatCell 
-                  startValue={repayment} 
-                  endValue={customRepayment} 
-                  title={`Monthly Payment`}
-                  description={`To pay off in ${customTimeframe} months`} 
-                />
+                </Stack>
               </Stack>
-            </motion.div>
-          </Container> */}
+          </motion.div>
         </Container>
       </Grid.Col>
 
@@ -370,6 +329,7 @@ export const Calculator = ({
             <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
               Compare and select payment options
             </JumboTitle>
+            <Text pt="md" ta="center" fs="italic">all plans may be paid out at any time without paying any remaining interest</Text>
           </motion.div>
         </Stack>
         

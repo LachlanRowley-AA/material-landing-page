@@ -164,7 +164,7 @@ const downloadQRCode = (customerName: string) => {
     tempCtx.drawImage(canvas, 0, 0);
     
     // Add border to the copy
-    addBorderToCanvas(tempCanvas, 10, '#01E194');
+    addBorderToCanvas(tempCanvas, 10, '#FC8900');
     
     // Download the modified canvas
     const link = document.createElement('a');
