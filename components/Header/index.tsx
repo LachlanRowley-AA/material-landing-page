@@ -18,6 +18,7 @@ import { motion } from 'motion/react';
 import NextLink from 'next/link';
 import classes from './index.module.css';
 import { text } from 'stream/consumers';
+import { useMediaQuery } from '@mantine/hooks';
 
 export type HeaderLink = {
   label: string;
@@ -69,6 +70,7 @@ const scrollToSection = (id: string) => {
 };
 
 
+
 export const Header01 = ({
   style,
   breakpoint = 'xs',
@@ -76,13 +78,16 @@ export const Header01 = ({
     <Image src="/dbm.png" h={30} maw={200}/>
   ),
   callToActionTitle = 'Submit an Application',
+  callToActionSmall = 'Submit',
   callToActionUrl = 'contact',
   links = HEADER_LINKS,
   onMenuToggle,
   isMenuOpen,
   h = 60,
   ...containerProps
-}: Header01Props) => (
+}: Header01Props) => {
+  const isSmall = useMediaQuery('(max-width: 768px)'); // sm breakpoint
+  return(
   <Container
     className={classes.container}
     component="header"
@@ -101,7 +106,6 @@ export const Header01 = ({
       wrap="nowrap"
     >
       <Group gap={0} style={{ flexShrink: 0 }}>
-        <Burger size="sm" opened={isMenuOpen} onClick={onMenuToggle} hiddenFrom={breakpoint} />
         {logo}
       </Group>
       <motion.div
@@ -156,8 +160,8 @@ export const Header01 = ({
           }
       }}
       >
-        {callToActionTitle}
+        {isSmall ? callToActionSmall : callToActionTitle}
       </Button>
     </Flex>
   </Container>
-);
+)};

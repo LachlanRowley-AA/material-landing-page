@@ -318,7 +318,7 @@ export const Calculator = ({
       </Grid.Col>
 
       {/* Second Column - Chart */}
-      <Grid.Col  span={isMobile ? 12 : 6} pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} >
+      <Grid.Col  span={isMobile ? 12 : 6} pt={isMobile ? 'xl' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'} >
         <Stack align="center" gap="x" my={isMobile ? 'md' : 'xl'}>
           <motion.div
             initial={{ opacity: 0.0, y: 40 }}
@@ -326,7 +326,7 @@ export const Calculator = ({
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             style={{ width: '100%' }}
           >
-            <JumboTitle order={3} fz={isMobile ? "md" : "xs"} ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
+            <JumboTitle  order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "black",md:"black"}} fw={600}>
               Compare and select payment options
             </JumboTitle>
             <Text pt="md" ta="center" fs="italic">all plans may be paid out at any time without paying any remaining interest</Text>
