@@ -131,22 +131,39 @@ export const AskForBankstatement = () => {
           }}
           onClick={handleIlionClick}
           loading={loading}
+          styles={{
+              label: {
+                whiteSpace: 'normal',   // allow line‑breaks (use 'unset' or 'normal')
+                lineHeight: 1.25,      // optional – tidier vertical spacing
+                textAlign: 'center',   // optional – nicer on multi‑line buttons
+              },
+            }}
+
         >
           Provide your bank statements through Ilion
         </Button>
 
         <Button
-          fullWidth
-          radius="md"
-          size="md"
-          variant="outline"
-          color="dark"
-          onClick={handleUploadClick}
-          loading={loading}
-        >
-          {file ? 'Submit Application' : 'No thanks, continue without uploading'}
-        </Button>
-
+            fullWidth
+            radius="md"
+            size="md"
+            variant="outline"
+            color="dark"
+            onClick={handleUploadClick}
+            loading={loading}
+            /* Styles API – override the label only */
+            styles={{
+              label: {
+                whiteSpace: 'normal',   // allow line‑breaks (use 'unset' or 'normal')
+                lineHeight: 1.25,      // optional – tidier vertical spacing
+                textAlign: 'center',   // optional – nicer on multi‑line buttons
+              },
+            }}
+          >
+            {file
+              ? 'Submit Application'
+              : 'No thanks, continue without uploading'}
+          </Button>
         {success && (
           <Notification icon={<IconCheck />} color="green" title="Success" onClose={() => setSuccess(null)}>
             {success}
