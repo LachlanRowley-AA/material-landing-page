@@ -40,6 +40,9 @@ type Header01Props = ContainerProps & {
   /** Title for the call to action button */
   callToActionTitle?: string;
 
+  /** Title for CtA button on mobile */
+  callToActionSmall?: string;
+
   /** URL for the call to action button */
   callToActionUrl?: string;
 
