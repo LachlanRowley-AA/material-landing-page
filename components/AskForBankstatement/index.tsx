@@ -84,7 +84,7 @@ export const AskForBankstatement = () => {
     <Card
       shadow="lg"
       radius="xl"
-      p="xl"
+      p={{base:"md", md: "md"}}
       withBorder
       style={{
         border: `2px solid #fc8900`,
@@ -133,9 +133,9 @@ export const AskForBankstatement = () => {
           loading={loading}
           styles={{
               label: {
-                whiteSpace: 'normal',   // allow line‑breaks (use 'unset' or 'normal')
-                lineHeight: 1.25,      // optional – tidier vertical spacing
-                textAlign: 'center',   // optional – nicer on multi‑line buttons
+                whiteSpace: 'normal',  
+                lineHeight: 1.25,      
+                textAlign: 'center', 
               },
             }}
 

@@ -184,16 +184,16 @@ export default function HomepageClient() {
                     <section id="Home"><Welcome /></section>
                     <UserDataDisplay userDetails={userDetails}/>
                     {/* <UploadInvoice /> */}
-                   <section id="contact">
+                   
                         <Grid style={{overflow: 'hidden'}} mx="xl">
                             <Grid.Col span={{ md: 9}}>
                                 <Calculator startingAmount={parsedBalance ?? 80000}/>
                             </Grid.Col>
                             <Grid.Col span={{ md: 3}}>
-                                <AgreementWidget />
+                                <section id="contact"><AgreementWidget /></section>
                             </Grid.Col>
                         </Grid>
-                    </section>
+                    
                 </Container>
                 <section id="About"><Feature02 /></section>
                 <UseCases />
