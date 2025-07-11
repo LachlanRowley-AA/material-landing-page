@@ -84,7 +84,7 @@ export const AskForBankstatement = () => {
     <Card
       shadow="lg"
       radius="xl"
-      p={{base:"md", md: "md"}}
+      p={{base:"md", md: "xl"}}
       withBorder
       style={{
         border: `2px solid #fc8900`,
