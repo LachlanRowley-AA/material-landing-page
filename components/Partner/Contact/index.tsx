@@ -65,13 +65,6 @@ const formFields = [
     icon: IconBuilding,
     type: 'text'
   },
-  {
-    key: 'price' as keyof FormData,
-    label: 'Amount Required',
-    placeholder: 'Enter amount required',
-    icon: IconCurrencyDollar,
-    type: 'text'
-  }
 ];
 
 export const ContactForm = () => {
@@ -170,7 +163,7 @@ export const ContactForm = () => {
               fw={700}
               mb="sm"
             >
-              {isSuccess ? "Application Submitted!" : "Apply now to confirm eligibility"}
+              {isSuccess ? "Application Submitted!" : "Apply Now to Become a Partner"}
             </JumboTitle>
             <Text 
               size="lg" 

@@ -9,6 +9,7 @@ import {
   Image,
   Stack,
   Text,
+  Title,
   Button,
   Overlay,
   useMantineTheme
@@ -106,11 +107,11 @@ export const Hero03 = ({
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             viewport={{ once: true }}
           >
-            <JumboTitle ta="center" order={3} 
-              style={{ textWrap: 'balance', textShadow: '0 0 4px rgba(0, 0, 0, 0.8' }}
-              c={theme.colors.secondary[0]}>
+            <Title ta="center" fz={80} 
+              style={{ textWrap: 'balance'}}
+              c="white">
                 {title}
-            </JumboTitle>
+            </Title>
             </motion.div>
           <Text
               ta="center"
