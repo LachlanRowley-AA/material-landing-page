@@ -178,7 +178,7 @@ export const Calculator = ({
   // Calculate data for all timeframes
   const timeframes = [6, 12, 24, 36];
   const chartData = timeframes.map(months => {
-  const monthlyPayment = calculateCustomRepayment(baseValue, interestRate, months);
+  const monthlyPayment = months === 6 ? calculateCustomRepayment(baseValue, 20.0, months) : calculateCustomRepayment(baseValue, interestRate, months);
   const totalInterest = (monthlyPayment * months) - baseValue;
   const isSelected = months === parseInt(customTimeframe);
   return {

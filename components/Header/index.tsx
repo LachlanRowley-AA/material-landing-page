@@ -92,42 +92,49 @@ export const Header01 = ({
   const isSmall = useMediaQuery('(max-width: 768px)'); // sm breakpoint
   return(
   <Container
-    className={classes.container}
-    component="header"
-    style={{ ...style }}
-    w={{ base: '100%' }}
-    h={h}
-    maw='100vw'
-    {...containerProps}
+  className={classes.container}
+  component="header"
+  style={{ ...style, position: 'relative' }}
+  w={{ base: '100%' }}
+  h={h}
+  maw="100vw"
+  {...containerProps}
+>
+  <Flex
+    justify="space-between"
+    align="center"
+    h="100%"
+    gap="xs"
+    wrap="nowrap"
+    style={{ position: 'relative' }}
   >
-    <Flex
-      justify="space-between"
-      align="center"
-      h="100%"
-      style={{ overflow: 'hidden' }}
-      gap="xs"
-      wrap="nowrap"
+    {/* LEFT: Logo */}
+    <Group gap={0} style={{ flexShrink: 0 }}>
+      {logo}
+    </Group>
+
+    {/* CENTER: Links absolutely centered */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8, ease: 'easeInOut' }}
+      viewport={{ once: true }}
+      style={{
+        position: 'absolute',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+      }}
     >
-      <Group gap={0} style={{ flexShrink: 0 }}>
-        {logo}
-      </Group>
-      <motion.div
-        initial={{ width: 0, opacity: 0 }}
-        whileInView={{ width: 'fit-content', opacity: 1 }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-        viewport={{ once: true }}
+      <Flex
+        px="lg"
+        gap="lg"
+        align="center"
+        visibleFrom={breakpoint}
+        className={classes['link-container']}
       >
-        <Flex
-          flex={1}
-          justify="center"
-          px="lg"
-          h="100%"
-          align="center"
-          wrap="nowrap"
-          visibleFrom={breakpoint}
-          gap="lg"
-          className={classes['link-container']}
-        >
         {links.map((link) => (
           <Button
             key={link.href}
@@ -143,28 +150,30 @@ export const Header01 = ({
             {link.label}
           </Button>
         ))}
-        </Flex>
-      </motion.div>
-      <Button
-        onClick={(e: any) => {
-          e.preventDefault();
-          scrollToSection(callToActionUrl);
-        }}
-        className={classes.cta}
-        radius="xl"
-        rightSection={<IconArrowRight size={16} />}
-        style={{ flexShrink: 0 }}
-        styles={{
-          label: {
-            color:"#149a91"
-          },
-          section: {
-            color:"#149a91"
-          }
+      </Flex>
+    </motion.div>
+
+    {/* RIGHT: CTA */}
+    <Button
+      onClick={(e: any) => {
+        e.preventDefault();
+        scrollToSection(callToActionUrl);
       }}
-      >
-        {isSmall ? callToActionSmall : callToActionTitle}
-      </Button>
-    </Flex>
-  </Container>
+      className={classes.cta}
+      radius="xl"
+      rightSection={<IconArrowRight size={16} />}
+      style={{ flexShrink: 0 }}
+      styles={{
+        label: {
+          color: '#149a91',
+        },
+        section: {
+          color: '#149a91',
+        },
+      }}
+    >
+      {isSmall ? callToActionSmall : callToActionTitle}
+    </Button>
+  </Flex>
+</Container>
 )};
