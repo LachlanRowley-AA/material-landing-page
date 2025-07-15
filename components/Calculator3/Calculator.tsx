@@ -253,7 +253,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                       </Grid>
                     </Box>
                   )}
-                  <Group justify='flex-end' w="100%">
+                  <Group justify='flex-end' w="100%" visibleFrom="md">
                     <Switch onChange={(e) => setShowGraph(e.currentTarget.checked)} checked={showGraph} />
                     <Text>Toggle graph display</Text>
                   </Group>

@@ -85,17 +85,17 @@ export const Hero03 = ({
                 mt="xl"
               />
           )}
-          <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={450}/>
+          <Image src="/subheading.png" pt={0} mt={0} pb="xl" w={{base: 300, md:450}}/>
           <motion.div
             initial={{ opacity: 0.0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             viewport={{ once: true }}
           >
-            <Title fz={80} ta="center">
+            <Title fz={{base: 40, md: 80}} ta="center">
               More Material
                 <BackgroundImage src="./tape.png">
-                  <Text span inherit px="100px"> Less Red Tape</Text>
+                  <Text span inherit px={{base: "20px", md: "100px"}} ta="center" style={{textWrap: 'balance'}}> Less Red Tape</Text>
                 </BackgroundImage>
             </Title>
             </motion.div>

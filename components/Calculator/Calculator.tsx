@@ -440,7 +440,7 @@ export const Calculator = ({
                   </Grid>
                 </Box>
               )}
-              <Group justify='flex-end' w="100%">
+              <Group justify='flex-end' w="100%" visibleFrom='md'>
                 <Switch onChange={(event) => setShowGraph(event.currentTarget.checked)} checked={showGraph}/>
                   <Text>Toggle graph display</Text>
               </Group>

@@ -169,6 +169,7 @@ export const ContactForm = () => {
               c="#01E194"
               fw={700}
               mb="sm"
+              px="sm"
             >
               {isSuccess ? "Application Submitted!" : "Apply now to confirm eligibility"}
             </JumboTitle>

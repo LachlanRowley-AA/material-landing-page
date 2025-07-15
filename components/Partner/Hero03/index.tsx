@@ -91,11 +91,11 @@ export const Hero03 = ({
           {badge && (
               <Image
                 variant="default"
-                p={0}
+                p={30}
                 src="/logo_transparent.png"
                 mb={0}
                 style={{ textTransform: 'none' }}
-                maw={600}
+                maw={500}
                 mt="xl"
                 pt="xs"
               />
@@ -107,7 +107,7 @@ export const Hero03 = ({
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             viewport={{ once: true }}
           >
-            <Title ta="center" fz={80} 
+            <Title ta="center" fz={{base: 60, md:80} }
               style={{ textWrap: 'balance'}}
               c="white">
                 {title}
