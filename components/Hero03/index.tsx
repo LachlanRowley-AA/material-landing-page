@@ -16,6 +16,7 @@ import {
   Text,
   TextInput,
   Button,
+  useMantineTheme 
 } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'motion/react';
@@ -49,7 +50,9 @@ export const Hero03 = ({
   title = 'Pay Over Time \n Not Upfont',
   description = 'No financials required, Approvals in 24-48 hours. Credit score safe ',
   ...containerProps
-}: Hero03Props) => (
+}: Hero03Props) => {
+  const theme = useMantineTheme();
+  return (
   <Container pos="relative" h="80vh" mah={950} style={{ overflow: 'hidden' }} fluid>
     <Container component="section" h="80vh" mah={950} mx="auto" size="xl" {...containerProps}>
       <Box
@@ -101,7 +104,7 @@ export const Hero03 = ({
             </Text>
             <Button
               size="lg"
-              bg="rgba(1, 225, 148, 0.2)"
+              bg="rgba(1, 1, 1, 0.2)"
               mt="xl"
               c="#01E194"
               onMouseEnter={(e) => {
@@ -109,7 +112,7 @@ export const Hero03 = ({
                 e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(1, 225, 148, 0.2)';
+                e.currentTarget.style.backgroundColor = 'rgba(1, 1, 1, 0.2)';
                 e.currentTarget.style.color = '#01E194';
               }}
               onClick={(e:any)=>{e.preventDefault;scrollToSection('footer')}}>
@@ -119,4 +122,4 @@ export const Hero03 = ({
       </Flex>
     </Container>
   </Container>
-);
+)};

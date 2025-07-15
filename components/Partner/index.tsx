@@ -1,0 +1,6 @@
+export { default as Comparison } from './Comparison'
+export { default as Header } from './Header'
+export { default as Features } from './Features'
+export { default as Hero } from './Hero03'
+export { default as Journey } from './Journey'
+export { default as ContactForm } from './Contact'
