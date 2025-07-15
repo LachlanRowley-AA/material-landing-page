@@ -78,7 +78,7 @@ export const Header01 = ({
   style,
   breakpoint = 'xs',
   logo = (
-    <Image src="/dbm.png" h={30} maw={200}/>
+    <Image src="/logo_transparent.png" h={30} maw={200}/>
   ),
   callToActionTitle = 'Submit an Application',
   callToActionSmall = 'Submit',
@@ -156,10 +156,10 @@ export const Header01 = ({
         style={{ flexShrink: 0 }}
         styles={{
           label: {
-            color:"#fc8900"
+            color:"#149a91"
           },
           section: {
-            color:"#fc8900"
+            color:"#149a91"
           }
       }}
       >

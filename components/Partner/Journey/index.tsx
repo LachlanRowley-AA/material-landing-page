@@ -23,6 +23,8 @@ import {
   Award,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useMediaQuery } from '@mantine/hooks';
+
 
 const steps = [
   {
@@ -66,6 +68,8 @@ const ReferralJourneySection = () => {
   const [visibleSteps, setVisibleSteps] = useState(new Set<number>());
   const [isVisible, setIsVisible] = useState(false);
   const theme = useMantineTheme();
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+  
 
   useEffect(() => {
     setIsVisible(true);
@@ -117,10 +121,10 @@ const ReferralJourneySection = () => {
                 >
                   <Text size="md" mt={4}>{step.description}</Text>
                   <div>{index===1 && 
-                    <Divider size="xl" pt="md" label="Integrated Implementation" color={theme.colors.secondary[0]}
+                    <Divider size="xl" pt="md" label={isDesktop? "Integrated Implementation": "Full Implementation"} color={theme.colors.secondary[0]}
                       styles={{
                         label: {
-                          fontSize: "30px",
+                          fontSize:isDesktop ? "30px" : "15px",
                           color: theme.colors.secondary[0]
                         }
                       }}/>}

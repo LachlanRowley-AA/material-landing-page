@@ -21,6 +21,8 @@ export const AskForBankstatement = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [licenseFront, setLicenseFront] = useState<File | null>(null);
+  const [licenseBack, setLicenseBack] = useState<File | null>(null);
 
   const sendToLendAPI = async () => {
     setLoading(true);
@@ -93,7 +95,7 @@ export const AskForBankstatement = () => {
     >
       <Stack gap="lg">
         <JumboTitle order={2} fz={rem(20)} ta="center" c="#fc8900" style={{ fontWeight: 700 }}>
-          Get ahead of approval by uploading your business bank statements
+          Get ahead of approval by uploading your business bank statements and ID
         </JumboTitle>
 
         <FileInput

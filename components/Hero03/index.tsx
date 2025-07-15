@@ -5,6 +5,7 @@ import {
   ActionIcon,
   Avatar,
   AvatarGroup,
+  BackgroundImage,
   Badge,
   Box,
   Container,
@@ -15,6 +16,7 @@ import {
   Stack,
   Text,
   TextInput,
+  Title,
   Button,
   useMantineTheme 
 } from '@mantine/core';
@@ -47,7 +49,7 @@ const scrollToSection = (id: string) => {
 
 export const Hero03 = ({
   badge = ' ',
-  title = 'Pay Over Time \n Not Upfont',
+  title = 'More Material Less Red Tape',
   description = 'No financials required, Approvals in 24-48 hours. Credit score safe ',
   ...containerProps
 }: Hero03Props) => {
@@ -76,10 +78,10 @@ export const Hero03 = ({
                 variant="default"
                 p="xs"
                 bg="var(--mantine-color-body)"
-                src="/dbm.png"
+                src="/logo_transparent.png"
                 mb={0}
                 style={{ textTransform: 'none' }}
-                maw={900}
+                maw={300}
                 mt="xl"
               />
           )}
@@ -90,9 +92,12 @@ export const Hero03 = ({
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             viewport={{ once: true }}
           >
-            <JumboTitle ta="center" order={1} fz="lg" style={{ textWrap: 'balance' }}>
-              {title}
-            </JumboTitle>
+            <Title fz={80} ta="center">
+              More Material
+                <BackgroundImage src="./tape.png">
+                  <Text span inherit px="100px"> Less Red Tape</Text>
+                </BackgroundImage>
+            </Title>
             </motion.div>
           <Text
               ta="center"
@@ -104,7 +109,7 @@ export const Hero03 = ({
             </Text>
             <Button
               size="lg"
-              bg="rgba(1, 1, 1, 0.2)"
+              bg="rgba(1, 1, 1, 0.8)"
               mt="xl"
               c="#01E194"
               onMouseEnter={(e) => {
@@ -112,7 +117,7 @@ export const Hero03 = ({
                 e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(1, 1, 1, 0.2)';
+                e.currentTarget.style.backgroundColor = 'rgba(1, 1, 1, 0.8)';
                 e.currentTarget.style.color = '#01E194';
               }}
               onClick={(e:any)=>{e.preventDefault;scrollToSection('footer')}}>

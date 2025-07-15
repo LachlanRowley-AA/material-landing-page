@@ -174,7 +174,7 @@ export const ContactForm = () => {
             >
               {isSuccess 
                 ? "Thank you for your application. We'll review your details and get back to you within 24 hours." 
-                : "Tell us about your business needs and we'll get back to you ASAP."
+                : "Tell us about your business and we'll get back to you ASAP."
               }
             </Text>
           </Stack>
@@ -291,7 +291,7 @@ export const ContactForm = () => {
                         }
                       }}
                     >
-                      {isSubmitting ? 'Submitting...' : 'Get My Quote'}
+                      {isSubmitting ? 'Submitting...' : 'Submit'}
                     </Button>
                   </motion.div>
                 </Stack>
