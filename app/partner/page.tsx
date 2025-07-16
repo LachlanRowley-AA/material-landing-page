@@ -1,4 +1,13 @@
-import { Comparison, ContactForm, Header, Features, Hero, Journey } from '@/components/Partner'
+import { 
+    Comparison,
+    ContactForm, 
+    Header, 
+    Features, 
+    Hero, 
+    Journey,
+    Testimonial,
+    Why,
+ } from '@/components/Partner'
 
 
 export default function PartnerPage() {
@@ -6,9 +15,11 @@ export default function PartnerPage() {
         <div>
             <Header />
             <Hero />
+            <Why />
             <Features />
             <Comparison />
             <Journey />
+            <Testimonial />
             <ContactForm />
         </div>
     )

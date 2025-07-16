@@ -34,12 +34,7 @@ export default function HomepageClient() {
         
         try {
             setError(null); // Clear any previous errors
-            const response = await fetch(`/api/sheet?accountKey=${encodeURIComponent(apiKey)}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response = await fetch(`https://script.google.com/macros/s/AKfycbzaMZ_HCY-nYjktQGmRZbwXxRYrDtFi3CGDkQlIJMK0LA12zXT6xifTbNWO2hRFK-4WGg/exec?accountKey=${encodeURIComponent(apiKey)}`)
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -48,8 +43,14 @@ export default function HomepageClient() {
             const data = await response.json();
 
             // Parse the balance if it's a string
-            setBalance(parseFloat(data.data.balance.replace(/[\$,]/g, '')))
+            const rawBalance = data.data.balance;
+            const cleanedBalance = typeof rawBalance === 'string'
+            ? parseFloat(rawBalance.replace(/[\$,]/g, ''))
+            : typeof rawBalance === 'number'
+                ? rawBalance
+                : 0; // fallback if undefined or invalid
 
+            setBalance(cleanedBalance);
             console.log('User data fetched successfully:', data);
             setUserDetails(data.data);
             sessionStorage.setItem('userData', JSON.stringify(data.data));

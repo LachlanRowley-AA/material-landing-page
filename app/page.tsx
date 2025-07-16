@@ -13,7 +13,6 @@ export default function HomePage() {
   return (
     <>
       <Header01 />
-      <div style={{paddingBottom:"40px"}}/>
       <Hero03 />
       <Feature02 />
       <Calculator />

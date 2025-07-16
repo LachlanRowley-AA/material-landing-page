@@ -292,14 +292,14 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
             fullWidth
             styles={{
               root: {
-                background: "linear-gradient(135deg, rgba(1, 225, 148, 0.2) 0%, rgba(1, 225, 148, 0.2) 100%)",
+                background: `${theme.colors.secondary[0]}`,
                 border: "1px solid rgba(1, 225, 148, 0.2)",
                 padding: rem(24),
                 height: "auto",
                 marginTop: rem(40),
                 transition: "all 0.3s ease",
                 '&:hover': {
-                  background: "rgba(1, 225, 148, 0.3)",
+                  background: `${theme.colors.secondary[0]}`,
                   transform: "translateY(-2px)",
                 }
               },
@@ -316,10 +316,10 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
               }
             }}
             onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(1, 225, 148, 0.4)";
+                e.currentTarget.style.background = "#1fcfc3";
             }}
             onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(1, 225, 148, 0.2)";
+                e.currentTarget.style.background = `${theme.colors.secondary[0]}`;
             }}
 
           >

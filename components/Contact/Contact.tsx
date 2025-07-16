@@ -166,7 +166,7 @@ export const ContactForm = () => {
               fz="md" 
               ta="center" 
               style={{ textWrap: 'balance' }} 
-              c="#01E194"
+              c="#1fcfc3"
               fw={700}
               mb="sm"
               px="sm"
@@ -277,7 +277,7 @@ export const ContactForm = () => {
                       leftSection={<IconSend size={20} />}
                       styles={{
                         root: {
-                          background: "linear-gradient(135deg, #01E194 0%, #00C878 100%)",
+                          background: '#1fcfc3',
                           border: "none",
                           padding: `${rem(16)} ${rem(24)}`,
                           height: rem(56),
@@ -286,7 +286,7 @@ export const ContactForm = () => {
                           fontWeight: 600,
                           transition: "all 0.3s ease",
                           '&:hover': {
-                            background: "linear-gradient(135deg, #00C878 0%, #01E194 100%)",
+                            background: `linear-gradient(135deg, #00C878 0%, ${theme.colors.secondary[0]} 100%)`,
                             transform: "translateY(-2px)",
                             boxShadow: "0 8px 32px rgba(1, 225, 148, 0.3)",
                           },
