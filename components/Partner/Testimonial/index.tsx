@@ -18,7 +18,6 @@ type Testimonial = {
   quote: string;
   name: string;
   imageUrl: string;
-  handle: string;
   alt: string;
 };
 
@@ -26,10 +25,9 @@ const TESTIMONIALS: Testimonial[] = [
   {
     quote:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut",
-    name: 'Dolore Magna',
+    name: 'Charlie Daoud',
     imageUrl:
       'https://assetalley.com.au',
-    handle: '@sthompson',
     alt: 'dolore magna',
   },
 ];
@@ -38,7 +36,6 @@ const TestimonialCell = ({
   quote,
   name,
   imageUrl,
-  handle,
   alt,
   ...paperProps
 }: PaperProps & Testimonial) => (
@@ -54,7 +51,7 @@ const TestimonialCell = ({
   >
     <Flex direction="column" justify="space-between" h="100%">
       <Text component="blockquote">"{quote}"</Text>
-      <Group mt="xl" align="start">
+      <Group mt="xl" align="center">
         <Avatar radius="xl" size="lg">
           {/* <NextImage src={imageUrl} alt={alt} fill /> */}
         </Avatar>
@@ -62,7 +59,6 @@ const TestimonialCell = ({
           <Text fz="lg" fw={500}>
             {name}
           </Text>
-          <Text c="dimmed">{handle}</Text>
         </Box>
       </Group>
     </Flex>

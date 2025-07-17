@@ -1,13 +1,10 @@
 'use client';
 
-import { AnimatedCounter, AnimatedCounterProps } from './AnimatedCounter';
 import { JumboTitle } from '../JumboTitle/JumboTitle';
 import { Box, BoxProps, Button, Container, Grid, Stack, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch, SegmentedControl } from '@mantine/core';
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import dynamic from 'next/dynamic';
 import 'chart.js/auto';
-import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconArrowUp } from '@tabler/icons-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
@@ -80,71 +77,14 @@ const calculateInterestCost = (loanAmount: number, periodsElapsed: number, inter
   return Math.max(0, totalPaid - principalPaid);
 };
 
-
-const StatCell = ({
-    startValue,
-    endValue,
-    title,
-    description,
-    ...boxProps
-  }: BoxProps & { startValue: AnimatedCounterProps['startValue']; endValue: AnimatedCounterProps['endValue']; title: string; description: string }) => (
-    <motion.div
-      initial={{ opacity: 0.0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: 'easeInOut' }}
-    >
-      <Box {...boxProps}>
-        <AnimatedCounter ta="center" fz={rem(50)} fw="bold" c={{base: "01E194",md:"#01E194"}} endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)}  />
-        <Text fz="lg" inline ta="center" c={{base: "01E194",md:"black"}}>
-          {description}
-        </Text>
-      </Box>
-    </motion.div>
-  );
-
-  const PayoutCell = ({
-    startValue,
-    endValue,
-    title,
-    description,
-    payoutStartValue,
-    payoutEndValue,
-    payout,
-    ...boxProps
-  }: BoxProps & { startValue: AnimatedCounterProps['startValue']; endValue: AnimatedCounterProps['endValue']; title: string; 
-    description: string; payout: string; payoutStartValue: AnimatedCounterProps['startValue']; payoutEndValue: AnimatedCounterProps['endValue'] }) => (
-    <motion.div
-      initial={{ opacity: 0.0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: 'easeInOut' }}
-    >
-      <Box {...boxProps}
-        style={{
-            radius: '1rem',
-            borderRadius: '1rem',
-            padding: '0px'
-        }}
-      >
-        <AnimatedCounter c="black" ta="center" fz={rem(32)} fw="bold" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)} />
-        <Group justify="center" gap={5}>
-          <Text c="#01E194" fz="lg">
-            How Much Interest You'll Pay if Paid Out in:
-          </Text>
-          <Text fz="lg" c="black" fw="500">
-            {description}
-          </Text>
-        </Group>
-      </Box>
-    </motion.div>
-  );
-
 const CustomTooltip = ({ active, payload, label }: any) => {
+  const theme = useMantineTheme();
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
       <Box p="sm" style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
         <Text fw="500" c="black">{`${label} months`}</Text>
-        <Text c="#01E194">{`Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
+        <Text c={theme.colors.secondary[0]}>{`Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
       </Box>
     );
   }
@@ -186,33 +126,9 @@ export const Calculator = ({
       monthlyPayment: Math.round(monthlyPayment),
       totalInterest: Math.round(Math.max(0, totalInterest)),
       label: `${months} months`,
-      color: isSelected ? '#FFA500' : '#01E194' // Orange for selected, green for others
+      color: isSelected ? '#FFA500' : theme.colors.secondary[0] // Orange for selected, green for others
     };
   });
-
-  const CustomStatCell = ({
-      startValue,
-      endValue,
-      title,
-      description,
-      ...boxProps
-    }: BoxProps & { startValue: AnimatedCounterProps['startValue']; endValue: AnimatedCounterProps['endValue']; title: string; description: string }) => (
-      <motion.div
-        initial={{ opacity: 0.0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-      >
-        <Box {...boxProps} p="md" style={{ border: '2px solid #01E194', borderRadius: '12px' }}>
-          <Text fz="lg" ta="center" c="black" fw="600" mb="xs">
-            {title}
-          </Text>
-          <AnimatedCounter ta="center" fz={rem(36)} fw="bold" c="#01E194" endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)}  />
-          <Text fz="sm" ta="center" c="dimmed" mt="xs">
-            {description}
-          </Text>
-        </Box>
-      </motion.div>
-    );
 
   return (
     <Grid
@@ -244,7 +160,7 @@ export const Calculator = ({
                   <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "black",md:"black"}} fw={600}>
                     Select your
                   </JumboTitle>
-                  <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "01E194",md:"#01E194"}} fw={600}>
+                  <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "01E194",md:theme.colors.secondary[0]}} fw={600}>
                     {isWeekly ? 'weekly' : 'monthly'} repayment
                   </JumboTitle>
                 </span>
@@ -273,7 +189,7 @@ export const Calculator = ({
                   section:  { fontSize: isMobile ? rem(28) : rem(40), color: 'black'} 
                 }}
                 ta="center"
-                c={{base: "white", md:"#01E194"}}
+                c={{base: "white", md:theme.colors.secondary[0]}}
                 rightSection={
                   <Button
                     size="xs"
@@ -296,7 +212,7 @@ export const Calculator = ({
                   step={1000}
                   value={baseValue}
                   onChange={(value) => setBaseValue(Math.max(0, value))}
-                  c={{base: "white",md:"#01E194"}}
+                  c={{base: "white",md:theme.colors.secondary[0]}}
                   mx={isMobile ? 'xs' : 0}
                   marks={[
                     { value: startingAmount, label: <div><IconArrowUp style={{marginBottom:"0px", paddingBottom:"0px"}}/>
@@ -356,7 +272,7 @@ export const Calculator = ({
                           },
                           control: {
                             '&[dataActive]': {
-                              backgroundColor: '#01E194',
+                              backgroundColor: theme.colors.secondary[0],
                               color: 'white',
                             },
                           },

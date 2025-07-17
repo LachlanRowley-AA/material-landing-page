@@ -159,6 +159,7 @@ export const Header01 = ({
         e.preventDefault();
         scrollToSection(callToActionUrl);
       }}
+      bg="transparent"
       className={classes.cta}
       radius="xl"
       rightSection={<IconArrowRight size={16} />}

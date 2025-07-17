@@ -244,7 +244,7 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
               fz="md" 
               ta="center" 
               style={{ textWrap: 'balance' }} 
-              c="#01E194"
+              c={theme.colors.secondary[0]}
               fw={700}
               mb="md"
             >
@@ -324,10 +324,10 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
 
           >
             <Stack align="center" gap="md">
-              <Text size="xl" fw={600} c="#01E194" ta="center">
+              <Text size="xl" fw={600} c="white" ta="center">
                 Still have questions?
               </Text>
-                <Text size="md" c="rgba(255, 255, 255, 0.8)" w="100%" ta="center" style={{wordWrap: "break-word", }}>
+                <Text size="md" c="rgba(255, 255, 255, 0.9)" w="100%" ta="center" style={{wordWrap: "break-word", }}>
                 Our team is here to help you understand how we can work for your specific situation.
                 </Text>
             </Stack>

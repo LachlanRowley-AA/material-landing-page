@@ -12,7 +12,8 @@ import {
   Text,
   Title,
   useMantineTheme,
-  Overlay
+  Overlay, 
+  Image
 } from '@mantine/core';
 import { IconArrowRight, IconCircleCheckFilled } from '@tabler/icons-react';
 import { motion } from 'motion/react';
@@ -111,6 +112,17 @@ export const Hero03 = ({
             gap="md"
             style={{ zIndex: 1 }}
           >
+          {badge && (
+              <Image
+                variant="default"
+                p={30}
+                src="/logo.svg"
+                mb={0}
+                style={{ textTransform: 'none' }}
+                maw={500}
+              />
+          )}
+          <Image src="/subheading_white.png" pt={-10} mt={-20} pb="xl" w={300}/>
             <motion.div
               initial={{ opacity: 0.0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -151,14 +163,14 @@ export const Hero03 = ({
               size="lg"
               bg="rgba(1, 1, 1, 0.8)"
               mt="md"
-              c="#01E194"
+              c={theme.colors.secondary[0]}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#01E194';
+                e.currentTarget.style.backgroundColor = theme.colors.secondary[0];
                 e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(1, 1, 1, 0.8)';
-                e.currentTarget.style.color = '#01E194';
+                e.currentTarget.style.color = theme.colors.secondary[0];
               }}
               onClick={(e: any) => {
                 e.preventDefault();

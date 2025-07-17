@@ -4,11 +4,11 @@
 
 @keyframes glow {
   from {
-    box-shadow: 0 0 20px #01E194, 0 0 40px #01E194, 0 0 60px #01E194;
+    box-shadow: 0 0 20px var(--mantine-colors-secondary), 0 0 40px var(--mantine-colors-secondary), 0 0 60px var(--mantine-colors-secondary);
     transform: translateX(-50%) scale(1);
   }
   to {
-    box-shadow: 0 0 30px #01E194, 0 0 60px #01E194, 0 0 90px #01E194;
+    box-shadow: 0 0 30px var(--mantine-colors-secondary), 0 0 60px var(--mantine-colors-secondary), 0 0 90px var(--mantine-colors-secondary);
     transform: translateX(-50%) scale(1.1);
   }
 }

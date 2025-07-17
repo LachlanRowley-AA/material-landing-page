@@ -49,7 +49,7 @@ export const Hero03 = ({
   const theme = useMantineTheme();
   return(
   <Container pos="relative" h="80vh" mah={950} style={{ overflow: 'hidden' }} fluid >
-    <Container component="section" h="80vh" mah={950} mx="auto" size="xl" {...containerProps} mt="md">
+    <Container component="section" h="100%" mx="auto" size="xl" {...containerProps}>
       <Box
         pos="absolute"
         top={0}
@@ -75,12 +75,12 @@ export const Hero03 = ({
       </Box>
       <Box
         pos="absolute"
-        top={100}
+        top={0}
         left={0}
         h="100%"
         w="100%"
       />
-      <Flex h="100%" pos="relative" justify="center">
+      <Flex h="100%" pos="relative" justify="center" align="center">
         <Stack
           pt={{ base: 'xl', sm: 0 }}
           maw="var(--mantine-breakpoint-md)"
@@ -92,7 +92,7 @@ export const Hero03 = ({
               <Image
                 variant="default"
                 p={30}
-                src="/logo_transparent.png"
+                src="/logo.svg"
                 mb={0}
                 style={{ textTransform: 'none' }}
                 maw={500}
@@ -123,16 +123,16 @@ export const Hero03 = ({
             </Text>
             <Button
               size="lg"
-              bg="rgba(1, 225, 148, 0.3)"
+              bg={theme.colors.secondary[9]}
               mt="xl"
-              c="#01E194"
+              c="white"
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#01E194';
+                e.currentTarget.style.backgroundColor = theme.colors.secondary[0];
                 e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(1, 225, 148, 0.2)';
-                e.currentTarget.style.color = '#01E194';
+                e.currentTarget.style.backgroundColor = theme.colors.secondary[9];
+                e.currentTarget.style.color = "white";
               }}
               onClick={(e:any)=>{e.preventDefault;scrollToSection('footer')}}>
               Get Started

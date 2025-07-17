@@ -40,21 +40,34 @@ const calculateCustomRepayment = (loanAmount: number, interestRate: number, mont
 
 const StatCell = ({
   startValue, endValue, title, description, ...boxProps
-}: BoxProps & { startValue: AnimatedCounterProps['startValue']; endValue: AnimatedCounterProps['endValue']; title: string; description: string }) => (
+}: BoxProps & { startValue: AnimatedCounterProps['startValue']; endValue: AnimatedCounterProps['endValue']; title: string; description: string }) => {
+  const theme = useMantineTheme();
+  return(
   <motion.div initial={{ opacity: 0.0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, ease: 'easeInOut' }}>
     <Box {...boxProps}>
-      <AnimatedCounter ta="center" fz={rem(50)} fw="bold" c={{ base: "01E194", md: "#01E194" }} endValue={Math.max(0, endValue)} prefix="$" startValue={Math.max(0, startValue)} />
-      <Text fz="lg" inline ta="center" c={{ base: "01E194", md: "black" }}>{description}</Text>
+      <AnimatedCounter
+        ta="center"
+        fz={rem(50)}
+        fw="bold"
+        c={{ base: theme.colors.secondary[0], md: theme.colors.secondary[0] }}
+        endValue={Math.max(0, endValue)}
+        prefix="$"
+        startValue={Math.max(0, startValue)}
+      />
+      <Text fz="lg" inline ta="center" c={{ base: theme.colors.secondary[0], md: "black" }}>
+        {description}
+      </Text>   
     </Box>
   </motion.div>
-);
+)};
 
 const CustomTooltip = ({ active, payload, label }: any) => {
+  const theme = useMantineTheme();
   if (active && payload && payload.length) {
     return (
       <Box p="sm" style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
         <Text fw="500" c="black">{`${label} months`}</Text>
-        <Text c="#01E194">{`Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
+        <Text c={theme.colors.secondary[0]}>{`Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
       </Box>
     );
   }
@@ -88,7 +101,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
       monthlyPayment: Math.round(monthlyPayment),
       totalInterest: Math.round(Math.max(0, totalInterest)),
       label: `${months} months`,
-      color: isSelected ? '#FFA500' : '#01E194'
+      color: isSelected ? '#FFA500' : theme.colors.secondary[0]
     };
   });
 
@@ -174,7 +187,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                       step={1000}
                       value={baseValue}
                       onChange={(value) => setBaseValue(Math.max(0, value))}
-                      c="#01E194"
+                      c={theme.colors.secondary[0]}
                       size="xl"
                       styles={{ markLabel: { color: "orange" } }}
                     />
@@ -208,8 +221,11 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                         styles={{
                           root: { backgroundColor: '#f8f9fa' },
                           control: {
-                            '&[dataActive]': { backgroundColor: '#01E194', color: 'white' },
-                          },
+                            '&[dataActive]': {
+                              backgroundColor: theme.colors.secondary[0],
+                              color: 'white'
+                            }
+                          }
                         }}
                       />
                       <ResponsiveContainer width="100%" height="90%">

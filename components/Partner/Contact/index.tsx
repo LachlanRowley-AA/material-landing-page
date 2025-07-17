@@ -159,7 +159,7 @@ export const ContactForm = () => {
               fz="md" 
               ta="center" 
               style={{ textWrap: 'balance' }} 
-              c="#01E194"
+              c={theme.colors.secondary[0]}
               fw={700}
               mb="sm"
             >
@@ -171,6 +171,7 @@ export const ContactForm = () => {
               ta="center"
               maw={600}
               style={{ lineHeight: 1.6 }}
+              px="md"
             >
               {isSuccess 
                 ? "Thank you for your application. We'll review your details and get back to you within 24 hours." 
@@ -269,7 +270,7 @@ export const ContactForm = () => {
                       leftSection={<IconSend size={20} />}
                       styles={{
                         root: {
-                          background: "linear-gradient(135deg, #01E194 0%, #00C878 100%)",
+                          background:theme.colors.secondary[0],
                           border: "none",
                           padding: `${rem(16)} ${rem(24)}`,
                           height: rem(56),
@@ -357,14 +358,14 @@ export const ContactForm = () => {
                       variant="outline"
                       styles={{
                         root: {
-                          border: "2px solid #01E194",
-                          color: "#01E194",
+                          border: "2px solid",
+                          color: theme.colors.secondary[0],
                           height: rem(48),
                           fontSize: rem(16),
                           fontWeight: 600,
                           transition: "all 0.3s ease",
                           '&:hover': {
-                            background: "#01E194",
+                            background: theme.colors.secondary[0],
                             color: 'black',
                             transform: "translateY(-1px)",
                           }

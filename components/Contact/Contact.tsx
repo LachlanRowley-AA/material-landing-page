@@ -179,6 +179,7 @@ export const ContactForm = () => {
               ta="center"
               maw={600}
               style={{ lineHeight: 1.6 }}
+              px="md"
             >
               {isSuccess 
                 ? "Thank you for your application. We'll review your details and get back to you within 24 hours." 

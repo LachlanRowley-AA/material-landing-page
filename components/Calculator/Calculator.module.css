@@ -4,7 +4,7 @@
 
 @keyframes glow {
   from {
-    box-shadow: 0 0 20px #01E194, 0 0 40px #01E194, 0 0 60px #01E194;
+    box-shadow: 0 0 20px #01E194, 0 0 40px #01E194, 0 0 60px;
     transform: translateX(-50%) scale(1);
   }
   to {
