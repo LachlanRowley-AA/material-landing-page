@@ -54,7 +54,7 @@ export const Hero03 = ({
   return (
     <Container
       pos="relative"
-      h="80vh"
+      h={{base: "100vh", md:"85vh"}}
       mah={950}
       fluid
       style={{
