@@ -57,7 +57,7 @@ export const IntroSection = () => {
         transition={{ duration: 0.8, delay: 1.8 }}
       >
         <Text size="xl" fw={500} c="black" mb="lg">
-          Whether you're a builder starting a new development or a contractor managing a busy schedule, Eazypay is here to help you move forward with confidence.
+          Even if you are fairly new business looking to purchase more without the cashflow constraint or a large business reaching capacity with trade accounts, Eazypay is here to help you move forward with confidence.
         </Text>
       </motion.div>
     </Container>

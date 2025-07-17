@@ -78,7 +78,7 @@ export const Header01 = ({
   style,
   breakpoint = 'xs',
   logo = (
-    <Image src="/logo_transparent.png" h={30} maw={200}/>
+    <Image src="/logo_transparent.png" h={20} maw={200}/>
   ),
   callToActionTitle = 'Submit an Application',
   callToActionSmall = 'Submit',

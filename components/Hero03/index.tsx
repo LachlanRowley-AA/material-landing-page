@@ -89,7 +89,7 @@ export const Hero03 = ({
                     objectFit: 'cover',
                   }}
                 >
-                  <source src="/construction.mp4" type="video/mp4" />
+                  <source src="/construction.webm" type="video/webm" />
                 </video>
               </Box>
         <Box
