@@ -6,6 +6,7 @@ import {
   Container,
   Flex,
   Group,
+  Image,
   Paper,
   PaperProps,
   Stack,
@@ -14,10 +15,12 @@ import {
 import NextImage from 'next/image';
 import classes from './index.module.css';
 
+
 type Testimonial = {
   quote: string;
   name: string;
   imageUrl: string;
+  company: string;
   alt: string;
 };
 
@@ -26,9 +29,9 @@ const TESTIMONIALS: Testimonial[] = [
     quote:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut",
     name: 'Charlie Daoud',
-    imageUrl:
-      'https://assetalley.com.au',
-    alt: 'dolore magna',
+    imageUrl: './charlie.jpg',
+    company: 'Discount Building Materials',
+    alt: 'Charlie Daud',
   },
 ];
 
@@ -36,6 +39,7 @@ const TestimonialCell = ({
   quote,
   name,
   imageUrl,
+  company,
   alt,
   ...paperProps
 }: PaperProps & Testimonial) => (
@@ -51,13 +55,16 @@ const TestimonialCell = ({
   >
     <Flex direction="column" justify="space-between" h="100%">
       <Text component="blockquote">"{quote}"</Text>
-      <Group mt="xl" align="center">
+      <Group mt="md" align="center">
         <Avatar radius="xl" size="lg">
-          {/* <NextImage src={imageUrl} alt={alt} fill /> */}
+          <Image src={imageUrl} alt={alt} />
         </Avatar>
         <Box>
           <Text fz="lg" fw={500}>
             {name}
+          </Text>
+          <Text fz="sm" c="gray">
+            {company}
           </Text>
         </Box>
       </Group>
@@ -69,9 +76,9 @@ export const Testimonial01 = () => (
   <Container
     bg="var(--mantine-color-body)"
     py={{
-      base: 'calc(var(--mantine-spacing-lg) * 4)',
-      xs: 'calc(var(--mantine-spacing-lg) * 5)',
-      lg: 'calc(var(--mantine-spacing-lg) * 6)',
+      base: 'calc(var(--mantine-spacing-lg) * 3)',
+      xs: 'calc(var(--mantine-spacing-lg) * 3)',
+      lg: 'calc(var(--mantine-spacing-lg) * 3)',
     }}
     fluid
   >

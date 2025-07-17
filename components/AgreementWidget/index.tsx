@@ -14,7 +14,8 @@ import {
   Box,
   Tooltip,
   FileInput,
-  Modal
+  Modal,
+  useMantineTheme
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
@@ -31,6 +32,7 @@ export const AgreementWidget = () => {
   const [error, setError] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [opened, {open, close }] = useDisclosure(false);
+  const theme = useMantineTheme();
 
   const handleCompleteApplication = () => {
     if (!dataShareTicked) {
@@ -62,7 +64,7 @@ export const AgreementWidget = () => {
       <Stack align="center">
         <Image src="/assetalley.svg" w={160} alt="Asset Alley Logo" />
 
-        <Title order={3} c="#fc8900">
+        <Title order={3} c={theme.colors.secondary[0]}>
           Let's get started
         </Title>
         <Checkbox

@@ -8,19 +8,22 @@ import {
     Testimonial,
     Why,
  } from '@/components/Partner'
-
+import {
+    Footer01
+} from '@/components/footer/footer'
 
 export default function PartnerPage() {
     return (
         <div>
             <Header />
             <Hero />
-            <Why />
+            {/* <Why /> */}
             <Features />
             <Comparison />
             <Journey />
             <Testimonial />
-            <ContactForm />
+            <section id ="contact"><ContactForm /></section>
+            <Footer01 />
         </div>
     )
 }

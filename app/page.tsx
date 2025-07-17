@@ -7,18 +7,17 @@ import { Calculator } from '@/components/Calculator3/Calculator';
 import { Footer01 } from '@/components/footer/footer';
 import { FAQ } from '@/components/FAQ/Faq';
 import { ContactForm } from '@/components/Contact/Contact';
-import { Header01 } from '@/components/Header';
+import { Header } from '@/components/Partner';
 
 export default function HomePage() {
   return (
     <>
-      <Header01 />
+      <Header />
       <Hero03 />
       <Feature02 />
-      <Calculator />
       <UseCases />
       <FAQ />
-      <section id ="footer"><ContactForm /></section>
+      <section id ="contact"><Calculator /></section>
       <Footer01 />
     </>
   );

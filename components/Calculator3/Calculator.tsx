@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { AgreementWidget } from '@/components/AgreementWidget';
 
 const DEFAULT_INTEREST_RATE = 13.95;
 const DAYS_IN_YEAR = 365;
@@ -118,7 +119,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
       <Box
         bg="white"
         style={{
-          maxWidth: 1400,
+          maxWidth: 1600,
           margin: '0 auto',
           borderRadius: '1rem',
           boxShadow: '0 0 12px rgba(0,0,0,0.05)',
@@ -139,7 +140,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
           bg="white"
         >
           {/* Left Column */}
-          <Grid.Col span={isMobile ? 12 : 6} pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'}>
+          <Grid.Col span={isMobile ? 12 : 4} pt={isMobile ? 'xs' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'}>
             <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
               <motion.div initial={{ opacity: 0.0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeInOut' }} style={{ width: '100%' }}>
                 <Grid align="center" gutter="xl">
@@ -198,7 +199,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
           </Grid.Col>
 
           {/* Right Column */}
-          <Grid.Col span={isMobile ? 12 : 6} pt={isMobile ? 'xl' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'}>
+          <Grid.Col span={isMobile ? 12 : 5} pt={isMobile ? 'xl' : 'md'} px={isMobile ? 'xs' : 'md'} pb={isMobile ? 'md' : 'xl'}>
             <Stack align="center" gap="x" my={isMobile ? 'md' : 'xl'}>
               <motion.div initial={{ opacity: 0.0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeInOut' }} style={{ width: '100%' }}>
                 <JumboTitle order={1} fz="xs" ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
@@ -275,6 +276,11 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                   </Group>
                 </Stack>
               </motion.div>
+            </Container>
+          </Grid.Col>
+          <Grid.Col span={isMobile ? 12 : 3}>
+            <Container px="xl">
+              <AgreementWidget />
             </Container>
           </Grid.Col>
         </Grid>

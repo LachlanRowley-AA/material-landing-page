@@ -27,8 +27,8 @@ export type HeaderLink = {
 };
 
 const HEADER_LINKS: HeaderLink[] = [
-  { label: 'For Businesses', href: 'Home' },
-  { label: 'Become a Partner', href: 'About' },
+  { label: 'Looking for Finance', href: '/' },
+  { label: 'Become a Partner', href: '/partner' },
 ];
 
 type Header01Props = ContainerProps & {
@@ -134,13 +134,11 @@ export const Header01 = ({
           <Button
             key={link.href}
             className={classes.link}
-            onClick={(e: any) => {
-              e.preventDefault();
-              scrollToSection(link.href);
-            }}
             td="none"
             bg="transparent"
             fz="lg"
+            component={NextLink}
+            href={link.href}
           >
             {link.label}
           </Button>

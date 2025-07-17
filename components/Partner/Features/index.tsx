@@ -45,7 +45,7 @@ const FEATURES: Feature[] = [
   {
     icon: <IconClockBolt size={28} stroke={1.5} />,
     title: 'Help Clients Buy More with No Extra Risk to You',
-    description: '',
+    description: 'You still get paid even if your client defaults',
   },
   {
     icon: <IconTrendingUp size={28} stroke={1.5} />,
