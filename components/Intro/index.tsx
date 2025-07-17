@@ -21,7 +21,7 @@ export const IntroSection = () => {
         transition={{ duration: 0.8, delay: 0 }}
       >
         <Text size="xl" fw={500} c="black" mb="lg">
-          At Eazypay, we're full-service asset finance specialists committed to helping businesses grow with tailored, strategic funding solutions.
+          Eazypay is powered by full-service asset finance specialists committed to helping businesses grow with tailored, strategic funding solutions.
         </Text>
       </motion.div>
 
@@ -33,7 +33,7 @@ export const IntroSection = () => {
         transition={{ duration: 0.8, delay: 0.6 }}
       >
         <Text size="xl" fw={500} c="black" mb="lg">
-          Building on our strong foundation in asset finance, we’re now focused on supporting the construction and trade sectors—empowering businesses to access the building materials they need to complete projects efficiently and cost-effectively.
+          Building on our strong foundation in asset finance, we’re now focused on supporting the construction and trade sectors empowering businesses to access the building materials they need to complete projects efficiently and cost-effectively.
         </Text>
       </motion.div>
 
