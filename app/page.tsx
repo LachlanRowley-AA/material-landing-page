@@ -16,9 +16,9 @@ export default function HomePage() {
       <Hero03 />
       <IntroSection />
       <Feature02 />
+      <section id ="contact"><Calculator /></section>
       <UseCases />
       <FAQ />
-      <section id ="contact"><Calculator /></section>
       <Footer01 />
     </>
   );

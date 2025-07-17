@@ -20,8 +20,8 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0 }}
       >
-        <Text size="lg" c="black" mb="lg">
-          At eazypay, we're full-service asset finance specialists committed to helping businesses grow with tailored, strategic funding solutions.
+        <Text size="xl" fw={500} c="black" mb="lg">
+          At Eazypay, we're full-service asset finance specialists committed to helping businesses grow with tailored, strategic funding solutions.
         </Text>
       </motion.div>
 
@@ -32,7 +32,7 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
-        <Text size="lg" c="black" mb="lg">
+        <Text size="xl" fw={500} c="black" mb="lg">
           Building on our strong foundation in asset finance, we’re now focused on supporting the construction and trade sectors—empowering businesses to access the building materials they need to complete projects efficiently and cost-effectively.
         </Text>
       </motion.div>
@@ -44,7 +44,7 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 1.2 }}
       >
-        <Text size="lg" c="black" mb="lg">
+        <Text size="xl" fw={500} c="black" mb="lg">
           We work hand-in-hand with clients to make high-quality materials more accessible through flexible, affordable finance options that preserve cash flow and keep projects on track.
         </Text>
       </motion.div>
@@ -56,8 +56,8 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 1.8 }}
       >
-        <Text size="lg" c="black">
-          Whether you're a builder starting a new development or a contractor managing a busy schedule, Asset Alley is here to help you move forward with confidence.
+        <Text size="xl" fw={500} c="black" mb="lg">
+          Whether you're a builder starting a new development or a contractor managing a busy schedule, Eazypay is here to help you move forward with confidence.
         </Text>
       </motion.div>
     </Container>

@@ -23,7 +23,10 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0 }}
       >
-        <Text size="lg" c="black" mb="lg">
+        <Text size="xl" fw={600} c="black" mb="lg">
+          No admin, 0 fees
+        </Text>        
+        <Text size="xl" fw={500} c="black" mb="lg">
           Eazypay helps suppliers grow their sales by offering flexible finance solutions directly to their customers without the admin or risk of managing payment plans.
         </Text>
       </motion.div>
@@ -35,7 +38,7 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.6 }}
       >
-        <Text size="lg" c="black" mb="lg">
+        <Text size="xl" fw={500} c="black" mb="lg">
           By partnering with Eazypay, you can remove financial friction at checkout making it easier for your customers to say yes to larger orders and complete more projects with confidence.
         </Text>
       </motion.div>
@@ -47,7 +50,7 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 1.2 }}
       >
-        <Text size="lg" c="black" mb="lg">
+        <Text size="xl" fw={500} c="black" mb="lg">
           Our simple onboarding process and seamless finance options help your customers access the materials they need now, while you get paid upfront, every time.
         </Text>
       </motion.div>
@@ -59,7 +62,7 @@ export const IntroSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 1.8 }}
       >
-        <Text size="lg" c="black">
+        <Text size="xl" fw={500} c="black" mb="lg">
           Join Eazypay’s network of trusted suppliers and start offering smarter, more flexible payment options that strengthen customer loyalty and drive business growth.
         </Text>
       </motion.div>
