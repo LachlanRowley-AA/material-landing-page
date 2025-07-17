@@ -7,6 +7,7 @@ import {
     Journey,
     Testimonial,
     Why,
+    Intro,
  } from '@/components/Partner'
 import {
     Footer01
@@ -18,6 +19,7 @@ export default function PartnerPage() {
             <Header />
             <Hero />
             {/* <Why /> */}
+            <Intro />
             <Features />
             <Comparison />
             <Journey />
