@@ -94,7 +94,7 @@ export const Header01 = ({
   <Container
   className={classes.container}
   component="header"
-  style={{ ...style, position: 'relative' }}
+  style={{ ...style}}
   w={{ base: '100%' }}
   h={h}
   maw="100vw"
@@ -106,7 +106,7 @@ export const Header01 = ({
     h="100%"
     gap="xs"
     wrap="nowrap"
-    style={{ position: 'relative' }}
+    style={{ overflow: 'hidden' }}
   >
     {/* LEFT: Logo */}
     <Group gap={0} style={{ flexShrink: 0 }}>
