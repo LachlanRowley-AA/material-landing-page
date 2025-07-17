@@ -147,9 +147,6 @@ const ReferralJourneySection = () => {
             itemBullet: {
               backgroundColor: theme.colors.green[1],
             },
-            itemLine: {
-              backgroundColor: theme.colors.green[1],
-            },
           }}
         >
           {currentSteps.map((step, index) => (
