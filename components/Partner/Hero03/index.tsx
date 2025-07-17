@@ -48,7 +48,7 @@ export const Hero03 = ({
 }: Hero03Props) => {
   const theme = useMantineTheme();
   return(
-  <Container pos="relative" h="80vh" mah={950} style={{ overflow: 'hidden' }} fluid >
+  <Container pos="relative" h={{base: "90vh", md: "80vh"}} mah={950} style={{ overflow: 'hidden' }} fluid >
     <Container component="section" h="100%" mx="auto" size="xl" {...containerProps}>
       <Box
         pos="absolute"
