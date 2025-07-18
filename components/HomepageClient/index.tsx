@@ -34,7 +34,7 @@ export default function HomepageClient() {
         
         try {
             setError(null); // Clear any previous errors
-            const response = await fetch(`https://script.google.com/macros/s/AKfycbzaMZ_HCY-nYjktQGmRZbwXxRYrDtFi3CGDkQlIJMK0LA12zXT6xifTbNWO2hRFK-4WGg/exec?accountKey=${encodeURIComponent(apiKey)}`)
+            const response = await fetch(`https://script.google.com/macros/s/AKfycbxs5Q33W9e2m9Mzu7OQf8l8ZG2UAbDQTBX8GCj0LInQhXBLHoUOuyRVtrCa0oJrQYQkZQ/exec?accountKey=${encodeURIComponent(apiKey)}`)
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
