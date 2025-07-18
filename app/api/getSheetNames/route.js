@@ -39,7 +39,7 @@ export async function GET(req) {
 
     // Find column indices
     for (let i = 0; i < headers.length; i++) {
-      if (headers[i] === 'pw') {
+      if (headers[i] === 'UUID') {
         pwCol = i;
       }
       if (headers[i] === 'CompanyName') {
