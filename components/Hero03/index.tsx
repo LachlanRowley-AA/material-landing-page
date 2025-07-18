@@ -115,11 +115,12 @@ export const Hero03 = ({
           {badge && (
               <Image
                 variant="default"
-                p={30}
+                p="md"
                 src="/logo.svg"
                 mb={0}
                 style={{ textTransform: 'none' }}
-                maw={500}
+                maw={{base: "70vw", md: "30vw"}}
+                w={{base: "70wv"}}
               />
           )}
           <Image src="/subheading_white.png" pt={-10} mt={-20} pb="xl" w={300}/>

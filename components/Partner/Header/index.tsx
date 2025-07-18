@@ -110,7 +110,7 @@ export const Header01 = ({
       gap="xs"
       wrap="nowrap"
     >
-      <Group gap={0} style={{ flexShrink: 0 }}>
+      <Group gap={0} style={{ flexShrink: 0 }} px="md">
         {logo}
       </Group>
       <motion.div
