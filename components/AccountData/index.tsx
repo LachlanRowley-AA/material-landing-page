@@ -1,7 +1,7 @@
 'use client';
 import { Card, Text, Title, Stack, Divider, Box, Flex } from '@mantine/core';
 import { useState, useEffect } from 'react';
-import { UserDetails } from '../HomepageClient';
+import { UserDetails } from '@/lib/UserDetails';
 
 
 type UserAccountProps = {

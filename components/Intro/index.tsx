@@ -21,7 +21,7 @@ export const IntroSection = () => {
         transition={{ duration: 0.8, delay: 0 }}
       >
         <Text size="xl" fw={500} c="black" mb="lg">
-          Eazypay is powered by full-service asset finance specialists committed to helping businesses grow with tailored, strategic funding solutions.
+          Eazypay is powered by the full-service asset finance specialists Asset Alley who are committed to helping businesses grow with tailored, strategic funding solutions.
         </Text>
       </motion.div>
 

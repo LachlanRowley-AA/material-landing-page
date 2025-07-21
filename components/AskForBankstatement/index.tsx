@@ -14,6 +14,7 @@ import {
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
+import { UserDetails } from '@/lib/UserDetails';
 
 export const AskForBankstatement = () => {
   const router = useRouter();
@@ -29,6 +30,37 @@ export const AskForBankstatement = () => {
     setSuccess(null);
     setError(null);
 
+    const userData = sessionStorage.getItem('userData');
+    if (!userData) {
+      setError('User data not found in session storage.');
+      setLoading(false);
+      return;
+    }
+    const parsedUserData: UserDetails = JSON.parse(userData);
+    let [first, ...lastArr] = parsedUserData.name.split(' ');
+    let last = lastArr.join(' ');
+    first = first || 'Missing First Name';
+    last = last || 'Missing Last Name';
+    let lendTimeframe: string;
+    switch (sessionStorage.getItem('customTimeframe')) {
+      case '6':
+        lendTimeframe = '4';
+        break;
+      case '12':
+        lendTimeframe = '15';
+        break;
+      case '24':
+        lendTimeframe = '17';
+        break;
+      case '36':
+        lendTimeframe = '18';
+        break;
+      default:
+        lendTimeframe = '44';
+        break;
+    }
+    console.log('Lend Timeframe:', lendTimeframe);
+
     try {
         const res = await fetch('/api/send-lead', {
         method: 'POST',
@@ -37,24 +69,24 @@ export const AskForBankstatement = () => {
         },
        body: JSON.stringify({
         owner: {
-            first_name: 'TestFirstName',
-            last_name: 'TestLastName',
-            contact_number: '012345678',
-            email: 'testEmail@email.com',
+            first_name: first,
+            last_name: last,
+            contact_number: parsedUserData.phoneNumber || '0000000000',
+            email: parsedUserData.email || '',
         },
         lead: {
-            organisation_name: 'TestCompany',
+            organisation_name: parsedUserData.company || 'Unknown Company',
             industry_id: '189',
             purpose_id: '1',
-            amount_requested: '5.49',
+            amount_requested: sessionStorage.getItem('loanAmount') || '-1',
             sales_monthly: '-1',
             company_registration_date: '1444/11/11',
             campaign: 'Test Campaign',
-            loan_term_requested: '4',
+            loan_term_requested: lendTimeframe,
         },
         lead_notes: [
             {
-            notes: 'referred by [A]',
+            notes: 'referred by Eazypay',
             },
         ],
         })

@@ -6,21 +6,14 @@ import  {Calculator}  from '@/components/Calculator/Calculator';
 import { Footer01 } from '@/components/footer/footer';
 import { FAQ } from '@/components/FAQ/Faq';
 import { ContactForm } from '@/components/Contact/Contact';
-import {UserDataDisplay} from '@/components/AccountData';
+import { UserDataDisplay } from '@/components/AccountData';
 import { UseCases } from '@/components/UseCases/Usecases';
 import { UploadInvoice } from '@/components/UploadInvoice';
 import { AgreementWidget } from '@/components/AgreementWidget';
 import { Header01 } from '@/components/Header'
 import { Hero02 } from '@/components/Hero02'
 import  Welcome  from '@/components/Welcome'
-
-export type UserDetails = {
-    name: string;
-    company: string;
-    address: string;
-    phoneNumber: string;
-    balance: number | string;
-};
+import { UserDetails } from '@/lib/UserDetails';
 
 export default function HomepageClient() {
     const [isPageReady, setIsPageReady] = useState(false);
@@ -34,7 +27,7 @@ export default function HomepageClient() {
         
         try {
             setError(null); // Clear any previous errors
-            const response = await fetch(`https://script.google.com/macros/s/AKfycbzoqNl-2zyqoeuZf8vmQwSOlZ7FjrB6Gkyv4izgmz-znG1GsrBqws0KVuyuFhz_-Uc/exec?accountKey=${encodeURIComponent(apiKey)}`)
+            const response = await fetch(`https://script.google.com/macros/s/AKfycbxE7C_cBbmcK6WkX8r1LhzmksN1jS_U_dpEaE-oYbrHWBQxkuOk5jPlGF3y25MtrNpO/exec?accountKey=${encodeURIComponent(apiKey)}`)
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

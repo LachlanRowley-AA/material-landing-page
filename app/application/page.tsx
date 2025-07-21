@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Button, Stack, Text, Title, Anchor, Alert, Loader, Modal, Group } from '@mantine/core';
 import { IconDownload, IconAlertCircle, IconCheck } from '@tabler/icons-react';
-import { UserDetails } from '@/components/HomepageClient';
+import { UserDetails } from '@/lib/UserDetails';
 
 //Signed pdf imports
 import template from '@/lib/template.json';

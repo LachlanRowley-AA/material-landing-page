@@ -77,9 +77,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 type CalculatorProps = {
   startingAmount?: number;
+  prefilled?: boolean
 }
 
-export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
+export const Calculator = ({ startingAmount = 20000, prefilled = true }: CalculatorProps) => {
   const [baseValue, setBaseValue] = useState(startingAmount);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [isWeekly, setIsWeekly] = useState(false);
@@ -164,6 +165,9 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                       const rawValue = event.currentTarget.value.replace(/,/g, '');
                       const numericValue = Math.max(0, Number(rawValue));
                       setBaseValue(numericValue);
+                      sessionStorage.setItem('loanAmount', numericValue.toString());
+                      console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+
                     }}
                     leftSection="$"
                     size='xl'
@@ -174,7 +178,13 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                     }}
                     ta="center"
                     rightSection={
-                      <Button size="xs" variant="subtle" onClick={() => setBaseValue(startingAmount)}>Reset</Button>
+                      <Button size="xs" variant="subtle" onClick={() => {
+                          setBaseValue(startingAmount);
+                          sessionStorage.setItem('loanAmount', startingAmount.toString());
+                          console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+
+                        }
+                      }>Reset</Button>
                     }
                     rightSectionWidth={100}
                   />
@@ -187,7 +197,12 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                       max={500000}
                       step={1000}
                       value={baseValue}
-                      onChange={(value) => setBaseValue(Math.max(0, value))}
+                      onChange={(value) => {
+                          setBaseValue(Math.max(0, value))
+                          sessionStorage.setItem('loanAmount', value.toString());
+                          console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+                        }
+                      }
                       c={theme.colors.secondary[0]}
                       size="xl"
                       styles={{ markLabel: { color: "orange" } }}
@@ -216,8 +231,11 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                     <Box style={{ height: '400px' }}>
                       <SegmentedControl
                         value={customTimeframe}
-                        onChange={setCustomTimeframe}
                         data={timeframes.map(m => ({ label: `${m} months`, value: `${m}` }))}
+                        onChange={(value) => {
+                          setCustomTimeframe(value);
+                          sessionStorage.setItem('customTimeframe', value);
+                        }}
                         size="md"
                         styles={{
                           root: { backgroundColor: '#f8f9fa' },
@@ -257,7 +275,11 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                                 backgroundColor: item.color === '#FFA500' ? '#FFF3E0' : '#f8f9fa',
                                 height: '95%',
                               }}
-                              onClick={() => setCustomTimeframe(String(item.months))}
+                              onClick={() => {
+                                setCustomTimeframe(String(item.months))
+                                sessionStorage.setItem('customTimeframe', String(item.months));
+                                }
+                              }
                             >
                               <Box w="100%">
                                 <Text fw="600" c="black" fz="sm" ta="center">{item.months} months</Text>
@@ -280,7 +302,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
           </Grid.Col>
           <Grid.Col span={isMobile ? 12 : 3}>
             <Container px="xl">
-              <AgreementWidget />
+              <AgreementWidget showDataShareCheckbox={prefilled} />
             </Container>
           </Grid.Col>
         </Grid>

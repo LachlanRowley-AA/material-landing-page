@@ -102,7 +102,6 @@ type CalculatorProps = {
 export const Calculator = ({
   startingAmount = 20000
 }: CalculatorProps) => {
-  console.log(startingAmount);
   const [baseValue, setBaseValue] = useState(startingAmount ? startingAmount : 10000);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [isWeekly, setIsWeekly] = useState(false);
@@ -180,6 +179,9 @@ export const Calculator = ({
                   const rawValue = event.currentTarget.value.replace(/,/g, ''); // remove commas
                   const numericValue = Math.max(0, Number(rawValue));
                   setBaseValue(numericValue);
+                  sessionStorage.setItem('loanAmount', numericValue.toString());
+                  console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+
                 }}
                 leftSection="$"
                 size='xl'
@@ -194,7 +196,12 @@ export const Calculator = ({
                   <Button
                     size="xs"
                     variant="subtle"
-                    onClick={() => setBaseValue(startingAmount)}
+                    onClick={() => {
+                      setBaseValue(startingAmount)
+                      sessionStorage.setItem('loanAmount', startingAmount.toString());
+                      console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+                      }
+                    }
                   >
                     Reset
                   </Button>
@@ -211,7 +218,12 @@ export const Calculator = ({
                   max={500000}
                   step={1000}
                   value={baseValue}
-                  onChange={(value) => setBaseValue(Math.max(0, value))}
+                  onChange={(value) => {
+                      setBaseValue(Math.max(0, value));
+                      sessionStorage.setItem('loanAmount', value.toString());
+                      console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+                    }
+                  }
                   c={{base: "white",md:theme.colors.secondary[0]}}
                   mx={isMobile ? 'xs' : 0}
                   marks={[
@@ -258,7 +270,11 @@ export const Calculator = ({
                     <Stack gap={isMobile ? 'md' : 'xl'}>
                       <SegmentedControl
                         value={customTimeframe}
-                        onChange={setCustomTimeframe}
+                        onChange={(value) => {
+                          setCustomTimeframe(value);
+                          sessionStorage.setItem('customTimeframe', value);
+                          console.log('Custom Timeframe set to:', sessionStorage.getItem('customTimeframe'));
+                        }}
                         data={[
                           { label: '6 months', value: '6' },
                           { label: '12 months', value: '12' },
@@ -337,7 +353,12 @@ export const Calculator = ({
                             backgroundColor: item.color === '#FFA500' ? '#FFF3E0' : '#f8f9fa',
                             height: '95%',
                           }}
-                          onClick={() => setCustomTimeframe(String(item.months))}
+                          onClick={() => {
+                            setCustomTimeframe(String(item.months))
+                            sessionStorage.setItem('customTimeframe', String(item.months));
+                            console.log('Custom Timeframe set to:', sessionStorage.getItem('customTimeframe'));
+                            }
+                          }
                         >
                           <Box w="100%">
                             <Text fw="600" c="black" fz="sm" ta="center">

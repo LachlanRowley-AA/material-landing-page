@@ -25,10 +25,15 @@ import { AskForBankstatement } from "@/components/AskForBankstatement";
 import { useDisclosure } from "@mantine/hooks";
 
 
-export const AgreementWidget = () => {
+type AgreementWidgetProps = {
+  showDataShareCheckbox ?: boolean;
+}
+
+export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidgetProps) => {
   const router = useRouter();
   const isDesktop = useMediaQuery('(min-width: 768px)');
-  const [dataShareTicked, setDataShare] = useState(false);
+  const [dataShareTicked, setDataShare] = useState(!showDataShareCheckbox); // Default to true if checkbox is not shown
+  const [privacyPolicyTicked, setPrivacyPolicy] = useState(false);
   const [error, setError] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [opened, {open, close }] = useDisclosure(false);
@@ -67,13 +72,14 @@ export const AgreementWidget = () => {
         <Title order={3} c={theme.colors.secondary[0]}>
           Let's get started
         </Title>
-        {/* <Checkbox
-          label="I agree to share my data with Asset Alley"
-          checked={dataShareTicked}
-          onChange={(event) => setDataShare(event.currentTarget.checked)}
-          size="md"
-          w="100%"
-        /> */}
+        {showDataShareCheckbox && 
+          <Checkbox
+            label="I agree to share my data with Asset Alley"
+            checked={dataShareTicked}
+            onChange={(event) => setDataShare(event.currentTarget.checked)}
+            size="md"
+            w="100%"
+        />}
         <Checkbox
           w="100%"
           size="md"
@@ -123,7 +129,7 @@ export const AgreementWidget = () => {
         styles={{
           content: {
             padding: 0,
-            backgroundColor: 'transparent', // Remove background if your Card already has one
+            backgroundColor: 'transparent',
             boxShadow: 'none',
           },
           body: {

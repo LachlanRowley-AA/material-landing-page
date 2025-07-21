@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   const data = await req.json();
 
-  const username = 'lQg2HSOwNLgAmoqQqDe7ffpJkhtqhwXMK';
-  const password = 'CGxG0EdIjGLR3xt';
+  const username = 'nnXSEUPwdF0xU33lqHZSKS6tTBaitBqAm';
+  const password = 'bgSMUyYZLmk9Y0F';
 
   const auth = Buffer.from(`${username}:${password}`).toString('base64');
 
@@ -16,13 +16,14 @@ export async function POST(req: NextRequest) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Version: '20190501',
-        Environment: 'sandbox',
+        Environment: 'live',
         Authorization: `Basic ${auth}`,
       },
       body: JSON.stringify(data),
     });
 
     const responseBody = await res.text();
+    console.log('Response from Lend API:', responseBody);
 
     return NextResponse.json(
       {

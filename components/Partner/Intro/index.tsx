@@ -23,7 +23,7 @@ export const IntroSection = () => {
           Unlock More Sales{" "}
         </Text>
         <Text inherit span c="black">
-          by Empowering Your Customers with{" "}
+          at No Cost or Risk With{" "}
           <Text inherit span c={theme.colors.primary[0]}>eazy</Text>
           <Text inherit span c={theme.colors.secondary[1]}>pay</Text>
         </Text>
@@ -38,12 +38,13 @@ export const IntroSection = () => {
           transition={{ duration: 0.8 }}
         >
           <Text size="xl" fw={600} c="black" mb="xs">
-            More Projects, Less Risk
+            More Sales, Less Risk
           </Text>
           <Text size="lg" fw={500} c="black">
             Eazypay helps you grow sales by offering
             customers flexible ways to manage their purchases without exposing your
-            business to credit risk or admin overhead.
+            business to credit risk or extra admin overhead {" "}
+              <Text inherit span fw={600}>without changing your current accounts process</Text>.
           </Text>
         </motion.div>
 
