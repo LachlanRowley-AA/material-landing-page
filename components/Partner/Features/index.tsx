@@ -30,17 +30,17 @@ const FEATURES: Feature[] = [
   {
     icon: <IconFileOff size={28} stroke={1.5} />,
     title: 'Increase Sales, Get Paid Sooner',
-    description: 'Stop price objections with flexible term options that are paid straight to you, the supplier',
+    description: 'Don’t let your accounts team stop you from providing flexible options to your customers at no cost to you. If your customer proceeds, funds are paid directly to you from the lender with no liability.',
   },
   {
     icon: <IconCalendarTime size={28} stroke={1.5} />,
     title: 'No Change to Your Accounts Process',
-    description: 'Simply put your custom qr code on your invoices, and we\'ll handle the rest',
+    description: 'Simply put your custom QR code on your invoices and account summaries, and we\'ll handle the rest',
   },
   {
     icon: <IconBuilding size={28} stroke={1.5} />,
-    title: 'Minimal Merchant Requirements',
-    description: `As long as you sell high ticket products, you are eligible to partner with us`,
+    title: 'No Extra Admin or Merchant Requirements Required',
+    description: `No additional admin staff required to execute or implement. No minimal turnover requirements from you to partner. `,
   },
   {
     icon: <IconClockBolt size={28} stroke={1.5} />,

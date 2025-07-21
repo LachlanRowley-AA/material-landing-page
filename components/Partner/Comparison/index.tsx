@@ -158,7 +158,7 @@ export const Pricing01 = () => {
             },
             {
               title: 'Easy Setup',
-              description: 'Just register and start including your custom QR code on invoices.',
+              description: 'Just register and start including your custom QR code on invoices and account summaries.',
               icon: (
                 <Icon>
                   <IconUsers size={21} />

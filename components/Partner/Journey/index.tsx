@@ -76,7 +76,7 @@ const integrationSteps = [
   {
     icon: Search,
     title: 'Custom Page',
-    description: "We create a cobranded page and QR code for you to add to your invoices",
+    description: "We create a cobranded page and QR code for you to add to your invoices and account summaries",
   },
   {
     icon: CheckCircle,

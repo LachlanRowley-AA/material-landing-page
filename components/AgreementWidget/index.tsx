@@ -67,13 +67,13 @@ export const AgreementWidget = () => {
         <Title order={3} c={theme.colors.secondary[0]}>
           Let's get started
         </Title>
-        <Checkbox
+        {/* <Checkbox
           label="I agree to share my data with Asset Alley"
           checked={dataShareTicked}
           onChange={(event) => setDataShare(event.currentTarget.checked)}
           size="md"
           w="100%"
-        />
+        /> */}
         <Checkbox
           w="100%"
           size="md"
@@ -86,6 +86,8 @@ export const AgreementWidget = () => {
               of Asset Alley
             </>
           }
+          checked={dataShareTicked}
+          onChange={(event) => setDataShare(event.currentTarget.checked)}
         />
 
         {error && (
