@@ -114,12 +114,6 @@ export const ContactForm = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
-  };
-
   const resetForm = () => {
     setIsSuccess(false);
     setFormData({
@@ -132,6 +126,43 @@ export const ContactForm = () => {
     });
     setError(null);
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    // Simulate API call
+    try {
+      setIsSubmitting(true);
+      const response = await fetch('/api/partner', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone_number: formData.phoneNumber,
+          business_name: formData.businessName,
+          integration_wanted: formData.type,
+          comments: 'Eazypay Partner Application',
+        }),
+      })
+      const result = await response.json();
+      if (response.ok) {
+        setIsSuccess(true);
+        resetForm();
+        setIsSubmitting(false);
+      } else {
+        setError(result.message || 'An error occurred while submitting the form.');
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      setError('Failed to submit the form. Please try again later.');
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <Box

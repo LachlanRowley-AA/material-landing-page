@@ -29,7 +29,7 @@
     "@pdfme/generator": "^5.4.0",
     "@pdfme/schemas": "^5.4.0",
     "@pdfme/ui": "^5.4.0",
-    "@supabase/supabase-js": "^2.50.0",
+    "@supabase/supabase-js": "^2.52.0",
     "@tabler/icons-react": "^3.31.0",
     "@types/recharts": "^2.0.1",
     "chart.js": "^4.5.0",

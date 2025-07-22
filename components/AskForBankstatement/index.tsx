@@ -107,6 +107,27 @@ export const AskForBankstatement = () => {
 
   const handleUploadClick = () => {
     sendToLendAPI();
+    if(file) {
+      const userData = sessionStorage.getItem('userData');
+      const formData = new FormData();
+      formData.append('invoices', file);
+      const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+      formData.append('company_name', parsedUserData.company || 'Unknown Company');
+
+      fetch('/api/uploadBank', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            setError(data.error);
+          } else {
+            setSuccess('File uploaded successfully');
+          }
+        })
+        .catch(err => setError(`Upload failed: ${err.message}`));
+    }
   };
 
   const handleIlionClick = () => {

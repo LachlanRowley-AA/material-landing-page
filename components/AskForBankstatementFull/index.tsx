@@ -140,11 +140,37 @@ export const AskForBankstatementFull = () => {
   const handleFormSubmit = () => {
     syncUserToSession();
     sendToLendAPI();
+    setStep('upload');
   };
 
   const handleIlionClick = () => {
     router.push('/bankstatements');
   };
+
+    const handleUploadClick = () => {
+      if(file) {
+        const userData = sessionStorage.getItem('userData');
+        const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+        console.log('the file is:', file);
+        const formData = new FormData();
+        formData.append('invoices', file);
+        formData.append('company_name', parsedUserData.company || 'Unknown Company');
+  
+        fetch('/api/uploadBank', {
+          method: 'POST',
+          body: formData,
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              setError(data.error);
+            } else {
+              setSuccess('File uploaded successfully');
+            }
+          })
+          .catch(err => setError(`Upload failed: ${err.message}`));
+      }
+    };
 
   return (
     <Card
@@ -229,7 +255,11 @@ export const AskForBankstatementFull = () => {
               radius="md"
               withAsterisk
               value={file}
-              onChange={setFile}
+              onChange={(event) => {
+                setFile(event as File);
+                console.log(event);
+                console.log('File selected:', file);
+              }}
               styles={{
                 input: {
                   borderColor: '#fc8900',
@@ -274,7 +304,7 @@ export const AskForBankstatementFull = () => {
               variant="outline"
               color="dark"
               onClick={() => {
-                console.log('Bank statements uploaded:', file);
+                handleUploadClick();
               }}
               styles={{
                 label: {

@@ -40,8 +40,8 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
   const theme = useMantineTheme();
 
   const handleCompleteApplication = () => {
-    if (!dataShareTicked) {
-      setError('You must agree to share your data to proceed.');
+    if (!dataShareTicked || !privacyPolicyTicked) {
+      setError('You must agree to the above to proceed.');
       return;
     }
     setError('');
@@ -92,8 +92,8 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
               of Asset Alley
             </>
           }
-          checked={dataShareTicked}
-          onChange={(event) => setDataShare(event.currentTarget.checked)}
+          checked={privacyPolicyTicked}
+          onChange={(event) => setPrivacyPolicy(event.currentTarget.checked)}
         />
 
         {error && (
@@ -102,7 +102,7 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
           </Text>
         )}
         <Box w="100%">
-          <Tooltip label="Jump straight into the full application process." withArrow>
+          <Tooltip label="Submit an eazypay application to Asset Alley with 1 click" withArrow>
             <Button
               fullWidth
               size="md"
