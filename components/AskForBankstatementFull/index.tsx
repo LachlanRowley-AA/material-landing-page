@@ -44,6 +44,13 @@ export const AskForBankstatementFull = () => {
       company: userDetails.businessName,
       phoneNumber: userDetails.phone,
       email: userDetails.email,
+      balance: 0, // Default value, can be updated later
+      street: '',
+      city: '',
+      state: '',
+      postCode: '',
+      country: '',
+      address: '',
     };
     sessionStorage.setItem('userData', JSON.stringify(data));
   };
