@@ -134,7 +134,7 @@ export const Hero03 = ({
                 e.currentTarget.style.backgroundColor = theme.colors.secondary[9];
                 e.currentTarget.style.color = "white";
               }}
-              onClick={(e:any)=>{e.preventDefault;scrollToSection('footer')}}>
+              onClick={(e:any)=>{e.preventDefault;scrollToSection('contact')}}>
               Get Started
             </Button>
         </Stack>

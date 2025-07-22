@@ -175,7 +175,7 @@ export const Hero03 = ({
               }}
               onClick={(e: any) => {
                 e.preventDefault();
-                scrollToSection('footer');
+                scrollToSection('contact');
               }}
             >
               Get Started
