@@ -34,6 +34,19 @@ import NextLink from 'next/link';
 import { ReactNode, useState } from 'react';
 import classes from './index.module.css';
 
+const scrollToSection = (id: string) => {
+  const section = document.getElementById(id);
+  if (section) {
+    const yOffset = -30; // scroll 20px above the section
+    const y =
+      section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  } else {
+    console.log('section not found');
+  }
+};
+
 const Icon = ({ children }: { children: ReactNode }) => (
   <Card radius="xl" p="sm" withBorder>
     <Center>{children}</Center>
@@ -137,7 +150,7 @@ export const Pricing01 = () => {
           title="Low Touch"
           description="Fastest implementation"
           cta={
-            <Button component={NextLink} href="#" size="lg" variant="light" fullWidth>
+            <Button size="lg" variant="light" fullWidth onClick={() => scrollToSection('contact')}>
               Get started
             </Button>
           }
@@ -186,7 +199,7 @@ export const Pricing01 = () => {
           title="Integrated Implementation"
           description="For improved customer experience"
           cta={
-            <Button className={classes.cta} component={NextLink} href="#" size="lg" fullWidth>
+            <Button className={classes.cta} size="lg" fullWidth onClick={() => scrollToSection('contact')}>
               Get started
             </Button>
           }
