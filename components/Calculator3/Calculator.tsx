@@ -17,6 +17,11 @@ const DAYS_IN_WEEK = 7;
 const DAYS_IN_MONTH = 365 / 12;
 const LOAN_TERM_YEARS = 3;
 
+const MAX_LOAN_AMOUNT = 500000;
+
+const [loanInput, setLoanInput] = useState(''); // raw string input
+
+
 const calculateRepayment = (loanAmount: number, interestRate: number, isWeekly: boolean) => {
   if (loanAmount <= 0) return 0;
 
@@ -162,12 +167,33 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                     type="text"
                     value={baseValue.toLocaleString()}
                     onChange={(event) => {
-                      const rawValue = event.currentTarget.value.replace(/,/g, '');
-                      const numericValue = Math.max(0, Number(rawValue));
-                      setBaseValue(numericValue);
-                      sessionStorage.setItem('loanAmount', numericValue.toString());
-                      console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+                      const raw = event.currentTarget.value;
+                      const parsed = Number(raw.replace(/,/g, ''));
 
+                      if (!isNaN(parsed)) {
+                        const capped = Math.min(parsed, MAX_LOAN_AMOUNT);
+                        setBaseValue(capped);
+                        sessionStorage.setItem('loanAmount', capped.toString());
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+
+                      // Allow control keys
+                      if (allowed.includes(e.key)) return;
+
+                      // Allow one dot if not already present
+                      if (e.key === '.') {
+                        if (e.currentTarget.value.includes('.')) {
+                          e.preventDefault(); // prevent multiple dots
+                        }
+                        return;
+                      }
+
+                      // Allow digits 0–9
+                      if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault(); // block everything else
+                      }
                     }}
                     leftSection="$"
                     size='xl'
@@ -179,7 +205,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                     ta="center"
                     rightSection={
                       <Button size="xs" variant="subtle" onClick={() => {
-                          setBaseValue(startingAmount);
+                          setBaseValue(Math.min(startingAmount, MAX_LOAN_AMOUNT));
                           sessionStorage.setItem('loanAmount', startingAmount.toString());
                           console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
 
@@ -194,7 +220,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                       px="xl"
                       label="Loan Amount"
                       min={10000}
-                      max={500000}
+                      max={MAX_LOAN_AMOUNT}
                       step={1000}
                       value={baseValue}
                       onChange={(value) => {

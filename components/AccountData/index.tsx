@@ -43,7 +43,7 @@ export function UserDataDisplay({ userDetails = null }: UserAccountProps) {
     const displayData = {
         name: userDetails?.name || 'N/A',
         businessName: userDetails?.company || 'N/A',
-        address: userDetails?.address || 'N/A',
+        address: `${userDetails?.street || ''}, ${userDetails?.city || ''}, ${userDetails?.state || ''}, ${userDetails?.postCode || ''}, ${userDetails?.country || ''}`,
         phoneNumber: userDetails?.phoneNumber || 'N/A',
         balance: userDetails?.balance || 0
     };
@@ -86,7 +86,7 @@ export function UserDataDisplay({ userDetails = null }: UserAccountProps) {
                     <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
                         <Text fw={500}>Current Balance</Text>
                         <ValueBox>
-                            {displayData.balance}
+                            ${displayData.balance.toLocaleString()}
                         </ValueBox>
                     </Stack>
                 </Flex>

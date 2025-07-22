@@ -5,4 +5,9 @@ export type UserDetails = {
     phoneNumber: string;
     balance: number | string;
     email: string;
+    street: string;
+    city: string;
+    state: string;
+    postCode: string;
+    country: string;
 };
