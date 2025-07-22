@@ -19,9 +19,6 @@ const LOAN_TERM_YEARS = 3;
 
 const MAX_LOAN_AMOUNT = 500000;
 
-const [loanInput, setLoanInput] = useState(''); // raw string input
-
-
 const calculateRepayment = (loanAmount: number, interestRate: number, isWeekly: boolean) => {
   if (loanAmount <= 0) return 0;
 

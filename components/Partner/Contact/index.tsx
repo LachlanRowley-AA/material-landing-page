@@ -12,7 +12,8 @@ import {
   Button,
   Group,
   ThemeIcon,
-  useMantineTheme 
+  useMantineTheme ,
+  Radio,
 } from '@mantine/core';
 import { motion } from 'motion/react';
 import { useMediaQuery } from '@mantine/hooks';
@@ -25,7 +26,9 @@ import {
   IconCurrencyDollar,
   IconSend,
   IconCheck,
-  IconRefresh
+  IconRefresh,
+  IconQrcode,
+  IconWorld,
 } from '@tabler/icons-react';
 
 interface FormData {
@@ -34,6 +37,7 @@ interface FormData {
   phoneNumber: string;
   businessName: string;
   price: string;
+  type: string;
 }
 
 const formFields = [
@@ -67,6 +71,24 @@ const formFields = [
   },
 ];
 
+const radioData = [
+  {
+    value: 'low',
+    label: 'Low Touch Integration',
+    icon: IconQrcode,
+  },
+  {
+    value: 'high',
+    label: 'High Touch Integration',
+    icon: IconWorld,
+  },
+  {
+    value: 'undecided',
+    label: 'Undecided',
+    icon: IconPhone,
+  }
+]
+
 export const ContactForm = () => {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
@@ -76,8 +98,10 @@ export const ContactForm = () => {
     email: '',
     phoneNumber: '',
     businessName: '',
-    price: ''
+    price: '',
+    type: '',
   });
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -94,35 +118,6 @@ export const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
-
-    // try {
-    //   const response = await fetch('/api/createQuery', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       name: formData.name,
-    //       email: formData.email,
-    //       businessName: formData.businessName,
-    //       price: formData.price,
-    //       phoneNumber: formData.phoneNumber // Assuming phone number maps to amount
-    //     }),
-    //   });
-
-    //   const result = await response.json();
-
-    //   if (response.ok && result.success) {
-    //     setIsSuccess(true);
-    //   } else {
-    //     setError(result.error || 'Form submission failed. Please try again.');
-    //   }
-    // } catch (error) {
-    //   console.error('Form submission failed', error);
-    //   setError('Network error. Please check your connection and try again.');
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
   };
 
   const resetForm = () => {
@@ -132,7 +127,8 @@ export const ContactForm = () => {
       email: '',
       phoneNumber: '',
       businessName: '',
-      price: ''
+      price: '',
+      type: '',
     });
     setError(null);
   };
@@ -254,7 +250,39 @@ export const ContactForm = () => {
                       </Text>
                     </motion.div>
                   )}
-
+                  <Radio.Group
+                    value={formData.type}
+                    onChange={(value) => handleInputChange('type', value)}
+                    label="Integration Type"
+                    size="lg"
+                  >
+                    <Stack gap={0}>
+                      {radioData.map((item) => (
+                    <Radio.Card
+                      key={item.value}
+                      value={item.value}
+                      p="md"
+                      bg="white"
+                    >
+                      <Group wrap="nowrap" align="center" gap={0}>
+                        <Radio.Indicator />
+                        <ThemeIcon
+                          size={40}
+                          radius="md"
+                          variant="transparent"
+                          color="#01E194"
+                          ml="sm"
+                        >
+                          <item.icon size={30} />
+                        </ThemeIcon>
+                        <Text size="sm" fw={500}>
+                          {item.label}
+                        </Text>
+                      </Group>
+                    </Radio.Card>
+                      ))}
+                    </Stack>
+                  </Radio.Group>
                   <motion.div
                     initial={{ opacity: 0.0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}

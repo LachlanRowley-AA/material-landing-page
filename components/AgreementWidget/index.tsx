@@ -23,7 +23,7 @@ import { BiInfoCircle } from "react-icons/bi";
 import { IconUpload } from '@tabler/icons-react';
 import { AskForBankstatement } from "@/components/AskForBankstatement";
 import { useDisclosure } from "@mantine/hooks";
-
+import { AskForBankstatementFull } from "@/components/AskForBankstatementFull";
 
 type AgreementWidgetProps = {
   showDataShareCheckbox ?: boolean;
@@ -137,7 +137,12 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
           },
         }}
       >
-        <AskForBankstatement />
+        {showDataShareCheckbox && 
+          <AskForBankstatement />
+          }
+        {!showDataShareCheckbox && 
+          <AskForBankstatementFull /> // The full application process as no prefilled data is available
+        }
       </Modal>
   </Card>
   );
