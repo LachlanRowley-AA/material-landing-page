@@ -43,7 +43,7 @@ export const IntroSection = () => {
           <Text size="lg" fw={500} c="black">
             Eazypay helps you grow sales by offering
             customers flexible ways to manage their purchases without exposing your
-            business to credit risk or extra admin overhead {" "}
+            business to Credit risk, extra admin overhead and {" "}
               <Text inherit span fw={600}>without changing your current accounts process</Text>.
           </Text>
         </motion.div>
