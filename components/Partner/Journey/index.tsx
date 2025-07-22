@@ -57,8 +57,8 @@ const steps = [
   },
   {
     icon: DollarSign,
-    title: 'Funding & Support',
-    description: 'Deal completes with lifetime customer support included',
+    title: 'Funding',
+    description: 'Deal completes and funds are paid to you',
   },
 ];
 
