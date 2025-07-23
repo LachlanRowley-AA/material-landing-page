@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   Button,
@@ -11,6 +11,7 @@ import {
   rem,
   Notification,
   TextInput,
+  Group,
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
@@ -20,7 +21,7 @@ import { UserDetails } from '@/lib/UserDetails';
 export const AskForBankstatementFull = () => {
   const router = useRouter();
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -33,8 +34,27 @@ export const AskForBankstatementFull = () => {
     email: '',
   });
 
+  useEffect(() => {
+    const savedDetails = sessionStorage.getItem('bankFormUserDetails');
+    const savedStep = sessionStorage.getItem('bankFormStep');
+
+    if (savedDetails) {
+      setUserDetails(JSON.parse(savedDetails));
+    }
+    if (savedStep === 'form' || savedStep === 'upload' || savedStep === 'thankyou') {
+      setStep(savedStep);
+    }
+  }, []);
+
   const handleInputChange = (field: keyof typeof userDetails, value: string) => {
-    setUserDetails((prev) => ({ ...prev, [field]: value }));
+    const updated = { ...userDetails, [field]: value };
+    setUserDetails(updated);
+    sessionStorage.setItem('bankFormUserDetails', JSON.stringify(updated));
+  };
+
+  const handleStepChange = (newStep: typeof step) => {
+    setStep(newStep);
+    sessionStorage.setItem('bankFormStep', newStep);
   };
 
   const syncUserToSession = () => {
@@ -75,11 +95,21 @@ export const AskForBankstatementFull = () => {
 
     let lendTimeframe: string;
     switch (sessionStorage.getItem('customTimeframe')) {
-      case '6': lendTimeframe = '4'; break;
-      case '12': lendTimeframe = '15'; break;
-      case '24': lendTimeframe = '17'; break;
-      case '36': lendTimeframe = '18'; break;
-      default: lendTimeframe = '44'; break;
+      case '6':
+        lendTimeframe = '4';
+        break;
+      case '12':
+        lendTimeframe = '15';
+        break;
+      case '24':
+        lendTimeframe = '17';
+        break;
+      case '36':
+        lendTimeframe = '18';
+        break;
+      default:
+        lendTimeframe = '44';
+        break;
     }
 
     try {
@@ -117,7 +147,7 @@ export const AskForBankstatementFull = () => {
         setSuccess('Application submitted successfully');
         setTimeout(() => {
           setSuccess(null);
-          setStep('upload');
+          handleStepChange('upload');
         }, 1000);
       } else {
         const text = await res.text();
@@ -165,32 +195,34 @@ export const AskForBankstatementFull = () => {
   };
 
   const handleUploadClick = () => {
-    if (file) {
+    if (file && file.length > 0) {
       const userData = sessionStorage.getItem('userData');
       const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
       const formData = new FormData();
-      formData.append('invoices', file);
+      file.forEach((f) => {
+        formData.append('invoices', f);
+      });
       formData.append('company_name', parsedUserData.company || 'Unknown Company');
 
       fetch('/api/uploadBank', {
         method: 'POST',
         body: formData,
       })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           if (data.error) {
             setError(data.error);
           } else {
-            setSuccess('File uploaded successfully');
+            setSuccess('Files uploaded successfully');
             setTimeout(() => {
               setSuccess(null);
-              setStep('thankyou');
+              handleStepChange('thankyou');
             }, 1000);
           }
         })
-        .catch(err => setError(`Upload failed: ${err.message}`));
+        .catch((err) => setError(`Upload failed: ${err.message}`));
     } else {
-      setStep('thankyou');
+      handleStepChange('thankyou');
     }
   };
 
@@ -280,10 +312,10 @@ export const AskForBankstatementFull = () => {
               leftSection={<IconUpload size={18} />}
               radius="md"
               withAsterisk
-              value={file}
+              multiple
               onChange={(event) => {
-                setFile(event as File);
-                console.log('File selected:', event);
+                const selected = Array.isArray(event) ? event : event ? [event] : [];
+                setFile((prev) => [...(prev || []), ...selected]);
               }}
               styles={{
                 input: {
@@ -298,6 +330,24 @@ export const AskForBankstatementFull = () => {
                 },
               }}
             />
+
+            {file && file.length > 0 && (
+              <Stack gap="xs">
+                {file.map((f, index) => (
+                  <Group key={index} justify="space-between">
+                    <Text size="sm">{f.name}</Text>
+                    <Button
+                      size="xs"
+                      color="red"
+                      variant="subtle"
+                      onClick={() => setFile((prev) => prev?.filter((_, i) => i !== index))}
+                    >
+                      Remove
+                    </Button>
+                  </Group>
+                ))}
+              </Stack>
+            )}
 
             <Divider label="OR" labelPosition="center" color="#fc8900" />
 
@@ -337,7 +387,9 @@ export const AskForBankstatementFull = () => {
                 },
               }}
             >
-              {file ? 'Upload File and Continue' : 'Continue without Uploading'}
+              {file && file.length > 0
+                ? 'Upload File(s) and Continue'
+                : 'Continue without Uploading'}
             </Button>
           </>
         )}

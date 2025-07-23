@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   Button,
@@ -10,6 +10,7 @@ import {
   Divider,
   rem,
   Notification,
+  Group
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
@@ -18,12 +19,14 @@ import { UserDetails } from '@/lib/UserDetails';
 
 export const AskForBankstatement = () => {
   const router = useRouter();
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
+  const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
+
 
   const sendToLendAPI = async () => {
     setLoading(true);
@@ -105,28 +108,50 @@ export const AskForBankstatement = () => {
     }
   };
 
+  useEffect(() => {
+    const savedStep = sessionStorage.getItem('bankFormStep');
+
+    if (savedStep === 'upload' || savedStep === 'thankyou') {
+      setStep(savedStep);
+    }
+  }, []);
+
+  const handleStepChange = (newStep: typeof step) => {
+    setStep(newStep);
+    sessionStorage.setItem('bankFormStep', newStep);
+  };
+
+
   const handleUploadClick = () => {
     sendToLendAPI();
-    if(file) {
+   if (file && file.length > 0) {
       const userData = sessionStorage.getItem('userData');
-      const formData = new FormData();
-      formData.append('invoices', file);
       const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+      const formData = new FormData();
+      file.forEach((f) => {
+        formData.append('invoices', f);
+      });
       formData.append('company_name', parsedUserData.company || 'Unknown Company');
 
       fetch('/api/uploadBank', {
         method: 'POST',
         body: formData,
       })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           if (data.error) {
             setError(data.error);
           } else {
-            setSuccess('File uploaded successfully');
+            setSuccess('Files uploaded successfully');
+            setTimeout(() => {
+              setSuccess(null);
+              handleStepChange('thankyou');
+            }, 1000);
           }
         })
-        .catch(err => setError(`Upload failed: ${err.message}`));
+        .catch((err) => setError(`Upload failed: ${err.message}`));
+    } else {
+      handleStepChange('thankyou');
     }
   };
 
@@ -150,75 +175,106 @@ export const AskForBankstatement = () => {
         <JumboTitle order={2} fz={rem(20)} ta="center" c="#fc8900" style={{ fontWeight: 700 }}>
           Get ahead of approval by uploading your business bank statements
         </JumboTitle>
+        {step !=='thankyou' && (
+          <div>
+            <Stack gap="lg">
+            <FileInput
+              label="Upload your bank statements"
+              placeholder="Choose file(s)"
+              leftSection={<IconUpload size={18} />}
+              radius="md"
+              withAsterisk
+              multiple
+              onChange={(event) => {
+                const selected = Array.isArray(event) ? event : event ? [event] : [];
+                setFile((prev) => [...(prev || []), ...selected]);
+              }}
+              styles={{
+                input: {
+                  borderColor: '#fc8900',
+                  '&:focusWithin': {
+                    borderColor: '#fc8900',
+                  },
+                },
+                label: {
+                  color: '#fc8900',
+                  fontWeight: 600,
+                },
+              }}
+            />
+            {file && file.length > 0 && (
+              <Stack gap="xs">
+                {file.map((f, index) => (
+                  <Group key={index} justify="space-between">
+                    <Text size="sm">{f.name}</Text>
+                    <Button
+                      size="xs"
+                      color="red"
+                      variant="subtle"
+                      onClick={() => setFile((prev) => prev?.filter((_, i) => i !== index))}
+                    >
+                      Remove
+                    </Button>
+                  </Group>
+                ))}
+              </Stack>
+            )}
 
-        <FileInput
-          label="Upload your bank statements"
-          placeholder="Choose file(s)"
-          leftSection={<IconUpload size={18} />}
-          radius="md"
-          withAsterisk
-          value={file}
-          onChange={setFile}
-          styles={{
-            input: {
-              borderColor: '#fc8900',
-              '&:focusWithin': {
-                borderColor: '#fc8900',
-              },
-            },
-            label: {
-              color: '#fc8900',
-              fontWeight: 600,
-            },
-          }}
-        />
+            <Divider label="OR" labelPosition="center" color="#fc8900" />
 
-        <Divider label="OR" labelPosition="center" color="#fc8900" />
+            <Button
+              fullWidth
+              radius="md"
+              size="md"
+              style={{
+                backgroundColor: '#fc8900',
+                color: 'white',
+                fontWeight: 600,
+              }}
+              onClick={handleIlionClick}
+              loading={loading}
+              styles={{
+                  label: {
+                    whiteSpace: 'normal',  
+                    lineHeight: 1.25,      
+                    textAlign: 'center', 
+                  },
+                }}
 
-        <Button
-          fullWidth
-          radius="md"
-          size="md"
-          style={{
-            backgroundColor: '#fc8900',
-            color: 'white',
-            fontWeight: 600,
-          }}
-          onClick={handleIlionClick}
-          loading={loading}
-          styles={{
-              label: {
-                whiteSpace: 'normal',  
-                lineHeight: 1.25,      
-                textAlign: 'center', 
-              },
-            }}
+            >
+              Provide your bank statements through Ilion
+            </Button>
 
-        >
-          Provide your bank statements through Ilion
-        </Button>
+            <Button
+                fullWidth
+                radius="md"
+                size="md"
+                variant="outline"
+                color="dark"
+                onClick={handleUploadClick}
+                loading={loading}
+                /* Styles API – override the label only */
+                styles={{
+                  label: {
+                    whiteSpace: 'normal',   // allow line‑breaks (use 'unset' or 'normal')
+                    lineHeight: 1.25,      // optional – tidier vertical spacing
+                    textAlign: 'center',   // optional – nicer on multi‑line buttons
+                  },
+                }}
+              >
+                {file
+                  ? 'Submit Application'
+                  : 'No thanks, continue without uploading'}
+              </Button>
+              </Stack>
+            </div>
+          )}
+        {step === 'thankyou' && (
+          <Text ta="center" size="lg" fw={600} c="green">
+            Thanks for submitting your details. We'll be in touch soon!
+          </Text>
+        )}
 
-        <Button
-            fullWidth
-            radius="md"
-            size="md"
-            variant="outline"
-            color="dark"
-            onClick={handleUploadClick}
-            loading={loading}
-            /* Styles API – override the label only */
-            styles={{
-              label: {
-                whiteSpace: 'normal',   // allow line‑breaks (use 'unset' or 'normal')
-                lineHeight: 1.25,      // optional – tidier vertical spacing
-                textAlign: 'center',   // optional – nicer on multi‑line buttons
-              },
-            }}
-          >
-            {file
-              ? 'Submit Application'
-              : 'No thanks, continue without uploading'}
-          </Button>
         {success && (
           <Notification icon={<IconCheck />} color="green" title="Success" onClose={() => setSuccess(null)}>
             {success}
