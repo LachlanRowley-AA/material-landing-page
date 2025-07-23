@@ -148,7 +148,7 @@ export const AskForBankstatement = () => {
     >
       <Stack gap="lg">
         <JumboTitle order={2} fz={rem(20)} ta="center" c="#fc8900" style={{ fontWeight: 700 }}>
-          Get ahead of approval by uploading your business bank statements and ID
+          Get ahead of approval by uploading your business bank statements
         </JumboTitle>
 
         <FileInput

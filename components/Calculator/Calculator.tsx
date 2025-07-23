@@ -207,6 +207,16 @@ export const Calculator = ({
                     e.preventDefault(); // block everything else
                   }
                 }}
+                onBlur={() => {
+                  const raw = baseValue.toString();
+                  const parsed = Number(raw.replace(/,/g, ''));
+                  if (!isNaN(parsed)) {
+                    const capped = Math.max(5000, parsed);
+                    setBaseValue(capped);
+                    sessionStorage.setItem('loanAmount', capped.toString());
+                  }
+                }}
+
                 leftSection="$"
                 size='xl'
                 styles={{
@@ -238,12 +248,12 @@ export const Calculator = ({
                 <Slider
                   px="xl"
                   label="Loan Amount"
-                  min={10000}
+                  min={5000}
                   max={MAX_LOAN_AMOUNT}
                   step={1000}
                   value={baseValue}
                   onChange={(value) => {
-                      setBaseValue(Math.max(0, value));
+                      setBaseValue(Math.max(5000, value));
                       sessionStorage.setItem('loanAmount', value.toString());
                       console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
                     }

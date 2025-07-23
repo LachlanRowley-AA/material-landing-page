@@ -192,6 +192,15 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                         e.preventDefault(); // block everything else
                       }
                     }}
+                    onBlur={() => {
+                      const raw = baseValue.toString();
+                      const parsed = Number(raw.replace(/,/g, ''));
+                      if (!isNaN(parsed)) {
+                        const capped = Math.max(5000, parsed);
+                        setBaseValue(capped);
+                        sessionStorage.setItem('loanAmount', capped.toString());
+                      }
+                    }}
                     leftSection="$"
                     size='xl'
                     styles={{
@@ -216,7 +225,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                     <Slider
                       px="xl"
                       label="Loan Amount"
-                      min={10000}
+                      min={5000}
                       max={MAX_LOAN_AMOUNT}
                       step={1000}
                       value={baseValue}

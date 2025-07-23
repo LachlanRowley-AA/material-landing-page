@@ -19,7 +19,7 @@ import { UserDetails } from '@/lib/UserDetails';
 
 export const AskForBankstatementFull = () => {
   const router = useRouter();
-  const [step, setStep] = useState<'form' | 'upload'>('form');
+  const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export const AskForBankstatementFull = () => {
       company: userDetails.businessName,
       phoneNumber: userDetails.phone,
       email: userDetails.email,
-      balance: 0, // Default value, can be updated later
+      balance: 0,
       street: '',
       city: '',
       state: '',
@@ -75,21 +75,11 @@ export const AskForBankstatementFull = () => {
 
     let lendTimeframe: string;
     switch (sessionStorage.getItem('customTimeframe')) {
-      case '6':
-        lendTimeframe = '4';
-        break;
-      case '12':
-        lendTimeframe = '15';
-        break;
-      case '24':
-        lendTimeframe = '17';
-        break;
-      case '36':
-        lendTimeframe = '18';
-        break;
-      default:
-        lendTimeframe = '44';
-        break;
+      case '6': lendTimeframe = '4'; break;
+      case '12': lendTimeframe = '15'; break;
+      case '24': lendTimeframe = '17'; break;
+      case '36': lendTimeframe = '18'; break;
+      default: lendTimeframe = '44'; break;
     }
 
     try {
@@ -125,7 +115,10 @@ export const AskForBankstatementFull = () => {
 
       if (res.ok) {
         setSuccess('Application submitted successfully');
-        setStep('upload');
+        setTimeout(() => {
+          setSuccess(null);
+          setStep('upload');
+        }, 1000);
       } else {
         const text = await res.text();
         setError(`Submission failed: ${res.status} - ${text}`);
@@ -137,40 +130,69 @@ export const AskForBankstatementFull = () => {
     }
   };
 
-  const handleFormSubmit = () => {
+  const validateForm = () => {
+    const { firstName, lastName, phone, email } = userDetails;
+    const phoneRegex = /^[0-9\s\-\+\(\)]{10}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!firstName.trim() || !lastName.trim() || !phone.trim() || !email.trim()) {
+      setError('Please fill out all required fields.');
+      return false;
+    }
+
+    if (!phoneRegex.test(phone)) {
+      setError('Please enter a valid phone number.');
+      return false;
+    }
+
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
     syncUserToSession();
     sendToLendAPI();
-    setStep('upload');
   };
 
   const handleIlionClick = () => {
     router.push('/bankstatements');
   };
 
-    const handleUploadClick = () => {
-      if(file) {
-        const userData = sessionStorage.getItem('userData');
-        const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
-        console.log('the file is:', file);
-        const formData = new FormData();
-        formData.append('invoices', file);
-        formData.append('company_name', parsedUserData.company || 'Unknown Company');
-  
-        fetch('/api/uploadBank', {
-          method: 'POST',
-          body: formData,
+  const handleUploadClick = () => {
+    if (file) {
+      const userData = sessionStorage.getItem('userData');
+      const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+      const formData = new FormData();
+      formData.append('invoices', file);
+      formData.append('company_name', parsedUserData.company || 'Unknown Company');
+
+      fetch('/api/uploadBank', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            setError(data.error);
+          } else {
+            setSuccess('File uploaded successfully');
+            setTimeout(() => {
+              setSuccess(null);
+              setStep('thankyou');
+            }, 1000);
+          }
         })
-          .then(response => response.json())
-          .then(data => {
-            if (data.error) {
-              setError(data.error);
-            } else {
-              setSuccess('File uploaded successfully');
-            }
-          })
-          .catch(err => setError(`Upload failed: ${err.message}`));
-      }
-    };
+        .catch(err => setError(`Upload failed: ${err.message}`));
+    } else {
+      setStep('thankyou');
+    }
+  };
 
   return (
     <Card
@@ -193,57 +215,61 @@ export const AskForBankstatementFull = () => {
         >
           {step === 'form'
             ? 'Let\'s get your details first'
-            : 'Upload your business bank statements'}
+            : step === 'upload'
+            ? 'Upload your business bank statements'
+            : 'Thank you!'}
         </JumboTitle>
 
         {step === 'form' && (
-          <Stack gap="xs">
-            <TextInput
-              label="First Name"
-              placeholder="John"
-              value={userDetails.firstName}
-              onChange={(e) => handleInputChange('firstName', e.currentTarget.value)}
-              required
-            />
-            <TextInput
-              label="Last Name"
-              placeholder="Doe"
-              value={userDetails.lastName}
-              onChange={(e) => handleInputChange('lastName', e.currentTarget.value)}
-              required
-            />
-            <TextInput
-              label="Business Name"
-              placeholder="Acme Pty Ltd"
-              value={userDetails.businessName}
-              onChange={(e) => handleInputChange('businessName', e.currentTarget.value)}
-            />
-            <TextInput
-              label="Phone Number"
-              placeholder="0400 000 000"
-              value={userDetails.phone}
-              onChange={(e) => handleInputChange('phone', e.currentTarget.value)}
-              required
-            />
-            <TextInput
-              label="Email"
-              placeholder="you@example.com"
-              value={userDetails.email}
-              onChange={(e) => handleInputChange('email', e.currentTarget.value)}
-              required
-            />
+          <form onSubmit={handleFormSubmit}>
+            <Stack gap="xs">
+              <TextInput
+                label="First Name"
+                placeholder="John"
+                value={userDetails.firstName}
+                onChange={(e) => handleInputChange('firstName', e.currentTarget.value)}
+                required
+              />
+              <TextInput
+                label="Last Name"
+                placeholder="Doe"
+                value={userDetails.lastName}
+                onChange={(e) => handleInputChange('lastName', e.currentTarget.value)}
+                required
+              />
+              <TextInput
+                label="Business Name"
+                placeholder="Acme Pty Ltd"
+                value={userDetails.businessName}
+                onChange={(e) => handleInputChange('businessName', e.currentTarget.value)}
+              />
+              <TextInput
+                label="Phone Number"
+                placeholder="0400 000 000"
+                value={userDetails.phone}
+                onChange={(e) => handleInputChange('phone', e.currentTarget.value)}
+                required
+              />
+              <TextInput
+                label="Email"
+                placeholder="you@example.com"
+                value={userDetails.email}
+                onChange={(e) => handleInputChange('email', e.currentTarget.value)}
+                required
+              />
 
-            <Button
-              fullWidth
-              radius="md"
-              size="md"
-              style={{ backgroundColor: '#fc8900', color: 'white', fontWeight: 600 }}
-              onClick={handleFormSubmit}
-              loading={loading}
-            >
-              Submit Application
-            </Button>
-          </Stack>
+              <Button
+                fullWidth
+                radius="md"
+                size="md"
+                style={{ backgroundColor: '#fc8900', color: 'white', fontWeight: 600 }}
+                loading={loading}
+                type="submit"
+              >
+                Submit Application
+              </Button>
+            </Stack>
+          </form>
         )}
 
         {step === 'upload' && (
@@ -257,8 +283,7 @@ export const AskForBankstatementFull = () => {
               value={file}
               onChange={(event) => {
                 setFile(event as File);
-                console.log(event);
-                console.log('File selected:', file);
+                console.log('File selected:', event);
               }}
               styles={{
                 input: {
@@ -303,9 +328,7 @@ export const AskForBankstatementFull = () => {
               size="md"
               variant="outline"
               color="dark"
-              onClick={() => {
-                handleUploadClick();
-              }}
+              onClick={handleUploadClick}
               styles={{
                 label: {
                   whiteSpace: 'normal',
@@ -317,6 +340,12 @@ export const AskForBankstatementFull = () => {
               {file ? 'Upload File and Continue' : 'Continue without Uploading'}
             </Button>
           </>
+        )}
+
+        {step === 'thankyou' && (
+          <Text ta="center" size="lg" fw={600} c="green">
+            Thanks for submitting your details. We'll be in touch soon!
+          </Text>
         )}
 
         {success && (

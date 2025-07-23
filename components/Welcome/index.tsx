@@ -65,9 +65,9 @@ export default function Welcome() {
         </style>
         <Group align="center" mb="sm">
           <div>
-            <Title order={2} fw={700} style={{ color: '#fc8900' }}>
+            {name && <Title order={2} fw={700} style={{ color: '#fc8900' }}>
               {name ? `Hi ${name},` : <Skeleton width={120} height={28} />}
-            </Title>
+            </Title>}
             <Text size="xl" mt={4} c="black">
               Apply to pay your invoice in flexible monthly instalments — no upfront cost required.
             </Text>
