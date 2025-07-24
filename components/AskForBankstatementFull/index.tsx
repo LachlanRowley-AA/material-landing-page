@@ -313,6 +313,7 @@ export const AskForBankstatementFull = () => {
               radius="md"
               withAsterisk
               multiple
+              accept="application/pdf"
               onChange={(event) => {
                 const selected = Array.isArray(event) ? event : event ? [event] : [];
                 setFile((prev) => [...(prev || []), ...selected]);
