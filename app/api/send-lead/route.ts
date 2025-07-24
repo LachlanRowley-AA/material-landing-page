@@ -1,13 +1,18 @@
-// app/api/send-lead/route.ts (or pages/api/send-lead.ts)
 import { NextRequest, NextResponse } from 'next/server';
+import brokers from '@/lib/brokers.json';
 
 export async function POST(req: NextRequest) {
-  const data = await req.json();
-
-  const username = 'nnXSEUPwdF0xU33lqHZSKS6tTBaitBqAm';
-  const password = 'bgSMUyYZLmk9Y0F';
-
+  const username = process.env.LEND_USERNAME_LIVE;
+  const password = process.env.LEND_PASSWORD_LIVE;
   const auth = Buffer.from(`${username}:${password}`).toString('base64');
+
+  const brokerList = brokers.brokers.map((broker) => ({ id: broker.id }));
+  const chosenBroker = brokerList[Math.floor(Math.random() * brokerList.length)];
+
+  const data = {
+    ...(await req.json()),
+    broker_assigned: chosenBroker.id,
+  };
 
   try {
     const res = await fetch('https://partners.lend.com.au/api/leads', {
@@ -22,6 +27,8 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(data),
     });
 
+    console.log('brokers', brokers);
+    console.log('sent body:', data);
     const responseBody = await res.text();
     console.log('Response from Lend API:', responseBody);
 

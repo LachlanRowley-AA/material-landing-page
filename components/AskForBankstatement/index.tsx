@@ -7,10 +7,9 @@ import {
   Text,
   FileInput,
   Stack,
-  Divider,
-  rem,
   Notification,
-  Group
+  Group,
+  rem,
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
@@ -26,7 +25,6 @@ export const AskForBankstatement = () => {
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
-
 
   const sendToLendAPI = async () => {
     setLoading(true);
@@ -62,39 +60,38 @@ export const AskForBankstatement = () => {
         lendTimeframe = '44';
         break;
     }
-    console.log('Lend Timeframe:', lendTimeframe);
 
     try {
-        const res = await fetch('/api/send-lead', {
+      const res = await fetch('/api/send-lead', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
-       body: JSON.stringify({
-        owner: {
+        body: JSON.stringify({
+          owner: {
             first_name: first,
             last_name: last,
             contact_number: parsedUserData.phoneNumber || '0000000000',
             email: parsedUserData.email || '',
-        },
-        lead: {
+          },
+          lead: {
             organisation_name: parsedUserData.company || 'Unknown Company',
-            industry_id: '189',
-            purpose_id: '1',
+            industry_id: '62',
+            purpose_id: '15',
+            product_type_id: '1',
             amount_requested: sessionStorage.getItem('loanAmount') || '-1',
             sales_monthly: '-1',
             company_registration_date: '1444/11/11',
             campaign: 'Test Campaign',
             loan_term_requested: lendTimeframe,
-        },
-        lead_notes: [
+          },
+          lead_notes: [
             {
-            notes: 'referred by Eazypay',
+              notes: 'referred by Eazypay',
             },
-        ],
-        })
-        });
-
+          ],
+        }),
+      });
       if (res.ok) {
         setSuccess('Application submitted successfully');
       } else {
@@ -110,7 +107,6 @@ export const AskForBankstatement = () => {
 
   useEffect(() => {
     const savedStep = sessionStorage.getItem('bankFormStep');
-
     if (savedStep === 'upload' || savedStep === 'thankyou') {
       setStep(savedStep);
     }
@@ -121,10 +117,9 @@ export const AskForBankstatement = () => {
     sessionStorage.setItem('bankFormStep', newStep);
   };
 
-
   const handleUploadClick = () => {
     sendToLendAPI();
-   if (file && file.length > 0) {
+    if (file && file.length > 0) {
       const userData = sessionStorage.getItem('userData');
       const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
       const formData = new FormData();
@@ -164,112 +159,126 @@ export const AskForBankstatement = () => {
     <Card
       shadow="lg"
       radius="xl"
-      p={{base:"md", md: "xl"}}
+      p={{ base: 'md', md: 'xl' }}
       withBorder
       style={{
         border: `2px solid #fc8900`,
         background: 'linear-gradient(135deg, #fff9f0, #ffffff)',
       }}
     >
-      <Stack gap="lg">
+      <Stack gap="md">
         <JumboTitle order={2} fz={rem(20)} ta="center" c="#fc8900" style={{ fontWeight: 700 }}>
-          Get ahead of approval by uploading your business bank statements
+          Get ahead of approval by providing your id and business bank statements
         </JumboTitle>
-        {step !=='thankyou' && (
+
+        {step !== 'thankyou' && (
           <div>
             <Stack gap="lg">
-            <FileInput
-              label="Upload your bank statements"
-              placeholder="Choose file(s)"
-              leftSection={<IconUpload size={18} />}
-              radius="md"
-              withAsterisk
-              multiple
-              accept="application/pdf"
-              onChange={(event) => {
-                const selected = Array.isArray(event) ? event : event ? [event] : [];
-                setFile((prev) => [...(prev || []), ...selected]);
-              }}
-              styles={{
-                input: {
-                  borderColor: '#fc8900',
-                  '&:focusWithin': {
+              <FileInput
+                label="Upload or take photo of the FRONT of your driver's licence"
+                placeholder="Choose file or take photo"
+                leftSection={<IconUpload size={18} />}
+                radius="md"
+                withAsterisk
+                accept="image/*" // allows gallery or camera
+                onChange={(event) => {
+                  const selected = Array.isArray(event) ? event[0] : event;
+                  setLicenseFront(selected || null);
+                  if (selected) setFile((prev) => [...(prev || []), selected]);
+                }}
+                styles={{
+                  input: {
                     borderColor: '#fc8900',
+                    '&:focusWithin': {
+                      borderColor: '#fc8900',
+                    },
                   },
-                },
-                label: {
-                  color: '#fc8900',
-                  fontWeight: 600,
-                },
-              }}
-            />
-            {file && file.length > 0 && (
-              <Stack gap="xs">
-                {file.map((f, index) => (
-                  <Group key={index} justify="space-between">
-                    <Text size="sm">{f.name}</Text>
-                    <Button
-                      size="xs"
-                      color="red"
-                      variant="subtle"
-                      onClick={() => setFile((prev) => prev?.filter((_, i) => i !== index))}
-                    >
-                      Remove
-                    </Button>
-                  </Group>
-                ))}
-              </Stack>
-            )}
-
-            <Divider label="OR" labelPosition="center" color="#fc8900" />
-
-            <Button
-              fullWidth
-              radius="md"
-              size="md"
-              style={{
-                backgroundColor: '#fc8900',
-                color: 'white',
-                fontWeight: 600,
-              }}
-              onClick={handleIlionClick}
-              loading={loading}
-              styles={{
                   label: {
-                    whiteSpace: 'normal',  
-                    lineHeight: 1.25,      
-                    textAlign: 'center', 
+                    color: '#fc8900',
+                    fontWeight: 600,
                   },
                 }}
+              />
 
-            >
-              Provide your bank statements through Ilion
-            </Button>
+              <FileInput
+                label="Upload or take photo of the BACK of your driver's licence"
+                placeholder="Choose file or take photo"
+                leftSection={<IconUpload size={18} />}
+                radius="md"
+                withAsterisk
+                accept="image/*"
+                onChange={(event) => {
+                  const selected = Array.isArray(event) ? event[0] : event;
+                  setLicenseBack(selected || null);
+                  if (selected) setFile((prev) => [...(prev || []), selected]);
+                }}
+                styles={{
+                  input: {
+                    borderColor: '#fc8900',
+                    '&:focusWithin': {
+                      borderColor: '#fc8900',
+                    },
+                  },
+                  label: {
+                    color: '#fc8900',
+                    fontWeight: 600,
+                  },
+                }}
+              />
 
-            <Button
+              <Button
                 fullWidth
                 radius="md"
                 size="md"
-                variant="outline"
-                color="dark"
-                onClick={handleUploadClick}
+                style={{
+                  backgroundColor: '#fc8900',
+                  color: 'white',
+                  fontWeight: 600,
+                }}
+                onClick={handleIlionClick}
                 loading={loading}
-                /* Styles API – override the label only */
                 styles={{
                   label: {
-                    whiteSpace: 'normal',   // allow line‑breaks (use 'unset' or 'normal')
-                    lineHeight: 1.25,      // optional – tidier vertical spacing
-                    textAlign: 'center',   // optional – nicer on multi‑line buttons
+                    whiteSpace: 'normal',
+                    lineHeight: 1.25,
+                    textAlign: 'center',
                   },
                 }}
               >
-                {file
-                  ? 'Submit Application'
-                  : 'No thanks, continue without uploading'}
+                Provide your bank statements through Ilion
               </Button>
-              </Stack>
-            </div>
-          )}
+
+              <Group gap="xs" justify="center">
+                <Button
+                  fullWidth
+                  radius="md"
+                  size="md"
+                  variant="outline"
+                  color="dark"
+                  onClick={handleUploadClick}
+                  loading={loading}
+                  styles={{
+                    label: {
+                      whiteSpace: 'normal',
+                      lineHeight: 1.25,
+                      textAlign: 'center',
+                    },
+                  }}
+                >
+                  {file
+                    ? 'Submit Application'
+                    : 'No thanks, continue without uploading'}
+                </Button>
+                <Text size="xs" c="dimmed" ta="center">
+                  {file && file.length > 0
+                    ? 'You will need to provide your bank statements later'
+                    : 'You will need to provide your id and bank statements later'}
+                </Text>
+              </Group>
+            </Stack>
+          </div>
+        )}
+
         {step === 'thankyou' && (
           <Text ta="center" size="lg" fw={600} c="green">
             Thanks for submitting your details. We'll be in touch soon!

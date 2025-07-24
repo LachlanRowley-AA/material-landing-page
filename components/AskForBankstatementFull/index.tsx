@@ -127,8 +127,9 @@ export const AskForBankstatementFull = () => {
           },
           lead: {
             organisation_name: parsedUserData.company || 'Unknown Company',
-            industry_id: '189',
-            purpose_id: '1',
+            industry_id: '62',
+            purpose_id: '15',
+            product_type_id: '1',
             amount_requested: sessionStorage.getItem('loanAmount') || '-1',
             sales_monthly: '-1',
             company_registration_date: '1444/11/11',

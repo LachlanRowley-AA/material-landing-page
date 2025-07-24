@@ -47,6 +47,8 @@ export default function HomepageClient() {
             console.log('User data fetched successfully:', data);
             setUserDetails(data.data);
             sessionStorage.setItem('userData', JSON.stringify(data.data));
+            sessionStorage.setItem('loanAmount', data.data.balance.toString());
+            sessionStorage.setItem('customTimeframe', '12');
             setIsPageReady(true);
         } catch (err) {
             console.error('Error fetching user data:', err);

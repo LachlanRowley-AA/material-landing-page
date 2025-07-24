@@ -4,7 +4,7 @@ import { AnimatedCounter, AnimatedCounterProps } from './AnimatedCounter';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { Box, BoxProps, Button, Container, Grid, Stack, Text, rem, TextInput, Slider, Group, useMantineTheme, Switch, SegmentedControl } from '@mantine/core';
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { AgreementWidget } from '@/components/AgreementWidget';
@@ -18,6 +18,7 @@ const DAYS_IN_MONTH = 365 / 12;
 const LOAN_TERM_YEARS = 3;
 
 const MAX_LOAN_AMOUNT = 500000;
+const MIN_LOAN_AMOUNT = 5000;
 
 const calculateRepayment = (loanAmount: number, interestRate: number, isWeekly: boolean) => {
   if (loanAmount <= 0) return 0;
@@ -82,6 +83,7 @@ type CalculatorProps = {
   prefilled?: boolean
 }
 
+
 export const Calculator = ({ startingAmount = 20000, prefilled = true }: CalculatorProps) => {
   const [baseValue, setBaseValue] = useState(startingAmount);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
@@ -95,6 +97,13 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
   const customRepayment = calculateCustomRepayment(baseValue, interestRate, parseInt(customTimeframe));
 
   const timeframes = [6, 12, 24, 36];
+
+  useEffect(() => {
+    sessionStorage.setItem('loanAmount', MIN_LOAN_AMOUNT.toString());
+    sessionStorage.setItem('customTimeframe', '12');
+  })
+
+
   const chartData = timeframes.map(months => {
 
     const monthlyPayment = months === 6 ? calculateCustomRepayment(baseValue, 20.0, months) : calculateCustomRepayment(baseValue, interestRate, months);
@@ -196,7 +205,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                       const raw = baseValue.toString();
                       const parsed = Number(raw.replace(/,/g, ''));
                       if (!isNaN(parsed)) {
-                        const capped = Math.max(5000, parsed);
+                        const capped = Math.max(MIN_LOAN_AMOUNT, parsed);
                         setBaseValue(capped);
                         sessionStorage.setItem('loanAmount', capped.toString());
                       }
@@ -225,7 +234,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                     <Slider
                       px="xl"
                       label="Loan Amount"
-                      min={5000}
+                      min={MIN_LOAN_AMOUNT}
                       max={MAX_LOAN_AMOUNT}
                       step={1000}
                       value={baseValue}
