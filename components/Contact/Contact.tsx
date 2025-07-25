@@ -27,7 +27,6 @@ import {
   IconCheck,
   IconRefresh
 } from '@tabler/icons-react';
-import { createClient } from "@supabase/supabase-js"
 
 interface FormData {
   name: string;
@@ -103,34 +102,34 @@ export const ContactForm = () => {
     setIsSubmitting(true);
     setError(null);
 
-    try {
-      const response = await fetch('/api/createQuery', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          businessName: formData.businessName,
-          price: formData.price,
-          phoneNumber: formData.phoneNumber // Assuming phone number maps to amount
-        }),
-      });
+    // try {
+    //   const response = await fetch('/api/createQuery', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //       name: formData.name,
+    //       email: formData.email,
+    //       businessName: formData.businessName,
+    //       price: formData.price,
+    //       phoneNumber: formData.phoneNumber // Assuming phone number maps to amount
+    //     }),
+    //   });
 
-      const result = await response.json();
+    //   const result = await response.json();
 
-      if (response.ok && result.success) {
-        setIsSuccess(true);
-      } else {
-        setError(result.error || 'Form submission failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Form submission failed', error);
-      setError('Network error. Please check your connection and try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    //   if (response.ok && result.success) {
+    //     setIsSuccess(true);
+    //   } else {
+    //     setError(result.error || 'Form submission failed. Please try again.');
+    //   }
+    // } catch (error) {
+    //   console.error('Form submission failed', error);
+    //   setError('Network error. Please check your connection and try again.');
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
   };
 
   const resetForm = () => {
@@ -147,7 +146,7 @@ export const ContactForm = () => {
 
   return (
     <Box
-      bg="white"
+      bg="#f6f6f6"
       py={{ base: rem(60), md: rem(30) }}
       px={{ base: "0px", md: "xl" }}
       style={{ 
@@ -167,9 +166,10 @@ export const ContactForm = () => {
               fz="md" 
               ta="center" 
               style={{ textWrap: 'balance' }} 
-              c="#01E194"
+              c="#1fcfc3"
               fw={700}
               mb="sm"
+              px="sm"
             >
               {isSuccess ? "Application Submitted!" : "Apply now to confirm eligibility"}
             </JumboTitle>
@@ -179,6 +179,7 @@ export const ContactForm = () => {
               ta="center"
               maw={600}
               style={{ lineHeight: 1.6 }}
+              px="md"
             >
               {isSuccess 
                 ? "Thank you for your application. We'll review your details and get back to you within 24 hours." 
@@ -277,7 +278,7 @@ export const ContactForm = () => {
                       leftSection={<IconSend size={20} />}
                       styles={{
                         root: {
-                          background: "linear-gradient(135deg, #01E194 0%, #00C878 100%)",
+                          background: '#1fcfc3',
                           border: "none",
                           padding: `${rem(16)} ${rem(24)}`,
                           height: rem(56),
@@ -286,7 +287,7 @@ export const ContactForm = () => {
                           fontWeight: 600,
                           transition: "all 0.3s ease",
                           '&:hover': {
-                            background: "linear-gradient(135deg, #00C878 0%, #01E194 100%)",
+                            background: `linear-gradient(135deg, #00C878 0%, ${theme.colors.secondary[0]} 100%)`,
                             transform: "translateY(-2px)",
                             boxShadow: "0 8px 32px rgba(1, 225, 148, 0.3)",
                           },

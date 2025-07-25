@@ -1,5 +1,5 @@
 'use client';
-import { Box, Card, Container, Flex, Grid, Stack, Text } from '@mantine/core';
+import { Box, Card, Container, Flex, Grid, Stack, Text, useMantineTheme } from '@mantine/core';
 import {
   IconCurrencyDollar,
   IconFileOff,
@@ -21,8 +21,8 @@ type Feature = {
 const FEATURES: Feature[] = [
   {
     icon: <IconCurrencyDollar size={28} stroke={1.5} />,
-    title: 'Finance up to $300k',
-    description: 'Access unsecured funding of up to $300,000 to fuel your business growth.',
+    title: 'Finance up to $500k',
+    description: 'Access unsecured funding of up to $500,000 to fuel your business growth.',
   },
   {
     icon: <IconFileOff size={28} stroke={1.5} />,
@@ -32,7 +32,7 @@ const FEATURES: Feature[] = [
   {
     icon: <IconCalendarTime size={28} stroke={1.5} />,
     title: 'Flexible Terms',
-    description: '5-year loan terms with the option for early payoff.',
+    description: '3-year loan terms with the option for early payoff.',
   },
   {
     icon: <IconBuilding size={28} stroke={1.5} />,
@@ -81,7 +81,9 @@ const FeatureCell = ({
   index = 1,
 }: Feature & {
   index?: number;
-}) => (
+}) => {
+  const theme = useMantineTheme();
+  return(
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -107,7 +109,7 @@ const FeatureCell = ({
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.boxShadow = '0 8px 25px rgba(1, 225, 148, 0.15)';
-          e.currentTarget.style.borderColor = '#01E194';
+          e.currentTarget.style.borderColor = theme.colors.secondary[0];
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.04)';
@@ -141,7 +143,7 @@ const FeatureCell = ({
       </Card>
     </motion.div>
   </motion.div>
-);
+)};
 
 type Feature02Props = {
   title?: string;

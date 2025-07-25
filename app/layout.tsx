@@ -7,8 +7,8 @@ import { GoogleAnalytics} from '@next/third-parties/google'
 
 
 export const metadata = {
-  title: 'Ezypay powered by Asset Alley',
-  description: 'Ezypay powered by Asset Alley landing page!',
+  title: 'Eazypay powered by Asset Alley',
+  description: 'Eazypay powered by Asset Alley landing page!',
 };
 
 export default function RootLayout({ children }: { children: any }) {
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: any }) {
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
         />
       </head>
-      <GoogleAnalytics gaId="G-DV75N3M26V" />
+      {/* <GoogleAnalytics gaId="G-DV75N3M26V" /> */}
       <body>
         <MantineProvider theme={theme}>{children}</MantineProvider>
       </body>

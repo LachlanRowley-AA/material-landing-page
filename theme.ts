@@ -1,7 +1,11 @@
 'use client';
 
-import { createTheme } from '@mantine/core';
+import { createTheme, colorsTuple } from '@mantine/core';
 
 export const theme = createTheme({
-  /* Put your mantine theme override here */
+  colors: {
+    primary: colorsTuple('#10578b'),
+    secondary: ['#1fcfc3','#149a91','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3AA'],
+    tertiary: colorsTuple('#f6f6f6')
+  }
 });
