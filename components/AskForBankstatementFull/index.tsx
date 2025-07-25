@@ -22,6 +22,8 @@ export const AskForBankstatementFull = () => {
   const router = useRouter();
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
   const [file, setFile] = useState<File[] | undefined>(undefined);
+  const [licenseFront, setLicenseFront] = useState<File | null>(null);
+  const [licenseBack, setLicenseBack] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -135,6 +137,7 @@ export const AskForBankstatementFull = () => {
             company_registration_date: '1444/11/11',
             campaign: 'Test Campaign',
             loan_term_requested: lendTimeframe,
+            referrer_person_ref: 'X2RLL54'
           },
           lead_notes: [
             {
@@ -307,31 +310,57 @@ export const AskForBankstatementFull = () => {
 
         {step === 'upload' && (
           <>
-            <FileInput
-              label="Upload your bank statements"
-              placeholder="Choose file(s)"
-              leftSection={<IconUpload size={18} />}
-              radius="md"
-              withAsterisk
-              multiple
-              accept="application/pdf"
-              onChange={(event) => {
-                const selected = Array.isArray(event) ? event : event ? [event] : [];
-                setFile((prev) => [...(prev || []), ...selected]);
-              }}
-              styles={{
-                input: {
-                  borderColor: '#fc8900',
-                  '&:focusWithin': {
+                          <FileInput
+                label="Upload or take photo of the FRONT of your driver's licence"
+                placeholder="Choose file or take photo"
+                leftSection={<IconUpload size={18} />}
+                radius="md"
+                withAsterisk
+                accept="image/*" // allows gallery or camera
+                onChange={(event) => {
+                  const selected = Array.isArray(event) ? event[0] : event;
+                  setLicenseFront(selected || null);
+                  if (selected) setFile((prev) => [...(prev || []), selected]);
+                }}
+                styles={{
+                  input: {
                     borderColor: '#fc8900',
+                    '&:focusWithin': {
+                      borderColor: '#fc8900',
+                    },
                   },
-                },
-                label: {
-                  color: '#fc8900',
-                  fontWeight: 600,
-                },
-              }}
-            />
+                  label: {
+                    color: '#fc8900',
+                    fontWeight: 600,
+                  },
+                }}
+              />
+
+              <FileInput
+                label="Upload or take photo of the BACK of your driver's licence"
+                placeholder="Choose file or take photo"
+                leftSection={<IconUpload size={18} />}
+                radius="md"
+                withAsterisk
+                accept="image/*"
+                onChange={(event) => {
+                  const selected = Array.isArray(event) ? event[0] : event;
+                  setLicenseBack(selected || null);
+                  if (selected) setFile((prev) => [...(prev || []), selected]);
+                }}
+                styles={{
+                  input: {
+                    borderColor: '#fc8900',
+                    '&:focusWithin': {
+                      borderColor: '#fc8900',
+                    },
+                  },
+                  label: {
+                    color: '#fc8900',
+                    fontWeight: 600,
+                  },
+                }}
+              />
 
             {file && file.length > 0 && (
               <Stack gap="xs">

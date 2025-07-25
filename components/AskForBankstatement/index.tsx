@@ -84,6 +84,7 @@ export const AskForBankstatement = () => {
             company_registration_date: '1444/11/11',
             campaign: 'Test Campaign',
             loan_term_requested: lendTimeframe,
+            referrer_person_ref: 'X2RLL54'
           },
           lead_notes: [
             {
