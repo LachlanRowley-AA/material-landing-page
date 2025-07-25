@@ -31,7 +31,7 @@ const TESTIMONIALS: Testimonial[] = [
       The Asset Alley team are extremely professional and trustworthy, and I know they put my customers first everyime`,
     name: 'Charlie Daoud',
     imageUrl: './charlie.jpg',
-    company: 'Discount Building Materials',
+    company: 'Discount Building Material',
     alt: 'Charlie Daud',
   },
 ];

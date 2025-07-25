@@ -291,7 +291,7 @@ export const Calculator = ({
             <JumboTitle  order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "black",md:"black"}} fw={600}>
               Compare and select payment options
             </JumboTitle>
-            <Text pt="md" ta="center" fs="italic">all plans may be paid out at any time without paying any remaining interest</Text>
+            <Text pt="md" ta="center" fs="italic">All plans may be paid out at any time without paying any remaining interest</Text>
           </motion.div>
         </Stack>
         

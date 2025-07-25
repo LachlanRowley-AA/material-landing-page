@@ -24,8 +24,8 @@ export const IntroSection = () => {
         </Text>
         <Text inherit span c="black">
           at No Cost or Risk With{" "}
-          <Text inherit span c={theme.colors.primary[0]}>eazy</Text>
-          <Text inherit span c={theme.colors.secondary[1]}>pay</Text>
+          <Text inherit span c={theme.colors.primary[0]}></Text>
+          <Text inherit span c={theme.colors.secondary[0]}>Breezi</Text>
         </Text>
       </Title>
 
