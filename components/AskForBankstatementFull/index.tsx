@@ -310,7 +310,7 @@ export const AskForBankstatementFull = () => {
 
         {step === 'upload' && (
           <>
-                          <FileInput
+              <FileInput
                 label="Upload or take photo of the FRONT of your driver's licence"
                 placeholder="Choose file or take photo"
                 leftSection={<IconUpload size={18} />}

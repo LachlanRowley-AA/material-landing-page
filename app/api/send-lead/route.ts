@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import brokers from '@/lib/brokers.json';
 
 export async function POST(req: NextRequest) {
-  const username = process.env.LEND_USERNAME_SANDBOX;
-  const password = process.env.LEND_PASSWORD_SANDBOX;
+  const username = process.env.LEND_USERNAME_LIVE;
+  const password = process.env.LEND_PASSWORD_LIVE;
   const auth = Buffer.from(`${username}:${password}`).toString('base64');
 
   const brokerList = brokers.brokers.map((broker) => ({ id: broker.id }));
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Version: '20190501',
-        Environment: 'sandbox',
+        Environment: 'live',
         Authorization: `Basic ${auth}`,
       },
       body: JSON.stringify(data),
