@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Version: '20190501',
-        Environment: mode,
+        Environment: 'sandbox',
         Authorization: `Basic ${auth}`,
       },
       body: JSON.stringify(data),
