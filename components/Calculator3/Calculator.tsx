@@ -261,7 +261,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                 <JumboTitle order={1} fz="xs" ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
                   Compare Payment Options
                 </JumboTitle>
-                <Text pt="md" ta="center" fs="italic">all plans may be paid out at any time without paying any remaining interest</Text>
+                <Text pt="md" ta="center" fs="italic">All plans may be paid out at any time without paying any remaining interest</Text>
               </motion.div>
             </Stack>
 
