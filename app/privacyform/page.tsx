@@ -7,19 +7,3 @@ export default function Page() {
         </div>
     )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-///$1 a week worked
-///$52.50 wfh

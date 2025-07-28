@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       const { data, error } = await supabase.storage
         .from('bank-statements')
         .upload(filePath, file, {
-          upsert: true, // optional: overwrites if file exists
+          upsert: false, // don't overwrite because iphone direct camera photos have the same name
         });
 
       if (error) {
