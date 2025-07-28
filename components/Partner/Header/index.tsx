@@ -58,7 +58,7 @@ export const Header01 = ({
   style,
   breakpoint = 'xs',
   logo = (
-    <Image src="/logo_transparent.png" h={15} maw={150} w="auto" fit="contain" />
+    <Image src="/logo.svg" h={20} maw={150} w="auto" fit="contain" />
   ),
   callToActionTitle = 'Enquire Now',
   callToActionSmall = 'Submit',

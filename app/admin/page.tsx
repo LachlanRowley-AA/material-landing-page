@@ -125,7 +125,7 @@ export default function AdminPage() {
     const trackingParams = new URLSearchParams({
       utm_source: 'invoice',
       utm_medium: 'qr',
-      utm_campaign: 'eazypay',
+      utm_campaign: 'Reopay',
     });
     const pw = uuidv4();
     setcustomerPass(pw);

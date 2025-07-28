@@ -88,7 +88,7 @@ export const AskForBankstatement = () => {
           },
           lead_notes: [
             {
-              notes: 'referred by Eazypay',
+              notes: 'referred by Reopay',
             },
           ],
         }),

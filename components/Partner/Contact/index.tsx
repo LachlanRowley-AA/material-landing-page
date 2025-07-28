@@ -146,7 +146,7 @@ export const ContactForm = () => {
           phone_number: formData.phoneNumber,
           business_name: formData.businessName,
           integration_wanted: formData.type,
-          comments: 'Eazypay Partner Application',
+          comments: 'Reopay Partner Application',
         }),
       })
       const result = await response.json();
