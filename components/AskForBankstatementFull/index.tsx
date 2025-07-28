@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   Button,
@@ -17,6 +17,7 @@ import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
+import { now } from 'next-auth/client/_utils';
 
 export const AskForBankstatementFull = () => {
   const router = useRouter();
@@ -46,6 +47,7 @@ export const AskForBankstatementFull = () => {
     if (savedStep === 'form' || savedStep === 'upload' || savedStep === 'thankyou') {
       setStep(savedStep);
     }
+    fetchUserIP();
   }, []);
 
   const handleInputChange = (field: keyof typeof userDetails, value: string) => {
@@ -207,6 +209,17 @@ export const AskForBankstatementFull = () => {
         formData.append('invoices', f);
       });
       formData.append('company_name', parsedUserData.company || 'Unknown Company');
+      formData.append('name', parsedUserData.name || 'Unknown User');
+      formData.append('ipAddress', ip || 'IP_FETCH_FAILED');
+
+      const date = new Date()
+      const formattedDate = date.toLocaleDateString('en-AU', {
+          day: '2-digit' as const,
+          month: '2-digit' as const,
+          year: 'numeric' as const
+      })
+      formData.append('date', formattedDate);
+
       console.log('Uploading files:', formData);
       fetch('/api/uploadBank', {
         method: 'POST',
@@ -229,6 +242,30 @@ export const AskForBankstatementFull = () => {
       handleStepChange('thankyou');
     }
   };
+
+  const [ip, setIp] = useState<string | null>(null);
+  const ipService = 'https://api.ipify.org?format=json';
+
+  const fetchUserIP = useCallback(async () => {
+    try {
+      
+      const response = await fetch(ipService);
+      if (!response.ok) {
+        throw new Error('Failed to fetch IP address');
+      }
+      
+      const data = await response.json();
+      if (!data.ip) {
+        throw new Error('Invalid IP response');
+      }
+      
+      setIp(data.ip);
+    } catch (error) {
+      console.error('Error fetching IP address:', error);
+      setIp('IP_FETCH_FAILED');
+    }
+  }, []);
+
 
   return (
     <Card
