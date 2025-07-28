@@ -122,7 +122,7 @@ const ReferralJourneySection = () => {
           transition={{ duration: 1 }}
         >
           <Stack align="center" mb="xl">
-            <Title order={1} fz={{md:"80"}}>The <Text inherit span c="#0e5287">eazy</Text><Text inherit span c="#149a91">pay</Text> Journey</Title>
+            <Title order={1} fz={{md:"80"}}>The <Text inherit span c="#0e5287">Reo</Text><Text inherit span c="#149a91">pay</Text> Journey</Title>
             <Text size="lg" ta="center" maw={700}>
               From initial contact to successful funding — here's exactly what happens
             </Text>

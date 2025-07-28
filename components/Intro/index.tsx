@@ -21,7 +21,7 @@ export const IntroSection = () => {
         transition={{ duration: 0.8, delay: 0 }}
       >
         <Text size="xl" fw={500} c="black" mb="lg">
-          Eazypay is powered by the full-service asset finance specialists Asset Alley who are committed to helping businesses grow with tailored, strategic funding solutions.
+          Reopay is powered by the full-service asset finance specialists Asset Alley who are committed to helping businesses grow with tailored, strategic funding solutions.
         </Text>
       </motion.div>
 
@@ -57,7 +57,7 @@ export const IntroSection = () => {
         transition={{ duration: 0.8, delay: 1.8 }}
       >
         <Text size="xl" fw={500} c="black" mb="lg">
-          Even if you are fairly new business looking to purchase more without the cashflow constraint or a large business reaching capacity with trade accounts, Eazypay is here to help you move forward with confidence.
+          Even if you are fairly new business looking to purchase more without the cashflow constraint or a large business reaching capacity with trade accounts, Reopay is here to help you move forward with confidence.
         </Text>
       </motion.div>
     </Container>

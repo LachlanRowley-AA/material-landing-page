@@ -27,7 +27,7 @@ type Testimonial = {
 const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      `Eazypay has helped our business substantially, by providing our customers with flexible options at times they needed it most.
+      `Reopay has helped our business substantially, by providing our customers with flexible options at times they needed it most.
       The Asset Alley team are extremely professional and trustworthy, and I know they put my customers first everyime`,
     name: 'Charlie Daoud',
     imageUrl: './charlie.jpg',

@@ -141,7 +141,7 @@ export const AskForBankstatementFull = () => {
           },
           lead_notes: [
             {
-              notes: 'referred by Eazypay',
+              notes: 'referred by Reopay',
             },
           ],
         }),
@@ -207,7 +207,7 @@ export const AskForBankstatementFull = () => {
         formData.append('invoices', f);
       });
       formData.append('company_name', parsedUserData.company || 'Unknown Company');
-
+      console.log('Uploading files:', formData);
       fetch('/api/uploadBank', {
         method: 'POST',
         body: formData,
