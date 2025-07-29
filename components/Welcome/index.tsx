@@ -13,20 +13,7 @@ import {
 import { IconCheck, IconSparkles } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 
-export default function Welcome() {
-  const [name, setName] = useState<string | null>(null);
-
-  useEffect(() => {
-    const userData = sessionStorage.getItem('userData');
-    if (userData) {
-      try {
-        const parsed = JSON.parse(userData);
-        setName(parsed.name || null);
-      } catch (error) {
-        console.error('Invalid userData in sessionStorage:', error);
-      }
-    }
-  }, []);
+export default function Welcome({name} : { name?: string}) {
 
   return (
     <motion.div

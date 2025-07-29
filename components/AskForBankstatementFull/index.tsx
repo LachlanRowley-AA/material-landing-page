@@ -12,6 +12,7 @@ import {
   Notification,
   TextInput,
   Group,
+  Tooltip,
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
@@ -194,8 +195,10 @@ export const AskForBankstatementFull = () => {
   };
 
   const handleIlionClick = () => {
+    sendToLendAPI();
     router.push('/bankstatements');
   };
+
 
   const handleUploadClick = () => {
     if (file && file.length > 0) {
@@ -286,7 +289,7 @@ export const AskForBankstatementFull = () => {
           {step === 'form'
             ? 'Let\'s get your details first'
             : step === 'upload'
-            ? 'Upload your business bank statements'
+            ? 'Get ahead of approval by providing your ID and business bank statements'
             : 'Thank you!'}
         </JumboTitle>
 
@@ -345,8 +348,8 @@ export const AskForBankstatementFull = () => {
         {step === 'upload' && (
           <>
               <FileInput
-                label="Upload or take photo of the FRONT of your driver's licence"
-                placeholder="Choose file or take photo"
+                label="Upload or take a photo of the FRONT of your driver's licence"
+                placeholder="Choose a file or take a photo"
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
@@ -371,8 +374,8 @@ export const AskForBankstatementFull = () => {
               />
 
               <FileInput
-                label="Upload or take photo of the BACK of your driver's licence"
-                placeholder="Choose file or take photo"
+                label="Upload or take a photo of the BACK of your driver's licence"
+                placeholder="Choose a file or take a photo"
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
@@ -414,28 +417,30 @@ export const AskForBankstatementFull = () => {
               </Stack>
             )}
 
-            <Divider label="OR" labelPosition="center" color="#fc8900" />
-
-            <Button
-              fullWidth
-              radius="md"
-              size="md"
-              style={{
-                backgroundColor: '#fc8900',
-                color: 'white',
-                fontWeight: 600,
-              }}
-              onClick={handleIlionClick}
-              styles={{
-                label: {
-                  whiteSpace: 'normal',
-                  lineHeight: 1.25,
-                  textAlign: 'center',
-                },
-              }}
-            >
-              Provide your bank statements through Ilion
+            <Tooltip label={licenseFront && licenseBack ? '' : "Please upload your ID first"} display={licenseFront && licenseBack ? 'none' : 'block'}>
+              <Button
+                fullWidth
+                radius="md"
+                size="md"
+                style={{
+                  backgroundColor: licenseFront && licenseBack ? '#fc8900' : '#ccc',
+                  color: 'white',
+                  fontWeight: 600,
+                }}
+                onClick={handleIlionClick}
+                styles={{
+                  label: {
+                    whiteSpace: 'normal',
+                    lineHeight: 1.25,
+                    textAlign: 'center',
+                  },
+                }}
+                disabled={!licenseFront || !licenseBack}
+              >
+                Provide your bank statements through Illion
             </Button>
+
+            </Tooltip>
 
             <Button
               fullWidth
@@ -456,6 +461,11 @@ export const AskForBankstatementFull = () => {
                 ? 'Upload File(s) and Continue'
                 : 'Continue without Uploading'}
             </Button>
+            <Text size="xs" c="dimmed" ta="center">
+              {file && file.length > 0
+                ? 'You will need to provide your bank statements later'
+                : 'You will need to provide your ID and bank statements later'}
+            </Text>
           </>
         )}
 
@@ -464,6 +474,7 @@ export const AskForBankstatementFull = () => {
             Thanks for submitting your details. We'll be in touch soon!
           </Text>
         )}
+        
 
         {success && (
           <Notification

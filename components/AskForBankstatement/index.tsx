@@ -10,6 +10,7 @@ import {
   Notification,
   Group,
   rem,
+  Tooltip,
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
@@ -144,7 +145,7 @@ export const AskForBankstatement = () => {
 
 
   const handleUploadClick = () => {
-    // sendToLendAPI();
+    sendToLendAPI();
     if (file && file.length > 0) {
       const userData = sessionStorage.getItem('userData');
       const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
@@ -204,7 +205,7 @@ export const AskForBankstatement = () => {
     >
       <Stack gap="md">
         <JumboTitle order={2} fz={rem(20)} ta="center" c="#fc8900" style={{ fontWeight: 700 }}>
-          Get ahead of approval by providing your id and business bank statements
+          Get ahead of approval by providing your ID and business bank statements
         </JumboTitle>
 
         {step !== 'thankyou' && (
@@ -261,28 +262,29 @@ export const AskForBankstatement = () => {
                   },
                 }}
               />
-
-              <Button
-                fullWidth
-                radius="md"
-                size="md"
-                style={{
-                  backgroundColor: '#fc8900',
-                  color: 'white',
-                  fontWeight: 600,
-                }}
-                onClick={handleIlionClick}
-                loading={loading}
-                styles={{
-                  label: {
-                    whiteSpace: 'normal',
-                    lineHeight: 1.25,
-                    textAlign: 'center',
-                  },
-                }}
-              >
-                Provide your bank statements through Ilion
+              <Tooltip label={licenseFront && licenseBack ? '' : "Please upload your ID first"} display={licenseFront && licenseBack ? 'none' : 'block'}>
+                <Button
+                  fullWidth
+                  radius="md"
+                  size="md"
+                  style={{
+                    backgroundColor: licenseFront && licenseBack ? '#fc8900' : '#ccc',
+                    color: 'white',
+                    fontWeight: 600,
+                  }}
+                  onClick={handleIlionClick}
+                  styles={{
+                    label: {
+                      whiteSpace: 'normal',
+                      lineHeight: 1.25,
+                      textAlign: 'center',
+                    },
+                  }}
+                  disabled={!licenseFront || !licenseBack}
+                >
+                  Provide your bank statements through Illion
               </Button>
+              </Tooltip>
 
               <Group gap="xs" justify="center">
                 <Button
@@ -308,7 +310,7 @@ export const AskForBankstatement = () => {
                 <Text size="xs" c="dimmed" ta="center">
                   {file && file.length > 0
                     ? 'You will need to provide your bank statements later'
-                    : 'You will need to provide your id and bank statements later'}
+                    : 'You will need to provide your ID and bank statements later'}
                 </Text>
               </Group>
             </Stack>
