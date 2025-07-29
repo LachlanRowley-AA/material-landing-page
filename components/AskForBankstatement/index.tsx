@@ -188,7 +188,7 @@ export const AskForBankstatement = () => {
   };
 
   const handleIlionClick = () => {
-    sendToLendAPI();
+    handleUploadClick();
     router.push('/bankstatements');
   };
 

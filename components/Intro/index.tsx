@@ -22,7 +22,7 @@ export const IntroSection = () => {
       >
         <Text size="xl" fw={500} c="black" mb="lg">
             <Text inherit span c={theme.colors.primary[0]}>eazy</Text>
-            <Text inherit span c={theme.colors.secondary[0]}>trade</Text>
+            <Text inherit span c={theme.colors.secondary[0]}>trade{" "}</Text>
            is powered by the full-service asset finance specialists Asset Alley who are committed to helping businesses grow with tailored, strategic funding solutions.
         </Text>
       </motion.div>

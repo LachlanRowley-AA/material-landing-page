@@ -19,6 +19,7 @@ const DAYS_IN_MONTH = 365 / 12; // Average days per month
 const LOAN_TERM_YEARS = 3;
 
 const MAX_LOAN_AMOUNT = 500000; // Maximum loan amount
+const MIN_LOAN_AMOUNT = 5000; // Minimum loan amount
 
 
 const calculateRepayment = (loanAmount: number, interestRate: number, isWeekly: boolean) => {
@@ -159,10 +160,10 @@ export const Calculator = ({
               <Grid.Col span={12}>
                 <span>
                   <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "black",md:"black"}} fw={600}>
-                    Select your
+                    Set your
                   </JumboTitle>
                   <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "01E194",md:theme.colors.secondary[0]}} fw={600}>
-                    {isWeekly ? 'weekly' : 'monthly'} repayment
+                    loan amount
                   </JumboTitle>
                 </span>
             </Grid.Col>
@@ -248,12 +249,12 @@ export const Calculator = ({
                 <Slider
                   px="xl"
                   label="Loan Amount"
-                  min={5000}
+                  min={MIN_LOAN_AMOUNT}
                   max={MAX_LOAN_AMOUNT}
                   step={1000}
                   value={baseValue}
                   onChange={(value) => {
-                      setBaseValue(Math.max(5000, value));
+                      setBaseValue(Math.max(0, value));
                       sessionStorage.setItem('loanAmount', value.toString());
                       console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
                     }

@@ -102,7 +102,7 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
           </Text>
         )}
         <Box w="100%">
-          <Tooltip label="Submit an Reopay application to Asset Alley with 1 click" withArrow>
+          <Tooltip label="Submit an eazytrade application to Asset Alley with 1 click" withArrow>
             <Button
               fullWidth
               size="md"
