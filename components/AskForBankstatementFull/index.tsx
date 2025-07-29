@@ -137,7 +137,7 @@ export const AskForBankstatementFull = () => {
             company_registration_date: '1444/11/11',
             campaign: 'Test Campaign',
             loan_term_requested: lendTimeframe,
-            ...(process.env.LEND_MODE === 'live' && { referrer_person_ref: 'Z2RLL54' }),
+            ...(process.env.NEXT_PUBLIC_LEND_MODE === 'live' && { referrer_person_ref: 'Z2RLL54' }),
           },
           lead_notes: [
             {
