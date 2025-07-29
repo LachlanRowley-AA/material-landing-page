@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       const filePath = `${company}/${renamed}.${fileExtension}`;
 
       const { data, error } = await supabase.storage
-        .from('reopay')
+        .from('eazytrade')
         .upload(filePath, file, {
           upsert: true, // don't overwrite because iphone direct camera photos have the same name
         });
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     let pdfRes : Response;
     const allSuccess = uploadResults.every(result => result.success);
     if (allSuccess) {
-      pdfRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/generate_privacy`, {
+      pdfRes = await fetch(`${process.env.WEBSITE_URL}/api/generate_privacy`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json' },

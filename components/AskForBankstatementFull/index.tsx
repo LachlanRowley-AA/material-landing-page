@@ -17,7 +17,6 @@ import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
-import { now } from 'next-auth/client/_utils';
 
 export const AskForBankstatementFull = () => {
   const router = useRouter();
@@ -90,13 +89,11 @@ export const AskForBankstatementFull = () => {
       setLoading(false);
       return;
     }
-
     const parsedUserData: UserDetails = JSON.parse(userData);
     let [first, ...lastArr] = parsedUserData.name.split(' ');
     let last = lastArr.join(' ');
     first = first || 'Missing First Name';
     last = last || 'Missing Last Name';
-
     let lendTimeframe: string;
     switch (sessionStorage.getItem('customTimeframe')) {
       case '6':
@@ -143,7 +140,7 @@ export const AskForBankstatementFull = () => {
           },
           lead_notes: [
             {
-              notes: 'referred by Reopay',
+              notes: 'referred by eazytrade',
             },
           ],
         }),

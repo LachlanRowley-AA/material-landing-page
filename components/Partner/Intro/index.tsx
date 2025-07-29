@@ -24,8 +24,8 @@ export const IntroSection = () => {
         </Text>
         <Text inherit span c="black">
           at No Cost or Risk With{" "}
-          <Text inherit span c={theme.colors.primary[0]}>Reo</Text>
-          <Text inherit span c={theme.colors.secondary[0]}>pay</Text>
+          <Text inherit span c={theme.colors.primary[0]}>eazy</Text>
+          <Text inherit span c={theme.colors.secondary[0]}>trade</Text>
         </Text>
       </Title>
 
@@ -41,7 +41,7 @@ export const IntroSection = () => {
             More Sales, Less Risk
           </Text>
           <Text size="lg" fw={500} c="black">
-            Reopay helps you grow sales by offering
+            eazytrade helps you grow sales by offering
             customers flexible ways to manage their purchases without exposing your
             business to Credit risk, extra admin overhead and {" "}
               <Text inherit span fw={600}>without changing your current accounts process</Text>.
@@ -82,7 +82,7 @@ export const IntroSection = () => {
           </Text>
 
           <Text size="lg" fw={500} c="black">
-            Join Reopay’s network of trusted suppliers and offer a smarter path to
+            Join eazytrade’s network of trusted suppliers and offer a smarter path to
             purchasing while growing sales safely and sustainably.
           </Text>
         </motion.div>

@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const filePath = `${folder}/${fileName}`;
 
     const { error, data } = await supabase.storage
-      .from('reopay')
+      .from('eazytrade')
       .upload(filePath, buffer, {
         contentType: 'application/pdf',
         upsert: true

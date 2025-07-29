@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   Button,
@@ -88,7 +88,7 @@ export const AskForBankstatement = () => {
           },
           lead_notes: [
             {
-              notes: 'referred by Reopay',
+              notes: 'referred by eazytrade',
             },
           ],
         }),
@@ -107,6 +107,7 @@ export const AskForBankstatement = () => {
   };
 
   useEffect(() => {
+    fetchUserIP();
     const savedStep = sessionStorage.getItem('bankFormStep');
     if (savedStep === 'upload' || savedStep === 'thankyou') {
       setStep(savedStep);
@@ -118,8 +119,32 @@ export const AskForBankstatement = () => {
     sessionStorage.setItem('bankFormStep', newStep);
   };
 
+  const [ip, setIp] = useState<string | null>(null);
+  const ipService = 'https://api.ipify.org?format=json';
+
+  const fetchUserIP = useCallback(async () => {
+    try {
+      
+      const response = await fetch(ipService);
+      if (!response.ok) {
+        throw new Error('Failed to fetch IP address');
+      }
+      
+      const data = await response.json();
+      if (!data.ip) {
+        throw new Error('Invalid IP response');
+      }
+      
+      setIp(data.ip);
+    } catch (error) {
+      console.error('Error fetching IP address:', error);
+      setIp('IP_FETCH_FAILED');
+    }
+  }, []);
+
+
   const handleUploadClick = () => {
-    sendToLendAPI();
+    // sendToLendAPI();
     if (file && file.length > 0) {
       const userData = sessionStorage.getItem('userData');
       const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
@@ -128,6 +153,16 @@ export const AskForBankstatement = () => {
         formData.append('invoices', f);
       });
       formData.append('company_name', parsedUserData.company || 'Unknown Company');
+      formData.append('ipAddress', ip || 'IP_FETCH_FAILED');
+      formData.append('name', parsedUserData.name || 'Unknown');
+
+      const date = new Date()
+      const formattedDate = date.toLocaleDateString('en-AU', {
+          day: '2-digit' as const,
+          month: '2-digit' as const,
+          year: 'numeric' as const
+      })
+      formData.append('date', formattedDate);
 
       fetch('/api/uploadBank', {
         method: 'POST',

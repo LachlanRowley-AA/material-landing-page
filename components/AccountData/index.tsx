@@ -1,96 +1,269 @@
 'use client';
-import { Card, Text, Title, Stack, Divider, Box, Flex } from '@mantine/core';
-import { useState, useEffect } from 'react';
+import {
+  ActionIcon,
+  Button,
+  Card,
+  Group,
+  Text,
+  Title,
+  Stack,
+  Divider,
+  Box,
+  Flex,
+} from '@mantine/core';
+import { useState, useEffect, useRef } from 'react';
 import { UserDetails } from '@/lib/UserDetails';
+import { IconEdit } from '@tabler/icons-react';
 
-
-type UserAccountProps = {
-    userDetails : UserDetails | null;
+type ValueBoxProps = {
+  children: string;
+  editable?: boolean;
+  onChange?: (value: string) => void;
 };
 
+export const ValueBox = ({ children, editable = false, onChange }: ValueBoxProps) => {
+  const ref = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (ref.current && !editable) {
+      ref.current.innerText = children;
+    }
+  }, [children, editable]);
 
-const ValueBox = ({
-    children,
-    color,
-}: {
-    children: React.ReactNode;
-    color?: string;
-}) => (
+  const handleBlur = () => {
+    if (ref.current && onChange) {
+      onChange(ref.current.innerText.trim());
+    }
+  };
+
+  return (
     <Box
-        px="sm"
-        py="xs"
-        mih={40}
-        style={{
-            border: '1px solid #ced4da',
-            borderRadius: '4px',
-            backgroundColor: '#f8f9fa',
-            color,
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-        }}
+      px="sm"
+      py="xs"
+      mih={40}
+      style={{
+        border: '1px solid #ced4da',
+        borderRadius: '4px',
+        backgroundColor: editable ? '#fff' : '#f8f9fa',
+        color: '#212529',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        cursor: editable ? 'text' : 'default',
+      }}
     >
+      <div
+        ref={ref}
+        contentEditable={editable}
+        suppressContentEditableWarning
+        onBlur={handleBlur}
+        style={{ flex: 1, outline: 'none' }}
+      >
         {children}
+      </div>
     </Box>
-);
+  );
+};
+
+type UserAccountProps = {
+  userDetails: UserDetails | null;
+};
 
 export function UserDataDisplay({ userDetails = null }: UserAccountProps) {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
+  const address = [
+    userDetails?.street,
+    userDetails?.city,
+    userDetails?.state,
+    userDetails?.postCode,
+    userDetails?.country
+  ]
+  .filter(Boolean)
+  .join(', ');
 
-    // Default values for when userDetails is null
-    const displayData = {
-        name: userDetails?.name || 'N/A',
-        businessName: userDetails?.company || 'N/A',
-        address: `${userDetails?.street || ''}, ${userDetails?.city || ''}, ${userDetails?.state || ''}, ${userDetails?.postCode || ''}, ${userDetails?.country || ''}`,
-        phoneNumber: userDetails?.phoneNumber || 'N/A',
-        balance: userDetails?.balance || 0
-    };
+  const [displayData, setDisplayData] = useState({
+    name: userDetails?.name || 'N/A',
+    businessName: userDetails?.company || 'N/A',
+    address: address || 'N/A',
+    phoneNumber: userDetails?.phoneNumber || 'N/A',
+    balance: userDetails?.balance || 0,
+  });
 
-    console.log(displayData);
+  const setEditable = (val: boolean) => {
+    setIsEditable(val);
+    if (!val && userDetails) {
+      const updatedUserDetails: UserDetails = {
+        ...userDetails,
+        name: displayData.name,
+        company: displayData.businessName,
+        email: userDetails.email || '',
+        address: displayData.address,
+        street: displayData.address.split(',')[0].trim() || '',
+        city: displayData.address.split(',')[1].trim() || '',
+        state: displayData.address.split(',')[2].trim() || '',
+        postCode: displayData.address.split(',')[3].trim() || '',
+        country: displayData.address.split(',')[4].trim() || '',
+        phoneNumber: displayData.phoneNumber,
+        balance: parseFloat(displayData.balance.toString().replace(/[^0-9.-]+/g, '')),
+      };
+      sessionStorage.setItem('userData', JSON.stringify(updatedUserDetails));
+    }
+  };
 
-    return (
-        <Card radius="md" padding="lg" withBorder m="xl">
-            <Stack gap="md">
-                <Title order={3}>Account Summary</Title>
-                <Divider />
+  const undoChanges = () => {
+    const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+    setDisplayData({
+      name: userData.name || 'N/A',
+      businessName: userData.company || 'N/A',
+      address: userData.address || 'N/A',
+      phoneNumber: userData.phoneNumber || 'N/A',
+      balance: userData.balance || 0,
+    });
+    setUnsavedChanges(false);
+  };
+
+  function cleanDollarAmount(input: string | number): string {
+  // Keep only digits and dots
+  const raw = input.toString().replace(/[^0-9.]/g, '');
+
+  // Extract first valid number (ignore others if multiple dots)
+  const match = raw.match(/[0-9]*\.?[0-9]*/);
+  const num = match ? match[0] : '0';
+
+  // Convert to float then fix to 2 decimals
+  const float = parseFloat(num);
+  if (isNaN(float)){ return '$0.00'};
+
+  return `$${float.toFixed(2)}`;
+}
+
+  return (
+    <Card radius="md" padding="lg" withBorder m="xl">
+      <Stack gap="md">
+        <Group justify="space-between" align="center">
+          <Title order={3}>Account Summary</Title>
+          <Group>
+            <Button
+              onClick={() => {
+                undoChanges();
+                setUnsavedChanges(false);
+                setEditable(!isEditable);
+            }}
                 
-                {loading && <Text>Loading user data...</Text>}
-                {error && <Text c="red">Error: {error}</Text>}
-                {/* {!apiKey && <Text c="dimmed">No API key provided</Text>} */}
+              style={{ display: unsavedChanges ? 'block' : 'none' }}
+            >
+              Undo Changes
+            </Button>
+            <Button
+              onClick={() => {
+                setEditable(!isEditable);
                 
-                <Flex gap="xl" wrap="wrap">
-                    <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
-                        <Text fw={500}>Name</Text>
-                        <ValueBox>{displayData.name}</ValueBox>
-                    </Stack>
-                    <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
-                        <Text fw={500}>Business Name</Text>
-                        <ValueBox>{displayData.businessName}</ValueBox>
-                    </Stack>
-                </Flex>
-                
-                <Flex gap="xl" wrap="wrap">
-                    <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
-                        <Text fw={500}>Address</Text>
-                        <ValueBox>{displayData.address}</ValueBox>
-                    </Stack>
-                    <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
-                        <Text fw={500}>Phone Number</Text>
-                        <ValueBox>{displayData.phoneNumber}</ValueBox>
-                    </Stack>
-                </Flex>
-                
-                <Flex>
-                    <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
-                        <Text fw={500}>Current Balance</Text>
-                        <ValueBox>
-                            ${displayData.balance.toLocaleString()}
-                        </ValueBox>
-                    </Stack>
-                </Flex>
-            </Stack>
-        </Card>
-    );
+                setUnsavedChanges(false);
+              }}
+              leftSection={<IconEdit size={20} color={isEditable ? 'black' : 'white'} />}
+            >
+              {isEditable ? 'Save Changes' : 'Edit Details'}
+            </Button>
+          </Group>
+        </Group>
+        <Divider />
+
+        {loading && <Text>Loading user data...</Text>}
+        {error && <Text c="red">Error: {error}</Text>}
+
+        <Flex gap="xl" wrap="wrap">
+          <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
+            <Text fw={500}>Name</Text>
+            <ValueBox
+              editable={isEditable}
+              onChange={(val) => {
+                setUnsavedChanges(true);
+                if (val.trim() !== '') {
+                  setDisplayData((prev) => ({ ...prev, name: val }));
+                }
+              }}
+            >
+              {displayData.name}
+            </ValueBox>
+          </Stack>
+          <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
+            <Text fw={500}>Business Name</Text>
+            <ValueBox
+              editable={isEditable}
+              onChange={(val) => {
+                setUnsavedChanges(true);
+                if (val.trim() !== '') {
+                  setDisplayData((prev) => ({ ...prev, businessName: val }));
+                }
+              }}
+            >
+              {displayData.businessName}
+            </ValueBox>
+          </Stack>
+        </Flex>
+
+        <Flex gap="xl" wrap="wrap">
+          <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
+            <Text fw={500}>Address</Text>
+            <ValueBox
+              editable={isEditable}
+              onChange={(val) => {
+                setUnsavedChanges(true);
+                if (val.trim() !== '') {
+                  setDisplayData((prev) => ({ ...prev, address: val }));
+                }
+              }}
+            >
+              {displayData.address}
+            </ValueBox>
+          </Stack>
+          <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
+            <Text fw={500}>Phone Number</Text>
+            <ValueBox
+              editable={isEditable}
+              onChange={(val) => {
+                setUnsavedChanges(true);
+                if (val.trim() !== '') {
+                  setDisplayData((prev) => ({ ...prev, phoneNumber: val }));
+                }
+              }}
+            >
+              {displayData.phoneNumber}
+            </ValueBox>
+          </Stack>
+        </Flex>
+
+        <Flex>
+          <Stack gap={4} style={{ flex: 1, minWidth: 220 }}>
+            <Text fw={500}>Current Balance</Text>
+            <ValueBox
+              editable={false}
+              onChange={(val) => {
+                setUnsavedChanges(true);
+                if (val.trim() !== '') {
+                setDisplayData((prev) => ({ ...prev, balance: cleanDollarAmount(val) }));
+               }
+              }}
+            >
+              {typeof displayData.balance === 'number'
+                ? displayData.balance.toLocaleString('en-AU', {
+                    style: 'currency',
+                    currency: 'AUD',
+                  })
+                : displayData.balance}
+            </ValueBox>
+          </Stack>
+        </Flex>
+
+        {unsavedChanges && (
+          <Text c="red" size="sm">
+            You have unsaved changes!
+          </Text>
+        )}
+      </Stack>
+    </Card>
+  );
 }
