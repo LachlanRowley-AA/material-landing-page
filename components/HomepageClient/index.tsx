@@ -29,9 +29,7 @@ export default function HomepageClient({ userDetails, parsedBalance }: HomepageC
   } , [userDetails, parsedBalance]);
     if (!userDetails || !sessionReady) {
       return (
-        <Center style={{ height: '100vh' }}>
-          <Loader size="lg" />
-        </Center>
+        <div />
     );
   }
 

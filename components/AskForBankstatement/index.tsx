@@ -318,9 +318,14 @@ export const AskForBankstatement = () => {
         )}
 
         {step === 'thankyou' && (
-          <Text ta="center" size="lg" fw={600} c="green">
-            Thanks for submitting your details. We'll be in touch soon!
-          </Text>
+          <div>
+            <Text ta="center" size="lg" fw={600} c="green">
+              Thanks for submitting your details. We'll be in touch soon!
+            </Text>
+            <Text ta="center" size="sm" fw={400} c="black">
+                Click outside this box to close
+            </Text>
+          </div>        
         )}
 
         {success && (

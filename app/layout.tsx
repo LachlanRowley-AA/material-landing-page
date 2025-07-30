@@ -6,6 +6,7 @@ import { theme } from '../theme';
 import { GoogleAnalytics} from '@next/third-parties/google'
 
 
+
 export const metadata = {
   title: 'eazytrade powered by Asset Alley',
   description: 'eazytrade powered by Asset Alley landing page!',

@@ -42,13 +42,13 @@ const scrollToSection = (id: string) => {
 
 export const Hero03 = ({
   badge = ' ',
-  title = 'Transform Your Business',
+  title = 'Transform Your Wholesale Business',
   description = '',
   ...containerProps
 }: Hero03Props) => {
   const theme = useMantineTheme();
   return(
-  <Container pos="relative" h={{base: "90vh", md: "80vh"}} mah={950} style={{ overflow: 'hidden' }} fluid >
+  <Container pos="relative" h={{base: "100vh", md: "80vh"}} mah="100%" style={{ overflow: 'hidden' }} fluid >
     <Container component="section" h="100%" mx="auto" size="xl" {...containerProps}>
       <Box
         pos="absolute"
@@ -126,6 +126,7 @@ export const Hero03 = ({
               bg={theme.colors.secondary[9]}
               mt="xl"
               c="white"
+              visibleFrom="md"
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = theme.colors.secondary[0];
                 e.currentTarget.style.color = 'white';

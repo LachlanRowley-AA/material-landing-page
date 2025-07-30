@@ -19,10 +19,12 @@ export default async function DBM_DataLoaderServer({
 
   if (accountKey) {
     try {
+      console.log('Fetching now: ', Date.now())
       const response = await fetch(
         `https://script.google.com/macros/s/AKfycbxE7C_cBbmcK6WkX8r1LhzmksN1jS_U_dpEaE-oYbrHWBQxkuOk5jPlGF3y25MtrNpO/exec?accountKey=${encodeURIComponent(accountKey)}`,
         { cache: 'no-store' }
       );
+      console.log('Fetch completed: ', Date.now())
 
       if (!response.ok) {throw new Error(`HTTP error ${response.status}`)};
 

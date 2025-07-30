@@ -105,6 +105,7 @@ type CalculatorProps = {
 export const Calculator = ({
   startingAmount = 20000
 }: CalculatorProps) => {
+  const startingBalance = startingAmount || 0;
   const [baseValue, setBaseValue] = useState(startingAmount ? Math.min(startingAmount, MAX_LOAN_AMOUNT) : 10000);
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [isWeekly, setIsWeekly] = useState(false);
@@ -261,12 +262,22 @@ export const Calculator = ({
                   }
                   c={{base: "white",md:theme.colors.secondary[0]}}
                   mx={isMobile ? 'xs' : 0}
-                  marks={[
-                    { value: startingAmount, label: <div><IconArrowUp style={{marginBottom:"0px", paddingBottom:"0px"}}/>
-                                                      <p style={{margin: "0px"}}>Your balance</p>
-                                                      <p style={{margin: "0px"}}>with DBM</p>
-                                                    </div>}
-                  ]}
+                  marks={
+                    startingBalance > 0
+                      ? [
+                          {
+                            value: startingBalance,
+                            label: (
+                              <div>
+                                <IconArrowUp style={{ marginBottom: "0px", paddingBottom: "0px" }} />
+                                <p style={{ margin: "0px" }}>Your balance</p>
+                                <p style={{ margin: "0px" }}>with DBM</p>
+                              </div>
+                            ),
+                          },
+                        ]
+                      : []
+                  }
                   size="xl"
                   styles={{
                     markLabel: {
