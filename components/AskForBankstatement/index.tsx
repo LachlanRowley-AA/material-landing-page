@@ -21,6 +21,8 @@ export const AskForBankstatement = () => {
   const router = useRouter();
   const [file, setFile] = useState<File[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+  const [illionLoading, setIllionLoading] = useState(false);
+  const [noIllionLoading, setNoIllionLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
@@ -145,6 +147,9 @@ export const AskForBankstatement = () => {
 
 
   const handleUploadClick = () => {
+    if(loading) {
+      return;
+    }
     sendToLendAPI();
     if (file && file.length > 0) {
       const userData = sessionStorage.getItem('userData');
@@ -188,6 +193,9 @@ export const AskForBankstatement = () => {
   };
 
   const handleIlionClick = () => {
+    if(loading) {
+      return;
+    }
     handleUploadClick();
     router.push('/bankstatements');
   };
@@ -272,6 +280,8 @@ export const AskForBankstatement = () => {
                     color: 'white',
                     fontWeight: 600,
                   }}
+                  loading={loading}
+                  loaderProps={{ type: 'oval'}}
                   onClick={handleIlionClick}
                   styles={{
                     label: {
@@ -295,6 +305,7 @@ export const AskForBankstatement = () => {
                   color="dark"
                   onClick={handleUploadClick}
                   loading={loading}
+                  loaderProps={{ type: 'oval'}}
                   styles={{
                     label: {
                       whiteSpace: 'normal',

@@ -86,8 +86,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     const data = payload[0].payload;
     return (
       <Box p="sm" style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <Text fw="500" c="black">{`${label} months`}</Text>
-        <Text c={theme.colors.secondary[0]}>{`Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
+        <Text fw="500" c="black">{`${label}`}</Text>
+        <Text c={theme.colors.secondary[0]}>{`Est. Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
       </Box>
     );
   }
@@ -414,7 +414,7 @@ export const Calculator = ({
                               ${item.monthlyPayment.toLocaleString()}
                             </Text>
                             <Text c="dimmed" fz="xs" ta="center">
-                              monthly payment
+                              estimated monthly payment
                             </Text>
                           </Box>
                         </Button>

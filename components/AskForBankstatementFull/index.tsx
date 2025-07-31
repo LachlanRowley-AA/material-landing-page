@@ -337,6 +337,7 @@ export const AskForBankstatementFull = () => {
                 size="md"
                 style={{ backgroundColor: '#fc8900', color: 'white', fontWeight: 600 }}
                 loading={loading}
+                loaderProps={{ type: 'oval'}}
                 type="submit"
               >
                 Submit Application
@@ -427,6 +428,8 @@ export const AskForBankstatementFull = () => {
                   color: 'white',
                   fontWeight: 600,
                 }}
+                loading={loading}
+                loaderProps={{ type: 'oval'}}
                 onClick={handleIlionClick}
                 styles={{
                   label: {
