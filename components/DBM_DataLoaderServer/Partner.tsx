@@ -19,14 +19,17 @@ export default async function DBM_PartnerDataLoaderServer({
 
   if (accountKey) {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SITE_URL}/api/partner-data?accountKey=${encodeURIComponent(accountKey)}`,
+      console.log('Fetching now: ', Date.now())
+      const response = await fetch(
+        `https://script.google.com/macros/s/AKfycbydtvQbFhphQj7RaL2PvMhHyty-R3auBMWncfX0PaYCFeVhXhgziONL_0qzsEDAH8R7ew/exec?accountKey=${encodeURIComponent(accountKey)}`,
         { cache: 'no-store' }
       );
+      console.log('Fetch completed: ', Date.now())
 
-      const data = await res.json();
+      if (!response.ok) {throw new Error(`HTTP error ${response.status}`)};
 
-      userDetails = data?.data ?? null;
+      const data = await response.json();
+      userDetails = data.data;
 
       const rawBalance = userDetails?.balance;
       parsedBalance =
@@ -36,7 +39,7 @@ export default async function DBM_PartnerDataLoaderServer({
             ? rawBalance
             : 0;
     } catch (err) {
-      console.error('Server-side API fetch failed:', err);
+      console.error('Server-side fetch error:', err);
     }
   }
 
