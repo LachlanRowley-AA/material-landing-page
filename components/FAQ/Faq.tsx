@@ -207,6 +207,17 @@ const AccordionFAQ = () => {
   );
 };
 
+const scrollToSection = (id: string) => {
+    const section = document.getElementById(id);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+    else {
+      console.log('section not found');
+    }
+  };
+
+
 export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) => {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
@@ -320,6 +331,9 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.background = `${theme.colors.secondary[9]}`;
+            }}
+            onClick={(e:any) => {
+              e.preventDefault;scrollToSection('contact')
             }}
 
           >
