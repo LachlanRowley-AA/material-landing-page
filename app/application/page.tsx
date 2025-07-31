@@ -218,7 +218,7 @@ export default function Page() {
         {/* Loading State */}
         {loading.ip && (
           <Group gap="xs">
-            <Loader size="sm" />
+            <Loader size="sm" type="dots" />
             <Text size="sm">Loading your information...</Text>
           </Group>
         )}

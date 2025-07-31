@@ -4,7 +4,7 @@ import brokers from '@/lib/brokers.json';
 export async function POST(req: NextRequest) {
   const username = process.env.LEND_USERNAME;
   const password = process.env.LEND_PASSWORD;
-  const mode = process.env.LEND_MODE || 'live';
+  const mode = process.env.NEXT_PUBLIC_LEND_MODE || 'sandbox';
   const auth = Buffer.from(`${username}:${password}`).toString('base64');
 
   const brokerList = brokers.brokers.map((broker) => ({ id: broker.id }));
