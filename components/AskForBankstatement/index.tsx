@@ -147,9 +147,6 @@ export const AskForBankstatement = () => {
 
 
   const handleUploadClick = () => {
-    if(loading) {
-      return;
-    }
     sendToLendAPI();
     if (file && file.length > 0) {
       const userData = sessionStorage.getItem('userData');
@@ -193,9 +190,6 @@ export const AskForBankstatement = () => {
   };
 
   const handleIlionClick = () => {
-    if(loading) {
-      return;
-    }
     handleUploadClick();
     router.push('/bankstatements');
   };
