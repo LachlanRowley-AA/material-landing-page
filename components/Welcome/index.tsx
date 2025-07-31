@@ -62,7 +62,7 @@ export default function Welcome({name} : { name?: string}) {
         </Group>
 
         <Group mt="md">
-          <ThemeIcon color="#fc8900" size={24} radius="xl" variant="light" style={{ backgroundColor: '#ffe1c2' }}>
+          <ThemeIcon color="#fc8900" size={24} radius="xl" variant="light" style={{ backgroundColor: '#ffe1c2' }} visibleFrom="md">
             <IconCheck size={16} />
           </ThemeIcon>
           <Text size="lg" fw={500} c="#333">
