@@ -164,7 +164,7 @@ export const AskForBankstatement = () => {
 
 
 const handleUploadClick = async (): Promise<boolean> => {
-  if(loading) return;
+  if(loading) {return false};
   setLoading(true);
   let apiSuccess = false;
   try {
@@ -220,7 +220,7 @@ const handleUploadClick = async (): Promise<boolean> => {
 };
 
 const handleIlionClick = async () => {
-  if(loading) return;
+  if(loading) {return false};
   setLoading(true);
   const success = await handleUploadClick();
   if (success) {
