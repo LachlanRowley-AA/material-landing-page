@@ -174,7 +174,6 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
               <motion.div initial={{ opacity: 0.0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
                 <Stack gap={isMobile ? 'sm' : 'md'}>
                   <TextInput
-                    label="Loan Amount"
                     type="text"
                     value={baseValue.toLocaleString()}
                     onChange={(event) => {
@@ -235,10 +234,9 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                     rightSectionWidth={100}
                   />
                   <Stack gap={0}>
-                    <Text size="sm" fs="italic">Finance available up to $500,000 regardless of outstanding balance</Text>
+                    <Text size="sm" fs="italic">Finance available between $5,000 and $500,000 regardless of outstanding balance</Text>
                     <Slider
                       px="xl"
-                      label="Loan Amount"
                       min={MIN_LOAN_AMOUNT}
                       max={MAX_LOAN_AMOUNT}
                       step={1000}

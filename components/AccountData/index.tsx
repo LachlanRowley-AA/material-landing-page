@@ -92,26 +92,32 @@ export function UserDataDisplay({ userDetails = null }: UserAccountProps) {
     balance: userDetails?.balance || 0,
   });
 
-  const setEditable = (val: boolean) => {
-    setIsEditable(val);
-    if (!val && userDetails) {
-      const updatedUserDetails: UserDetails = {
-        ...userDetails,
-        name: displayData.name,
-        company: displayData.businessName,
-        email: userDetails.email || '',
-        address: displayData.address,
-        street: displayData?.address.split(',')[0].trim() || '',
-        city: displayData?.address.split(',')[1].trim() || '',
-        state: displayData?.address.split(',')[2].trim() || '',
-        postCode: displayData?.address.split(',')[3].trim() || '',
-        country: displayData?.address.split(',')[4].trim() || '',
-        phoneNumber: displayData.phoneNumber,
-        balance: parseFloat(displayData.balance.toString().replace(/[^0-9.-]+/g, '')),
-      };
-      sessionStorage.setItem('userData', JSON.stringify(updatedUserDetails));
-    }
-  };
+const setEditable = (val: boolean) => {
+  setIsEditable(val);
+
+  if (!val && userDetails) {
+    const addressParts = displayData?.address?.split(',').map(part => part.trim()) || [];
+
+    const updatedUserDetails: UserDetails = {
+      ...userDetails,
+      name: displayData.name,
+      company: displayData.businessName,
+      email: userDetails.email || '',
+      address: displayData.address,
+      street: addressParts[0] || '',
+      city: addressParts[1] || '',
+      state: addressParts[2] || '',
+      postCode: addressParts[3] || '',
+      country: addressParts[4] || '',
+      phoneNumber: displayData.phoneNumber,
+      balance: parseFloat(
+        displayData.balance.toString().replace(/[^0-9.-]+/g, '')
+      ),
+    };
+
+    sessionStorage.setItem('userData', JSON.stringify(updatedUserDetails));
+  }
+};
 
   const undoChanges = () => {
     const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');

@@ -154,8 +154,25 @@ export const AskForBankstatementFull = () => {
           handleStepChange('upload');
         }, 1000);
       } else {
-        const text = await res.text();
-        setError(`Submission failed: ${res.status} - ${text}`);
+          const text = await res.text();
+          let errorMessage = `Submission failed: ${res.status}`;
+
+          try {
+            const outer = JSON.parse(text);
+            if (outer.body) {
+              const inner = JSON.parse(outer.body);
+              if (inner.errors) {
+                errorMessage = inner.errors[0].error
+              }
+              if (inner.error) {
+                errorMessage = inner.error;
+              }
+            }
+          } catch {
+            // fallback to raw response text
+            errorMessage = text;
+          }
+          setError(errorMessage);
       }
     } catch (err: any) {
       setError(`Error: ${err.message}`);
@@ -256,6 +273,7 @@ export const AskForBankstatementFull = () => {
       
       const data = await response.json();
       if (!data.ip) {
+        setIp('192.168.1.1');
         throw new Error('Invalid IP response');
       }
       

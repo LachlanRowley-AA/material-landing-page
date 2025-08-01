@@ -38,7 +38,7 @@ export const AskForBankstatement = () => {
     if (!userData) {
       setError('User data not found in session storage.');
       setLoading(false);
-      return;
+      return false;
     }
     const parsedUserData: UserDetails = JSON.parse(userData);
     let [first, ...lastArr] = parsedUserData.name.split(' ');
@@ -64,7 +64,7 @@ export const AskForBankstatement = () => {
         break;
     }
 
-    try {
+    try {      
       const res = await fetch('/api/send-lead', {
         method: 'POST',
         headers: {
@@ -75,7 +75,7 @@ export const AskForBankstatement = () => {
             first_name: first,
             last_name: last,
             contact_number: parsedUserData.phoneNumber || '0000000000',
-            email: parsedUserData.email || '',
+            email: parsedUserData.email || 'missingEmail@email.com',
           },
           lead: {
             organisation_name: parsedUserData.company || 'Unknown Company',
@@ -98,14 +98,32 @@ export const AskForBankstatement = () => {
       });
       if (res.ok) {
         setSuccess('Application submitted successfully');
-      } else {
-        const text = await res.text();
-        setError(`Submission failed: ${res.status} - ${text}`);
+        return true;
       }
-    } catch (err: any) {
+      const text = await res.text();
+      let errorMessage = `Submission failed: ${res.status}`;
+
+      try {
+        const outer = JSON.parse(text);
+        if (outer.body) {
+          const inner = JSON.parse(outer.body);
+          if (inner.errors) {
+            errorMessage = inner.errors[0].error
+          }
+          if (inner.error) {
+            errorMessage = inner.error;
+          }
+        }
+      } catch {
+        // fallback to raw response text
+        errorMessage = text;
+      }
+
+      setError(errorMessage);
+      return false;    }
+  catch (err: any) {
       setError(`Error: ${err.message}`);
-    } finally {
-      setLoading(false);
+      return false;
     }
   };
 
@@ -122,12 +140,11 @@ export const AskForBankstatement = () => {
     sessionStorage.setItem('bankFormStep', newStep);
   };
 
-  const [ip, setIp] = useState<string | null>(null);
+  const [ip, setIp] = useState<string | null>('0.0.0.0');
   const ipService = 'https://api.ipify.org?format=json';
 
   const fetchUserIP = useCallback(async () => {
     try {
-      
       const response = await fetch(ipService);
       if (!response.ok) {
         throw new Error('Failed to fetch IP address');
@@ -146,53 +163,71 @@ export const AskForBankstatement = () => {
   }, []);
 
 
-  const handleUploadClick = () => {
-    sendToLendAPI();
-    if (file && file.length > 0) {
-      const userData = sessionStorage.getItem('userData');
-      const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
-      const formData = new FormData();
-      file.forEach((f) => {
-        formData.append('invoices', f);
-      });
-      formData.append('company_name', parsedUserData.company || 'Unknown Company');
-      formData.append('ipAddress', ip || 'IP_FETCH_FAILED');
-      formData.append('name', parsedUserData.name || 'Unknown');
+const handleUploadClick = async (): Promise<boolean> => {
+  if(loading) return;
+  setLoading(true);
+  let apiSuccess = false;
+  try {
+      apiSuccess = await sendToLendAPI(); // Ensure Lend API call completes before continuing
+    } catch (err: any) {
+      setError(`Lend API error: ${err.message || 'Unknown error'}`);
+      setLoading(false);
+      return false;
+  }
+  if(!apiSuccess) {
+    return false;
+  }
+  if (file && file.length > 0) {
+    const userData = sessionStorage.getItem('userData');
+    const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+    const formData = new FormData();
+    file.forEach((f) => {
+      formData.append('invoices', f);
+    });
+    formData.append('company_name', parsedUserData.company || 'Unknown Company');
+    formData.append('ipAddress', ip || 'IP_FETCH_FAILED');
+    formData.append('name', parsedUserData.name || 'Unknown');
 
-      const date = new Date()
-      const formattedDate = date.toLocaleDateString('en-AU', {
-          day: '2-digit' as const,
-          month: '2-digit' as const,
-          year: 'numeric' as const
-      })
-      formData.append('date', formattedDate);
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString('en-AU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    formData.append('date', formattedDate);
 
-      fetch('/api/uploadBank', {
+    try {
+      const response = await fetch('/api/uploadBank', {
         method: 'POST',
         body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.error) {
-            setError(data.error);
-          } else {
-            setSuccess('Files uploaded successfully');
-            setTimeout(() => {
-              setSuccess(null);
-              handleStepChange('thankyou');
-            }, 1000);
-          }
-        })
-        .catch((err) => setError(`Upload failed: ${err.message}`));
-    } else {
-      handleStepChange('thankyou');
+      });
+      const data = await response.json();
+      if (data.error) {
+        setError(data.error);
+        return false;
+      }
+      setSuccess('Files uploaded successfully');
+      await new Promise((res) => setTimeout(res, 1000));
+      return true;
+    } catch (err: any) {
+      setError(`Upload failed: ${err.message}`);
+      return false;
     }
-  };
+  } else {
+    // no files uploaded
+    return true;
+  }
+};
 
-  const handleIlionClick = () => {
-    handleUploadClick();
+const handleIlionClick = async () => {
+  if(loading) return;
+  setLoading(true);
+  const success = await handleUploadClick();
+  if (success) {
+    handleStepChange('thankyou');
     router.push('/bankstatements');
-  };
+  }
+};
 
   return (
     <Card
@@ -291,27 +326,32 @@ export const AskForBankstatement = () => {
               </Tooltip>
 
               <Group gap="xs" justify="center">
-                <Button
-                  fullWidth
-                  radius="md"
-                  size="md"
-                  variant="outline"
-                  color="dark"
-                  onClick={handleUploadClick}
-                  loading={loading}
-                  loaderProps={{ type: 'oval'}}
-                  styles={{
-                    label: {
-                      whiteSpace: 'normal',
-                      lineHeight: 1.25,
-                      textAlign: 'center',
-                    },
-                  }}
-                >
-                  {file
-                    ? 'Submit Application'
-                    : 'No thanks, continue without uploading'}
-                </Button>
+               <Button
+                fullWidth
+                radius="md"
+                size="md"
+                variant="outline"
+                color="dark"
+                onClick={async () => {
+                  const success = await handleUploadClick();
+                  if (success) {
+                    handleStepChange('thankyou');
+                  }
+                }}
+                loading={loading}
+                loaderProps={{ type: 'oval' }}
+                styles={{
+                  label: {
+                    whiteSpace: 'normal',
+                    lineHeight: 1.25,
+                    textAlign: 'center',
+                  },
+                }}
+              >
+                {file
+                  ? 'Submit Application'
+                  : 'No thanks, continue without uploading'}
+              </Button>
                 <Text size="xs" c="dimmed" ta="center">
                   {file && file.length > 0
                     ? 'You will need to provide your bank statements later'
