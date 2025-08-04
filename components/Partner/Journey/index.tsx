@@ -94,11 +94,11 @@ const integrationSteps = [
 const ReferralJourneySection = () => {
   const [visibleSteps, setVisibleSteps] = useState(new Set<number>());
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedJourney, setSelectedJourney] = useState<'Integration' | 'Referral' >('Integration');
+  const [selectedJourney, setSelectedJourney] = useState<'Wholesale Integration' | 'Customer Referral Journey' >('Wholesale Integration');
   const theme = useMantineTheme();
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
-  const currentSteps = selectedJourney === 'Referral' ? steps : integrationSteps;
+  const currentSteps = selectedJourney === 'Customer Referral Journey' ? steps : integrationSteps;
 
   useEffect(() => {
     setIsVisible(true);
@@ -128,8 +128,8 @@ const ReferralJourneySection = () => {
             </Text>
             <SegmentedControl
               value={selectedJourney}
-              onChange={(value) => setSelectedJourney(value as 'Integration' | 'Referral')}
-              data={['Integration', 'Referral']}
+              onChange={(value) => setSelectedJourney(value as 'Wholesale Integration' | 'Customer Referral Journey')}
+              data={['Wholesale Integration', 'Customer Referral Journey']}
               size="lg"
               color="green"
               radius="md"

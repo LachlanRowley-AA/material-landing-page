@@ -16,6 +16,7 @@ import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
+import Link from 'next/link'
 
 export const AskForBankstatement = () => {
   const router = useRouter();
@@ -211,6 +212,8 @@ const handleUploadClick = async (): Promise<boolean> => {
       return true;
     } catch (err: any) {
       setError(`Upload failed: ${err.message}`);
+      await new Promise((res) => setTimeout(res, 1000));
+      setError(`We had an issue geting your Id. Don't worry, we have recieved your application and will be in touch soon.`)
       return false;
     }
   } else {
@@ -225,7 +228,7 @@ const handleIlionClick = async () => {
   const success = await handleUploadClick();
   if (success) {
     handleStepChange('thankyou');
-    router.push('/bankstatements');
+    window.open('/bankstatements', '_blank');
   }
 };
 
@@ -241,20 +244,19 @@ const handleIlionClick = async () => {
       }}
     >
       <Stack gap="md">
-        <JumboTitle order={2} fz={rem(20)} ta="center" c="#fc8900" style={{ fontWeight: 700 }}>
-          Get ahead of approval by providing your ID and business bank statements
-        </JumboTitle>
-
         {step !== 'thankyou' && (
           <div>
             <Stack gap="lg">
+            <JumboTitle order={2} fz={rem(20)} ta="center" c="#fc8900" style={{ fontWeight: 700 }}>
+              Get ahead of approval by providing your ID and business bank statements
+            </JumboTitle>
               <FileInput
-                label="Upload or take photo of the FRONT of your driver's licence"
+                label="Upload or take a photo of the FRONT of your driver's licence"
                 placeholder="Choose file or take photo"
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
-                accept="image/*" // allows gallery or camera
+                accept="image/jpeg, image/png" // allows gallery or camera
                 onChange={(event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseFront(selected || null);
@@ -275,12 +277,12 @@ const handleIlionClick = async () => {
               />
 
               <FileInput
-                label="Upload or take photo of the BACK of your driver's licence"
+                label="Upload or take a photo of the BACK of your driver's licence"
                 placeholder="Choose file or take photo"
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
-                accept="image/*"
+                accept="image/jpeg, image/png"
                 onChange={(event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseBack(selected || null);
@@ -299,31 +301,33 @@ const handleIlionClick = async () => {
                   },
                 }}
               />
-              <Tooltip label={licenseFront && licenseBack ? '' : "Please upload your ID first"} display={licenseFront && licenseBack ? 'none' : 'block'}>
-                <Button
-                  fullWidth
-                  radius="md"
-                  size="md"
-                  style={{
-                    backgroundColor: licenseFront && licenseBack ? '#fc8900' : '#ccc',
-                    color: 'white',
-                    fontWeight: 600,
-                  }}
-                  loading={loading}
-                  loaderProps={{ type: 'oval'}}
-                  onClick={handleIlionClick}
-                  styles={{
-                    label: {
-                      whiteSpace: 'normal',
-                      lineHeight: 1.25,
-                      textAlign: 'center',
-                    },
-                  }}
-                  disabled={!licenseFront || !licenseBack}
-                >
-                  Provide your bank statements through Illion
-              </Button>
-              </Tooltip>
+              <Group gap="xs" justify="center">
+                <Tooltip label={licenseFront && licenseBack ? '' : "Please upload your ID first"} display={licenseFront && licenseBack ? 'none' : 'block'}>
+                  <Button
+                    fullWidth
+                    radius="md"
+                    size="md"
+                    style={{
+                      backgroundColor: licenseFront && licenseBack ? '#fc8900' : '#ccc',
+                      color: 'white',
+                      fontWeight: 600,
+                    }}
+                    loading={loading}
+                    loaderProps={{ type: 'oval'}}
+                    onClick={handleIlionClick}
+                    styles={{
+                      label: {
+                        whiteSpace: 'normal',
+                        lineHeight: 1.25,
+                        textAlign: 'center',
+                      },
+                    }}
+                    disabled={!licenseFront || !licenseBack}
+                  >
+                    Provide your bank statements through Illion (credit score safe)
+                </Button>
+                </Tooltip>
+              </Group>
 
               <Group gap="xs" justify="center">
                <Button
@@ -369,6 +373,12 @@ const handleIlionClick = async () => {
             </Text>
             <Text ta="center" size="sm" fw={400} c="black">
                 Click outside this box to close
+            </Text>
+            <Text size="sm" mt="md" ta="center">
+              Need to upload your bank statements?{' '}
+              <Link href="/bankstatements" target="_blank" style={{ color: 'blue', textDecoration: 'underline' }}>
+                Click here.
+              </Link>
             </Text>
           </div>        
         )}

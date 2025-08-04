@@ -24,6 +24,7 @@ import { IconUpload } from '@tabler/icons-react';
 import { AskForBankstatement } from "@/components/AskForBankstatement";
 import { useDisclosure } from "@mantine/hooks";
 import { AskForBankstatementFull } from "@/components/AskForBankstatementFull";
+import { useUnsavedChanges } from '@/components/unsavedChanges';
 
 type AgreementWidgetProps = {
   showDataShareCheckbox ?: boolean;
@@ -38,10 +39,15 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [opened, {open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
+  const { unsavedChanges } = useUnsavedChanges();
 
   const handleCompleteApplication = () => {
     if (!dataShareTicked || !privacyPolicyTicked) {
       setError('You must agree to the above to proceed.');
+      return;
+    }
+    if( unsavedChanges ) {
+      setError('You have unsaved changes to your account details');
       return;
     }
     setError('');
@@ -119,6 +125,10 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
               Submit
             </Button>
           </Tooltip>
+            <Text size="xs" c="dimmed" ta="center" mt="xs">
+              This will not impact your credit score
+            </Text>
+
         </Box>
       </Stack>
       <Modal

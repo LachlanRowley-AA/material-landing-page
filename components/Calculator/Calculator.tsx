@@ -164,7 +164,7 @@ export const Calculator = ({
                     Set your
                   </JumboTitle>
                   <JumboTitle order={3} fz="xs" ta="center" style={{ textWrap: 'balance' }} c={{base: "01E194",md:theme.colors.secondary[0]}} fw={600}>
-                    loan amount
+                    Loan Amount
                   </JumboTitle>
                 </span>
             </Grid.Col>

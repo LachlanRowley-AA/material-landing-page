@@ -11,6 +11,7 @@ import { Header01 } from '@/components/Header';
 import Welcome from '@/components/Welcome';
 import { UserDetails } from '@/lib/UserDetails';
 import { useEffect, useState } from 'react';
+import { UnsavedChangesProvider } from '@/components/unsavedChanges';
 
 interface HomepageClientProps {
   userDetails: UserDetails | null;
@@ -34,18 +35,7 @@ export default function HomepageClient({ userDetails, parsedBalance }: HomepageC
   }
 
   return (
-    <>
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        .fade-in-container {
-          opacity: 0;
-          animation: fadeIn 1s ease-in-out forwards;
-        }
-      `}</style>
-      <div className="fade-in-container">
+      <UnsavedChangesProvider>
         <Header01 />
         <div style={{ paddingBottom: '40px' }} />
         <Container px={{ base: '0px', md: '20px', lg: '40px' }} mx={{ base: '0px' }} fluid>
@@ -64,7 +54,6 @@ export default function HomepageClient({ userDetails, parsedBalance }: HomepageC
         <UseCases />
         <FAQ />
         <Footer01 />
-      </div>
-    </>
+      </UnsavedChangesProvider>
   );
 }

@@ -14,6 +14,7 @@ import {
 import { useState, useEffect, useRef } from 'react';
 import { UserDetails } from '@/lib/UserDetails';
 import { IconEdit } from '@tabler/icons-react';
+import { useUnsavedChanges } from '@/components/unsavedChanges';
 
 type ValueBoxProps = {
   children: string;
@@ -72,7 +73,6 @@ type UserAccountProps = {
 export function UserDataDisplay({ userDetails = null }: UserAccountProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const address = [
     userDetails?.street,
@@ -118,6 +118,7 @@ const setEditable = (val: boolean) => {
     sessionStorage.setItem('userData', JSON.stringify(updatedUserDetails));
   }
 };
+  const { unsavedChanges, setUnsavedChanges } = useUnsavedChanges();
 
   const undoChanges = () => {
     const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');

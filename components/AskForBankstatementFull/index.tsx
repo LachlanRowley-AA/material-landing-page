@@ -18,6 +18,7 @@ import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
+import Link from 'next/link'
 
 export const AskForBankstatementFull = () => {
   const router = useRouter();
@@ -213,7 +214,7 @@ export const AskForBankstatementFull = () => {
 
   const handleIlionClick = () => {
     handleUploadClick();
-    router.push('/bankstatements');
+    window.open('/bankstatements', '_blank');
   };
 
 
@@ -372,7 +373,7 @@ export const AskForBankstatementFull = () => {
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
-                accept="image/*" // allows gallery or camera
+                accept="image/jpeg, image/png" // allows gallery or camera
                 onChange={(event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseFront(selected || null);
@@ -391,14 +392,13 @@ export const AskForBankstatementFull = () => {
                   },
                 }}
               />
-
               <FileInput
                 label="Upload or take a photo of the BACK of your driver's licence"
                 placeholder="Choose a file or take a photo"
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
-                accept="image/*"
+                accept="image/jpeg, image/png"
                 onChange={(event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseBack(selected || null);
@@ -458,7 +458,7 @@ export const AskForBankstatementFull = () => {
                 }}
                 disabled={!licenseFront || !licenseBack}
               >
-                Provide your bank statements through Illion
+                Provide your bank statements through Illion (credit score safe)
             </Button>
 
             </Tooltip>
@@ -498,6 +498,12 @@ export const AskForBankstatementFull = () => {
             <Text ta="center" size="sm" fw={400} c="black">
               Click outside this box to close
             </Text>
+            <Text size="sm" mt="md" ta="center">
+              Need to upload your bank statements?{' '}
+              <Link href="/bankstatements" target="_blank" style={{ color: 'blue', textDecoration: 'underline' }}>
+                Click here.
+              </Link>
+            </Text>            
           </div>
         )}
         

@@ -163,7 +163,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                 <Grid align="center" gutter="xl">
                   <Grid.Col span={12}>
                     <JumboTitle order={1} fz="xs" ta="center" style={{ textWrap: 'balance' }} c="black" fw={600}>
-                      Set your loan amount
+                      Set Your Loan Amount
                     </JumboTitle>
                   </Grid.Col>
                 </Grid>
