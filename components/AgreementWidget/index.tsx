@@ -125,7 +125,7 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
               Submit
             </Button>
           </Tooltip>
-            <Text size="xs" c="dimmed" ta="center" mt="xs">
+            <Text size="sm" ta="center" mt="xs" fw="600">
               This will not impact your credit score
             </Text>
 

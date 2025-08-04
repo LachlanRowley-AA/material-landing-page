@@ -157,10 +157,8 @@ export const AskForBankstatementFull = () => {
 
       if (res.ok) {
         setSuccess('Application submitted successfully');
-        setTimeout(() => {
-          setSuccess(null);
-          handleStepChange('upload');
-        }, 1000);
+        setSuccess(null);
+        handleStepChange('upload');
       } else {
           const text = await res.text();
           let errorMessage = `Submission failed: ${res.status}`;
@@ -256,10 +254,8 @@ export const AskForBankstatementFull = () => {
             setError(data.error);
           } else {
             setSuccess('Files uploaded successfully');
-            setTimeout(() => {
-              setSuccess(null);
-              handleStepChange('thankyou');
-            }, 1000);
+            setSuccess(null);
+            handleStepChange('thankyou');
           }
         })
         .catch((err) => setError(`Upload failed: ${err.message}`));

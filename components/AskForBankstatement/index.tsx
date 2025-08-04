@@ -214,11 +214,9 @@ const handleUploadClick = async (): Promise<boolean> => {
         return false;
       }
       setSuccess('Files uploaded successfully');
-      await new Promise((res) => setTimeout(res, 1000));
       return true;
     } catch (err: any) {
       setError(`Upload failed: ${err.message}`);
-      await new Promise((res) => setTimeout(res, 1000));
       setError(`We had an issue geting your Id. Don't worry, we have recieved your application and will be in touch soon.`)
       return false;
     }
@@ -228,15 +226,31 @@ const handleUploadClick = async (): Promise<boolean> => {
   }
 };
 
-const handleIlionClick = async () => {
-  if(loading) {return false};
-  setLoading(true);
-  const success = await handleUploadClick();
-  if (success) {
-    handleStepChange('thankyou');
-    window.open('/bankstatements', '_blank');
-  }
-};
+  const handleIlionClick = () => {
+    if (loading) return;
+
+    // Open new tab IMMEDIATELY on user click
+    const newTab = window.open('/bankstatements', '_blank');
+
+    // If popup was blocked, newTab will be null
+    if (!newTab) {
+      setError('Please allow pop-ups to open bank statement upload page.');
+      return;
+    }
+
+    setLoading(true);
+
+    // Proceed with async API logic in the background
+    handleUploadClick().then((success) => {
+      if (success) {
+        handleStepChange('thankyou');
+      }
+      setLoading(false);
+    }).catch((err) => {
+      setError(`Error: ${err.message}`);
+      setLoading(false);
+    });
+  };
 
   return (
     <Card

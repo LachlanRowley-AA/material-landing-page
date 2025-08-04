@@ -266,9 +266,22 @@ const setEditable = (val: boolean) => {
         </Flex>
 
         {unsavedChanges && (
+          <div>
           <Text c="red" size="sm">
             You have unsaved changes!
           </Text>
+          <Button
+              hiddenFrom="md"
+              onClick={() => {
+              setEditable(!isEditable);
+              
+              setUnsavedChanges(false);
+            }}
+            leftSection={<IconEdit size={20}/>}
+          >
+            Save Changes
+          </Button>
+          </div>
         )}
       </Stack>
     </Card>
