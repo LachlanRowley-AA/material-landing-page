@@ -1,3 +1,4 @@
+'use client'
 import { UseCases } from '@/components/UseCases/Usecases';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
 import { Hero03 } from '@/components/Hero03/index';
@@ -8,10 +9,11 @@ import { FAQ } from '@/components/FAQ/Faq';
 import { ContactForm } from '@/components/Contact/Contact';
 import { Header } from '@/components/Partner';
 import { IntroSection } from '@/components/Intro';
+import { UnsavedChangesProvider } from '@/components/unsavedChanges';
 
 export default function HomePage() {
   return (
-    <>
+    <UnsavedChangesProvider>
       <Header />
       <Hero03 />
       <IntroSection />
@@ -20,6 +22,6 @@ export default function HomePage() {
       <UseCases />
       <FAQ />
       <Footer01 />
-    </>
+    </UnsavedChangesProvider>
   );
 }

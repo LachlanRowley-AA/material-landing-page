@@ -85,6 +85,13 @@ export const AskForBankstatementFull = () => {
     setSuccess(null);
     setError(null);
 
+    const cancelSend = sessionStorage.getItem('testing');
+    if(cancelSend) {
+      setLoading(false);
+      return true;
+    }
+
+
     const userData = sessionStorage.getItem('userData');
     if (!userData) {
       setError('User data not found in session storage.');
