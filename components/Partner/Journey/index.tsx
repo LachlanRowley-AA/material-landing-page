@@ -157,7 +157,7 @@ const ReferralJourneySection = () => {
             >
               <Text size="md" mt={4}>{step.description}</Text>
 
-              {selectedJourney === 'Integration' && index === 2 && (
+              {selectedJourney === 'Wholesale Integration' && index === 2 && (
                 <Divider
                   size="xl"
                   pt="md"
