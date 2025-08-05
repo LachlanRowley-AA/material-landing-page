@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const formData = await request.formData();
-    const company = (formData.get('company_name') as string) || 'N/A';
+    const company = (formData.get('company_name') as string) || 'NAME_NOT_PASSED';
 
     // Grab all 'invoices' entries (can be multiple)
     const files = formData.getAll('invoices');
@@ -68,7 +68,14 @@ export async function POST(request: NextRequest) {
     else {
       return NextResponse.json({ error: 'Failed to upload some files', uploads: uploadResults }, { status: 501 });
     }
-    console.log('PDF generation response:', pdfRes.json());
+    let pdfJson;
+    try {
+      pdfJson = await pdfRes.json();
+    } catch (e) {
+      console.log('failed to parse privacy json: ', e)
+      return NextResponse.json({ error: 'Invalid JSON from privacy form generator' }, { status: 502 })
+    }
+    console.log('PDF generation response:', pdfJson);
     if( !pdfRes.ok) {
       return NextResponse.json({ error: 'Failed to generate privacy form' }, { status: 504 });
     }

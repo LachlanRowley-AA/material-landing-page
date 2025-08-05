@@ -125,7 +125,6 @@ export const AskForBankstatement = () => {
           }
         }
       } catch {
-        // fallback to raw response text
         errorMessage = text;
       }
 
@@ -321,9 +320,15 @@ const handleUploadClick = async (): Promise<boolean> => {
                 withAsterisk
                 accept="image/jpeg, image/png"
                 onChange={(event) => {
-                  const selected = Array.isArray(event) ? event[0] : event;
-                  setLicenseBack(selected || null);
-                  if (selected) setFile((prev) => [...(prev || []), selected]);
+                const selected = Array.isArray(event) ? event[0] : event;
+                setLicenseBack(selected || null);
+
+                setFile(() => {
+                  const newFiles = [];
+                  if (licenseFront) {newFiles.push(licenseFront)};
+                  if (selected) {newFiles.push(selected)};
+                  return newFiles;          
+                  });
                 }}
                 styles={{
                   input: {
