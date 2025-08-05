@@ -218,6 +218,8 @@ const handleUploadClick = async (): Promise<boolean> => {
       return true;
     } catch (err: any) {
       setError(`Upload failed: ${err.message}`);
+      console.log(err.message);
+      console.log(formData);
       setError(`We had an issue geting your Id. Don't worry, we have recieved your application and will be in touch soon.`)
       return false;
     }
@@ -229,7 +231,7 @@ const handleUploadClick = async (): Promise<boolean> => {
 
   const handleIlionClick = () => {
     if (loading) return;
-    sendGAEvent({ event: 'illionClicked', value: 'true'});
+    // sendGAEvent({ event: 'illionClicked', value: 'true'});
 
     // Open new tab IMMEDIATELY on user click
     const newTab = window.open('/bankstatements', '_blank');
@@ -274,7 +276,7 @@ const handleUploadClick = async (): Promise<boolean> => {
             </JumboTitle>
               <FileInput
                 label="Upload or take a photo of the FRONT of your driver's licence"
-                placeholder="Choose file or take photo"
+                placeholder="Choose a file or a take photo"
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
@@ -300,7 +302,7 @@ const handleUploadClick = async (): Promise<boolean> => {
 
               <FileInput
                 label="Upload or take a photo of the BACK of your driver's licence"
-                placeholder="Choose file or take photo"
+                placeholder="Choose a file or take a photo"
                 leftSection={<IconUpload size={18} />}
                 radius="md"
                 withAsterisk
@@ -361,7 +363,7 @@ const handleUploadClick = async (): Promise<boolean> => {
                 variant="outline"
                 color="dark"
                 onClick={async () => {
-                  sendGAEvent({ event: 'illionSkipped', value: 'true'})
+                  // sendGAEvent({ event: 'illionSkipped', value: 'true'})
                   const success = await handleUploadClick();
                   if (success) {
                     handleStepChange('thankyou');
