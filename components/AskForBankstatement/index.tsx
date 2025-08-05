@@ -30,7 +30,7 @@ export const AskForBankstatement = () => {
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
-  const [formDataDebug. setFormDataDebug] = useState<string[]>([]);
+  const [formDataDebug, setFormDataDebug] = useState<string[]>([]);
 
 
   const sendToLendAPI = async () => {
