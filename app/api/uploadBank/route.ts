@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       const file = files[i];
       if (!(file instanceof File)) {continue};
       const originalName = file.name;
-      const fileExtension = originalName.split('.').pop() || 'jpg';
+      const fileExtension = originalName.split('.').pop() || 'jpeg';
       
       const renamed = i === 0 ? 'front' : 'back';
       const filePath = `${company}/${renamed}.${fileExtension}`;

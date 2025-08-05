@@ -20,8 +20,6 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconUpload, IconFile, IconX, IconTrash, IconFileTypePdf } from '@tabler/icons-react';
 import { createClient } from '@supabase/supabase-js';
 
-// const supabase = createClient("https://hfsysehrdshrbtmjsgcx.supabase.co")
-
 export function UploadInvoice() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 

@@ -25,6 +25,7 @@ import { AskForBankstatement } from "@/components/AskForBankstatement";
 import { useDisclosure } from "@mantine/hooks";
 import { AskForBankstatementFull } from "@/components/AskForBankstatementFull";
 import { useUnsavedChanges } from '@/components/unsavedChanges';
+import { sendGAEvent } from '@next/third-parties/google';
 
 type AgreementWidgetProps = {
   showDataShareCheckbox ?: boolean;
@@ -51,6 +52,7 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
       return;
     }
     setError('');
+    sendGAEvent({ event: 'submitClicked', value: 'true'})
     if (uploadedFiles.length===0) {
       open()
     }

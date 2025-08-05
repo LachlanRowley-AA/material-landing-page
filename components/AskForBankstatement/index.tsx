@@ -17,6 +17,7 @@ import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
 import Link from 'next/link'
+import { sendGAEvent } from '@next/third-parties/google';
 
 export const AskForBankstatement = () => {
   const router = useRouter();
@@ -334,7 +335,11 @@ const handleUploadClick = async (): Promise<boolean> => {
                     }}
                     loading={loading}
                     loaderProps={{ type: 'oval'}}
-                    onClick={handleIlionClick}
+                    onClick={async () => {
+                        sendGAEvent({ event: 'illionClicked', value: 'true'});
+                        handleIlionClick
+                      }
+                    }
                     styles={{
                       label: {
                         whiteSpace: 'normal',
@@ -357,6 +362,7 @@ const handleUploadClick = async (): Promise<boolean> => {
                 variant="outline"
                 color="dark"
                 onClick={async () => {
+                  sendGAEvent({ event: 'illionSkipped', value: 'true'})
                   const success = await handleUploadClick();
                   if (success) {
                     handleStepChange('thankyou');
