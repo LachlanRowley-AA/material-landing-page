@@ -210,36 +210,43 @@ const handleUploadClick = async (): Promise<boolean> => {
         method: 'POST',
         body: formData,
       });
-      const data = await response.json();
+
+      const contentType = response.headers.get('content-type') || '';
+
+      let data: any = {};
+      if (contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        data = { error: `Unexpected response format: ${text}` };
+      }
+
       if (data.error) {
         setError(`Error in uploadBank ${data.error}`);
         return false;
       }
+
       setSuccess('Files uploaded successfully');
       return true;
+
     } catch (err: any) {
-        const debugEntries: string[] = [];
-        for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            debugEntries.push(`${key}: ${value.name} (${value.size} bytes, ${value.type})`);
-          } else {
-            debugEntries.push(`${key}: ${value}`);
-          }
+      const debugEntries: string[] = [];
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          debugEntries.push(`${key}: ${value.name} (${value.size} bytes, ${value.type})`);
+        } else {
+          debugEntries.push(`${key}: ${value}`);
         }
+      }
       setFormDataDebug(debugEntries);
-      console.log(err.message);
-      console.log(formData);
-      setError(`We had an issue geting your Id. Don't worry, we have recieved your application and will be in touch soon.
+      console.error(err.message);
+      console.error(formData);
+      setError(`We had an issue getting your Id. Don't worry, we have received your application and will be in touch soon.
         ${err.message}
         ${debugEntries.join('\n')}
-      `)
+      `);
       return false;
     }
-  } else {
-    // no files uploaded
-    return true;
-  }
-};
 
   const handleIlionClick = () => {
     if (loading) return;
