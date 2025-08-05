@@ -30,6 +30,8 @@ export const AskForBankstatement = () => {
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
+  const [formDataDebug. setFormDataDebug] = useState<string[]>([]);
+
 
   const sendToLendAPI = async () => {
     setLoading(true);
@@ -211,16 +213,27 @@ const handleUploadClick = async (): Promise<boolean> => {
       });
       const data = await response.json();
       if (data.error) {
-        setError(data.error);
+        setError(`Error in uploadBank ${data.error}`);
         return false;
       }
       setSuccess('Files uploaded successfully');
       return true;
     } catch (err: any) {
-      setError(`Upload failed: ${err.message}`);
+        const debugEntries: string[] = [];
+        for (const [key, value] of formData.entries()) {
+          if (value instanceof File) {
+            debugEntries.push(`${key}: ${value.name} (${value.size} bytes, ${value.type})`);
+          } else {
+            debugEntries.push(`${key}: ${value}`);
+          }
+        }
+      setFormDataDebug(debugEntries);
       console.log(err.message);
       console.log(formData);
-      setError(`We had an issue geting your Id. Don't worry, we have recieved your application and will be in touch soon.`)
+      setError(`We had an issue geting your Id. Don't worry, we have recieved your application and will be in touch soon.
+        ${err.message}
+        ${debugEntries.join('\n')}
+      `)
       return false;
     }
   } else {

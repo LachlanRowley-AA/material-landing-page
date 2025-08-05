@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   const supabaseKey = process.env.SUPABASE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    return NextResponse.json({ error: 'Supabase URL or Key is not set' }, { status: 500 });
+    return NextResponse.json({ error: 'Supabase URL or Key is not set' }, { status: 511 });
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -66,15 +66,15 @@ export async function POST(request: NextRequest) {
       )
     }
     else {
-      return NextResponse.json({ error: 'Failed to upload some files', uploads: uploadResults }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to upload some files', uploads: uploadResults }, { status: 501 });
     }
     console.log('PDF generation response:', pdfRes.json());
     if( !pdfRes.ok) {
-      return NextResponse.json({ error: 'Failed to generate privacy form' }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to generate privacy form' }, { status: 504 });
     }
     return NextResponse.json({ uploads: uploadResults }, { status: 201 });
 
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to process request' }, { status: 502 });
   }
 }
