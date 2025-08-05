@@ -229,6 +229,7 @@ const handleUploadClick = async (): Promise<boolean> => {
 
   const handleIlionClick = () => {
     if (loading) return;
+    sendGAEvent({ event: 'illionClicked', value: 'true'});
 
     // Open new tab IMMEDIATELY on user click
     const newTab = window.open('/bankstatements', '_blank');
@@ -335,10 +336,8 @@ const handleUploadClick = async (): Promise<boolean> => {
                     }}
                     loading={loading}
                     loaderProps={{ type: 'oval'}}
-                    onClick={async () => {
-                        sendGAEvent({ event: 'illionClicked', value: 'true'});
+                    onClick={
                         handleIlionClick
-                      }
                     }
                     styles={{
                       label: {
