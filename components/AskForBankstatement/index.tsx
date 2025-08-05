@@ -247,6 +247,11 @@ const handleUploadClick = async (): Promise<boolean> => {
       `);
       return false;
     }
+  } else {
+    // no files uploaded
+    return true;
+  }
+};
 
   const handleIlionClick = () => {
     if (loading) return;
