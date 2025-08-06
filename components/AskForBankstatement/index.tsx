@@ -431,7 +431,7 @@ export const AskForBankstatement = () => {
                   : 'No thanks, continue without uploading'}
               </Button>
                 <Text size="xs" c="dimmed" ta="center">
-                  {file && file.length > 0
+                  {licenseFrontUpload && licenseBackUpload
                     ? 'You will need to provide your bank statements later'
                     : 'You will need to provide your ID and bank statements later'}
                 </Text>
