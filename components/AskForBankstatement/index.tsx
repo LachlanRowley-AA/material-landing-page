@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
-import { IconUpload, IconCheck, IconX, IconHourglassLow } from '@tabler/icons-react';
+import { IconUpload, IconCheck, IconX, IconHourglassLow, IconCircleCheckFilled, IconCircleXFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
 import Link from 'next/link'
@@ -21,19 +21,15 @@ import { sendGAEvent } from '@next/third-parties/google';
 
 export const AskForBankstatement = () => {
   const router = useRouter();
-  const [file, setFile] = useState<File[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
-  const [illionLoading, setIllionLoading] = useState(false);
-  const [noIllionLoading, setNoIllionLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null);
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
-  const [licenseFrontUpload, setLicenseFrontUpload] = useState<boolean>(false);
+  const [licenseFrontUpload, setLicenseFrontUpload] = useState<boolean | null>(null);
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
-  const [licenseBackUpload, setLicenseBackUpload] = useState<boolean>(false);
+  const [licenseBackUpload, setLicenseBackUpload] = useState<boolean | null>(false);
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
-  const [formDataDebug, setFormDataDebug] = useState<string[]>([]);
 
 
   const sendToLendAPI = async () => {
@@ -207,9 +203,11 @@ export const AskForBankstatement = () => {
         switch (spot) {
           case 'front':
             setLicenseFront(null);
+            setLicenseFrontUpload(false);
             break;
           case 'back':
             setLicenseBack(null);
+            setLicenseBackUpload(false);
         }
         setError(`There was an issue uploading the ${spot} of your licence. Please try again`);
         setUploading(false);
@@ -338,12 +336,14 @@ export const AskForBankstatement = () => {
                 label="Upload or take a photo of the FRONT of your driver's licence"
                 placeholder="Choose a file or a take photo"
                 leftSection={<IconUpload size={18} />}
+                rightSection={licenseFrontUpload ? <IconCircleCheckFilled size={18} color='green' /> : ''}
                 radius="md"
                 withAsterisk
                 accept="image/jpeg, image/png" // allows gallery or camera
                 onChange={async (event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseFront(selected || null);
+                  setLicenseFrontUpload(null);
                   await handleIdUpload('front', selected);
                 }}
                 styles={{
@@ -364,12 +364,14 @@ export const AskForBankstatement = () => {
                 label="Upload or take a photo of the BACK of your driver's licence"
                 placeholder="Choose a file or take a photo"
                 leftSection={<IconUpload size={18} />}
+                rightSection={licenseBackUpload ? <IconCircleCheckFilled size={18} color='green' /> : ''}
                 radius="md"
                 withAsterisk
                 accept="image/jpeg, image/png"
                 onChange={async (event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseBack(selected || null);
+                  setLicenseBackUpload(null);
                   handleIdUpload('back', selected);
                 }}
                 styles={{
