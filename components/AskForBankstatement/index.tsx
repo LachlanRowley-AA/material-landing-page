@@ -233,7 +233,7 @@ export const AskForBankstatement = () => {
 
   const handleUploadClick = async (): Promise<boolean> => {
     if(loading) {return false};
-    if(!licenseFrontUpload || !licenseBackUpload) { return false } //don't submit until uploads are done
+    if((licenseFront && !licenseFrontUpload) || (licenseBack && !licenseBackUpload)) { return false } //don't submit until uploads are done
     setLoading(true);
     let apiSuccess = false;
     try {
@@ -244,6 +244,7 @@ export const AskForBankstatement = () => {
         return false;
     }
     if(!apiSuccess) {
+      setLoading(false);
       return false;
     }
     const userData = sessionStorage.getItem('userData');
@@ -283,6 +284,7 @@ export const AskForBankstatement = () => {
       return true;
     } catch (err: any) {
       setError(`Failed to upload privacy form ${err.message}`);
+      setLoading(false);
       return false;
     }
   };
