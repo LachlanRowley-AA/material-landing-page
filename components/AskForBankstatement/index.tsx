@@ -379,7 +379,7 @@ export const AskForBankstatement = () => {
                     radius="md"
                     size="md"
                     style={{
-                      backgroundColor: licenseFront && licenseBack ? '#fc8900' : '#ccc',
+                      backgroundColor: licenseFrontUpload && licenseBackUpload ? '#fc8900' : '#ccc',
                       color: 'white',
                       fontWeight: 600,
                     }}
@@ -395,7 +395,7 @@ export const AskForBankstatement = () => {
                         textAlign: 'center',
                       },
                     }}
-                    disabled={!licenseFront || !licenseBack}
+                    disabled={!licenseFrontUpload || !licenseBackUpload}
                   >
                     Provide your bank statements through Illion (credit score safe)
                 </Button>
