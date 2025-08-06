@@ -445,7 +445,7 @@ export const AskForBankstatement = () => {
                 {licenseBack && licenseFront
                   ? (
                     licenseBackUpload && licenseFrontUpload ?
-                      'Submit application' :
+                      'Submit without bank statements' :
                       'Uploading your ID'
                   )
                   : 'No thanks, continue without uploading'}
