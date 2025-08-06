@@ -70,8 +70,12 @@ export async function POST(request: NextRequest) {
     }
     let pdfJson;
     try {
-      pdfJson = await pdfRes.json();
-    } catch (e) {
+      if (pdfRes.headers.get('Content-Type')?.includes('application/json')) {
+        pdfJson = await pdfRes.json();
+      } else {
+        return NextResponse.json({ error: `Unexpected response format from PDF generator: ${pdfRes.text}` }, { status: 502 });
+      }
+} catch (e) {
       console.log('failed to parse privacy json: ', e)
       return NextResponse.json({ error: 'Invalid JSON from privacy form generator' }, { status: 502 })
     }
