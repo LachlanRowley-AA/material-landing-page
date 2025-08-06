@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       const { data, error } = await supabase.storage
         .from('eazytrade')
         .upload(filePath, file, {
-          upsert: true, // don't overwrite because iphone direct camera photos have the same name
+          upsert: true,
         });
 
       if (error) {

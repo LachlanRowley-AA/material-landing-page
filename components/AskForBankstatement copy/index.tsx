@@ -28,9 +28,7 @@ export const AskForBankstatement = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
-  const [licenseFrontUpload, setLicenseFrontUpload] = useState<boolean>(false);
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
-  const [licenseBackUpload, setLicenseBackUpload] = useState<boolean>(false);
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
   const [formDataDebug, setFormDataDebug] = useState<string[]>([]);
 
@@ -173,25 +171,48 @@ export const AskForBankstatement = () => {
     }
   }, []);
 
-  const handleIdUpload = async(spot : string, id: File): Promise<boolean> => {
+
+const handleUploadClick = async (): Promise<boolean> => {
+  if(loading) {return false};
+  setLoading(true);
+  let apiSuccess = false;
+  try {
+      apiSuccess = await sendToLendAPI(); // Ensure Lend API call completes before continuing
+    } catch (err: any) {
+      setError(`Lend API error: ${err.message || 'Unknown error'}`);
+      setLoading(false);
+      return false;
+  }
+  if(!apiSuccess) {
+    return false;
+  }
+  if (file && file.length > 0) {
+    const userData = sessionStorage.getItem('userData');
+    const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+    const formData = new FormData();
+    file.forEach((f) => {
+      formData.append('invoices', f);
+    });
+    formData.append('company_name', parsedUserData.company || 'Unknown Company');
+    formData.append('ipAddress', ip || 'IP_FETCH_FAILED');
+    formData.append('name', parsedUserData.name || 'Unknown');
+
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString('en-AU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    formData.append('date', formattedDate);
+
     try {
-      const userData = sessionStorage.getItem('userData');
-      const parsedUserData: UserDetails = userData ? JSON.parse(userData) : setError('userData not found');
-      if(!userData) {
-        return false;
-      }
-      const formData = new FormData();
-      formData.append('company_name', parsedUserData.company || 'Unknown Company');
-      formData.append('spot', spot);
-      formData.append('file', id);
-      const response = await fetch('/api/uploadIdSingular',
-        {
-          method: 'POST',
-          body: formData
-        }
-      );
+      const response = await fetch('/api/uploadBank', {
+        method: 'POST',
+        body: formData,
+      });
 
       const contentType = response.headers.get('content-type') || '';
+
       let data: any = {};
       if (contentType.includes('application/json')) {
         data = await response.json();
@@ -204,80 +225,36 @@ export const AskForBankstatement = () => {
         setError(`Error in uploadBank ${data.error}`);
         return false;
       }
-      switch(spot) {
-        case 'front':
-          setLicenseFrontUpload(true);
-          break;
-        case 'back':
-          setLicenseBackUpload(true);
-          break;
-      }
-      setSuccess(`${spot} uploaded successfully`);
-      return true;
-    } catch (err : any) {
-      setError(`Error upload ${spot}: ${err.message}`)
-      return false;
-    }
-  }
 
-  const handleUploadClick = async (): Promise<boolean> => {
-    if(loading) {return false};
-    if(!licenseFrontUpload || !licenseBackUpload) { return false } //don't submit until uploads are done
-    setLoading(true);
-    let apiSuccess = false;
-    try {
-        apiSuccess = await sendToLendAPI(); // Ensure Lend API call completes before continuing
-      } catch (err: any) {
-        setError(`Lend API error: ${err.message || 'Unknown error'}`);
-        setLoading(false);
-        return false;
-    }
-    if(!apiSuccess) {
-      return false;
-    }
-    const userData = sessionStorage.getItem('userData');
-    const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
-    const date = new Date();
-    const formattedDate = date.toLocaleDateString('en-AU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-    try {
-        const privacyRes = await fetch(`/api/generate_privacy`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({
-          name: parsedUserData.name,
-          ip,
-          date: formattedDate,
-          fileName: `${parsedUserData.company}-privacy-form.pdf`,
-          folder: `${parsedUserData.company}`
-          })
-        }
-      )
-      const contentType = privacyRes.headers.get('content-type') || '';
-      let data: any = {};
-      if (contentType.includes('application/json')) {
-        data = await privacyRes.json();
-      } else {
-        const text = await privacyRes.text();
-        data = { error: `Unexpected response format: ${text}` };
-      }
-      console.log(data)
-
-      setSuccess(`Submission successful`);
+      setSuccess('Files uploaded successfully');
       return true;
+
     } catch (err: any) {
-      setError(`Failed to upload privacy form ${err.message}`);
+      const debugEntries: string[] = [];
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          debugEntries.push(`${key}: ${value.name} (${value.size} bytes, ${value.type})`);
+        } else {
+          debugEntries.push(`${key}: ${value}`);
+        }
+      }
+      setFormDataDebug(debugEntries);
+      console.error(err.message);
+      console.error(formData);
+      setError(`We had an issue getting your Id. Don't worry, we have received your application and will be in touch soon.
+        ${err.message}
+        ${debugEntries.join('\n')}
+      `);
       return false;
     }
-  };
+  } else {
+    // no files uploaded
+    return true;
+  }
+};
 
   const handleIlionClick = () => {
-    if (loading) {return};
+    if (loading) return;
     // sendGAEvent({ event: 'illionClicked', value: 'true'});
 
     // Open new tab IMMEDIATELY on user click
@@ -328,10 +305,10 @@ export const AskForBankstatement = () => {
                 radius="md"
                 withAsterisk
                 accept="image/jpeg, image/png" // allows gallery or camera
-                onChange={async (event) => {
+                onChange={(event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseFront(selected || null);
-                  await handleIdUpload('front', selected);
+                  if (selected) setFile((prev) => [...(prev || []), selected]);
                 }}
                 styles={{
                   input: {
@@ -354,10 +331,16 @@ export const AskForBankstatement = () => {
                 radius="md"
                 withAsterisk
                 accept="image/jpeg, image/png"
-                onChange={async (event) => {
-                  const selected = Array.isArray(event) ? event[0] : event;
-                  setLicenseBack(selected || null);
-                  handleIdUpload('back', selected);
+                onChange={(event) => {
+                const selected = Array.isArray(event) ? event[0] : event;
+                setLicenseBack(selected || null);
+
+                setFile(() => {
+                  const newFiles = [];
+                  if (licenseFront) {newFiles.push(licenseFront)};
+                  if (selected) {newFiles.push(selected)};
+                  return newFiles;          
+                  });
                 }}
                 styles={{
                   input: {
