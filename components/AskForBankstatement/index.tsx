@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
-import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
+import { IconUpload, IconCheck, IconX, IconHourglassLow } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
 import Link from 'next/link'
@@ -26,6 +26,7 @@ export const AskForBankstatement = () => {
   const [illionLoading, setIllionLoading] = useState(false);
   const [noIllionLoading, setNoIllionLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null);
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
   const [licenseFrontUpload, setLicenseFrontUpload] = useState<boolean>(false);
@@ -174,10 +175,12 @@ export const AskForBankstatement = () => {
   }, []);
 
   const handleIdUpload = async(spot : string, id: File): Promise<boolean> => {
+    setUploading(true);
     try {
       const userData = sessionStorage.getItem('userData');
       const parsedUserData: UserDetails = userData ? JSON.parse(userData) : setError('userData not found');
       if(!userData) {
+        setUploading(false);
         return false;
       }
       const formData = new FormData();
@@ -201,7 +204,15 @@ export const AskForBankstatement = () => {
       }
 
       if (data.error) {
-        setError(`Error in uploadBank ${data.error}`);
+        switch (spot) {
+          case 'front':
+            setLicenseFront(null);
+            break;
+          case 'back':
+            setLicenseBack(null);
+        }
+        setError(`There was an issue uploading the ${spot} of your licence. Please try again`);
+        setUploading(false);
         return false;
       }
       switch(spot) {
@@ -213,9 +224,11 @@ export const AskForBankstatement = () => {
           break;
       }
       setSuccess(`${spot} uploaded successfully`);
+      setUploading(false);
       return true;
     } catch (err : any) {
       setError(`Error upload ${spot}: ${err.message}`)
+      setUploading(false);
       return false;
     }
   }
@@ -425,12 +438,17 @@ export const AskForBankstatement = () => {
                     textAlign: 'center',
                   },
                 }}
+                disabled={!!licenseBack && !!licenseFront && (!licenseFrontUpload || !licenseBackUpload)}
               >
-                {file
-                  ? 'Submit Application'
+                {licenseBack && licenseFront
+                  ? (
+                    licenseBackUpload && licenseFrontUpload ?
+                      'Submit application' :
+                      'Uploading your ID'
+                  )
                   : 'No thanks, continue without uploading'}
               </Button>
-                <Text size="xs" c="dimmed" ta="center">
+                <Text size="xs" ta="center" fw={550}>
                   {licenseFrontUpload && licenseBackUpload
                     ? 'You will need to provide your bank statements later'
                     : 'You will need to provide your ID and bank statements later'}
@@ -457,6 +475,11 @@ export const AskForBankstatement = () => {
           </div>        
         )}
 
+        {uploading && (
+          <Notification icon={<IconHourglassLow />} color="green" title="Success" onClose={() => setSuccess(null)}>
+            Uploading your Id
+          </Notification>
+        )}
         {success && (
           <Notification icon={<IconCheck />} color="green" title="Success" onClose={() => setSuccess(null)}>
             {success}
