@@ -373,7 +373,7 @@ export const AskForBankstatement = () => {
                 }}
               />
               <Group gap="xs" justify="center">
-                <Tooltip label={licenseFront && licenseBack ? '' : "Please upload your ID first"} display={licenseFront && licenseBack ? 'none' : 'block'}>
+                <Tooltip label={licenseFront && licenseBack ? '' : "Please upload your ID first"} display={licenseFrontUpload && licenseBackUpload ? 'none' : 'block'}>
                   <Button
                     fullWidth
                     radius="md"
