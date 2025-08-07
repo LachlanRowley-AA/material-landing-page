@@ -19,7 +19,7 @@ export default function LowTouchClient({ partner }: LowTouchClientProps) {
     <div
       style={{
         opacity: 0,
-        animation: 'fadeIn 1s ease-in-out forwards',
+        animation: 'fadeIn 1.5s ease-in-out forwards',
       }}
     >
       <style jsx>{`
@@ -33,9 +33,7 @@ export default function LowTouchClient({ partner }: LowTouchClientProps) {
         }
       `}</style>
       <UnsavedChangesProvider>
-        <Header />
         <Hero03 partner={partner} />
-        <IntroSection />
         <Feature02 />
         <section id="contact">
           <Calculator prefilled={false} />

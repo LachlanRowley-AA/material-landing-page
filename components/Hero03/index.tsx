@@ -40,7 +40,7 @@ const scrollToSection = (id: string) => {
   }
 };
 
-export  const Hero03 = ({
+export const Hero03 = ({
   badge = ' ',
   description = ['No financials required', 'Approvals in 24-48 hours', 'Credit score safe'],
   partner,
@@ -49,6 +49,7 @@ export  const Hero03 = ({
   const theme = useMantineTheme();
   const [isPageReady, setIsPageReady] = useState<boolean>(false);
   const [hasLogo, setHasLogo] = useState<boolean>(false);
+  const [textColour, setTextColor] = useState<string>('white');
 
   useEffect(() => {
     const preloadHeroData = async () => {
@@ -61,6 +62,10 @@ export  const Hero03 = ({
         const contentLength = logo.headers.get('content-length');
         const isValid = !!(logo.ok && contentLength && parseInt(contentLength, 10) > 0);
         setHasLogo(isValid);
+        if(isValid) {
+          setTextColor('black');
+          console.log('valid');
+        }
       } catch (error) {
         console.log('error');
       }
@@ -76,7 +81,7 @@ export  const Hero03 = ({
       fluid
       style={{
         overflow: 'hidden',
-        background: `linear-gradient(45deg, ${theme.colors.primary[0]} 0%, ${theme.colors.secondary[0]} 75%)`,
+        bg: 'white'
       }}
     >
       <Container component="section" h="100%" mx="auto" size="xl" {...containerProps}>
@@ -87,21 +92,24 @@ export  const Hero03 = ({
           w="100%"
           h="100%"
           style={{ zIndex: 0, overflow: 'hidden' }}
+          bg="white"
         >
-          <Overlay color="#000" backgroundOpacity={0.65} />
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-          >
-            <source src="/construction.webm" type="video/webm" />
-          </video>
+          {!hasLogo && <Overlay color="#000" backgroundOpacity={0.65} />}
+          {!hasLogo && (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            >
+              <source src="/construction.webm" type="video/webm" />
+            </video>
+          )}{' '}
         </Box>
         <Box
           pos="absolute"
@@ -122,21 +130,21 @@ export  const Hero03 = ({
               <Image
                 variant="default"
                 p="md"
-                src={hasLogo ? `/${partner}/logo_black.png`: "/logo.svg"}
+                src={hasLogo ? `/${partner}/logo_black.png` : '/logo.svg'}
                 mb={0}
                 style={{ textTransform: 'none' }}
                 maw={{ base: '70vw', md: '30vw' }}
                 w={{ base: '70wv' }}
               />
             )}
-            <Image src="/subheading_white.png" pt={-10} mt={-20} pb="xl" w={300} />
+            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={300} />
             <motion.div
               initial={{ opacity: 0.0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: 'easeInOut' }}
               viewport={{ once: true }}
             >
-              <Title fz={{ base: 40, md: 80 }} ta="center" c="white">
+              <Title fz={{ base: 40, md: 80 }} ta="center" c={textColour}>
                 More Material
                 <BackgroundImage src="./tape.png">
                   <Text
@@ -145,6 +153,7 @@ export  const Hero03 = ({
                     px={{ base: '20px', md: '100px' }}
                     ta="center"
                     style={{ textWrap: 'balance' }}
+                    c="white"
                   >
                     Less Red Tape
                   </Text>
@@ -156,7 +165,7 @@ export  const Hero03 = ({
               {description.map((item, index) => (
                 <Flex key={index} align="center" gap={10}>
                   <IconCircleCheckFilled size={20} color={theme.colors.green[6]} />
-                  <Text c="white" fz="lg">
+                  <Text c={textColour} fz="lg">
                     {item}
                   </Text>
                 </Flex>
@@ -188,4 +197,4 @@ export  const Hero03 = ({
       </Container>
     </Container>
   );
-}
+};
