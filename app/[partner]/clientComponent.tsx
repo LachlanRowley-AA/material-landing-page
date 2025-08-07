@@ -19,7 +19,7 @@ export default function LowTouchClient({ partner }: LowTouchClientProps) {
     <div
       style={{
         opacity: 0,
-        animation: 'fadeIn 1.5s ease-in-out forwards',
+        animation: 'fadeIn 2s ease-in-out forwards',
       }}
     >
       <style jsx>{`

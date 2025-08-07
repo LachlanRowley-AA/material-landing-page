@@ -123,18 +123,19 @@ export const Hero03 = ({
           h="100%"
           pos="relative"
           justify="center"
-          align="center" // vertically center
+          align={hasLogo? "" : "center"} // vertically center
+          pt={hasLogo? "80px" : "xs"}
         >
           <Stack maw="var(--mantine-breakpoint-md)" align="center" gap="md" style={{ zIndex: 1 }}>
             {badge && (
               <Image
                 variant="default"
-                p="md"
+                py="md"
                 src={hasLogo ? `/${partner}/logo_black.png` : '/logo.svg'}
                 mb={0}
                 style={{ textTransform: 'none' }}
-                maw={{ base: '70vw', md: '30vw' }}
-                w={{ base: '70wv' }}
+                maw={{ base: '100vw', md: '30vw' }}
+                w={{ base: '100wv' }}
               />
             )}
             <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={300} />
