@@ -1,25 +1,28 @@
+// app/dbm/prefill/page.tsx
+
 import { Suspense } from 'react';
 import { Center, Loader, Text, Stack } from '@mantine/core';
-import DBM_DataLoaderServer from '@/components/DBM_DataLoaderServer';
+import DBM_DataLoaderContent from '@/components/DBM_DataLoaderServer';
 
-export default function PrefillPage({ 
-  searchParams 
-}: { 
-  searchParams: Record<string, string | string[] | undefined> 
+export default async function PrefillPage({ searchParams }: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const rawKey = searchParams.accountKey;
+  // ✅ Await searchParams outside the JSX return
+  const resolvedSearchParams = await searchParams;
+  const rawKey = resolvedSearchParams.accountKey;
   const accountKey = typeof rawKey === 'string' ? rawKey : null;
 
+  // ✅ Still returns JSX immediately after that
   return (
     <Suspense fallback={
-      <Center style={{height: '100vh'}}>
+      <Center style={{ height: '100vh' }}>
         <Stack>
           <Loader />
           <Text ta="center">Loading your account data...</Text>
         </Stack>
       </Center>
     }>
-      <DBM_DataLoaderServer accountKey={accountKey} />
+      <DBM_DataLoaderContent accountKey={accountKey} />
     </Suspense>
   );
 }
