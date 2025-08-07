@@ -77,7 +77,6 @@ export const Hero03 = ({
     <Container
       pos="relative"
       h={hasLogo ? { base: '80vh', md: '85vh' } : { base: '100vh', md: '85vh' }}
-      mah={hasLogo ? '750px' : '950px' }
       fluid
       style={{
         overflow: 'hidden',
@@ -135,11 +134,11 @@ export const Hero03 = ({
                 src={hasLogo ? `/${partner}/logo_black.png` : '/logo.svg'}
                 mb={0}
                 style={{ textTransform: 'none' }}
-                maw={{ base: '100vw', md: '30vw' }}
+                maw={{ base: '100vw', md: '50vw' }}
                 w={{ base: '100wv' }}
               />
             )}
-            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={hasLogo ? "250px" : "300px"} />
+            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={hasLogo ? "70vw" : "85vw"} maw={{base: '300px', md: '600px'}} />
             <motion.div
               initial={{ opacity: 0.0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}

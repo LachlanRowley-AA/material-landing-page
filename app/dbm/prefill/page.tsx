@@ -1,32 +1,25 @@
-import DBM_DataLoaderServer from '@/components/DBM_DataLoaderServer';
-import HomepageClient from '@/components/HomepageClient';
-import { Center, Loader, Text, Stack } from '@mantine/core';
 import { Suspense } from 'react';
+import { Center, Loader, Text, Stack } from '@mantine/core';
+import DBM_DataLoaderServer from '@/components/DBM_DataLoaderServer';
 
-export default async function PrefillPage({ 
+export default function PrefillPage({ 
   searchParams 
 }: { 
-  searchParams: Promise<Record<string, string | string[] | undefined>> 
+  searchParams: Record<string, string | string[] | undefined> 
 }) {
-  const resolvedSearchParams = await searchParams;
-  const rawKey = resolvedSearchParams.accountKey;
+  const rawKey = searchParams.accountKey;
   const accountKey = typeof rawKey === 'string' ? rawKey : null;
-  
+
   return (
-    <Suspense fallback = {
+    <Suspense fallback={
       <Center style={{height: '100vh'}}>
         <Stack>
           <Loader />
           <Text ta="center">Loading your account data...</Text>
         </Stack>
       </Center>
-    }
-    >
-      <DBM_DataLoaderServer accountKey={accountKey}>
-        {({ userDetails, parsedBalance }) => (
-          <HomepageClient userDetails={userDetails} parsedBalance={parsedBalance} />
-        )}
-      </DBM_DataLoaderServer>
+    }>
+      <DBM_DataLoaderServer accountKey={accountKey} />
     </Suspense>
   );
 }
