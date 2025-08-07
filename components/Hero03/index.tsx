@@ -1,6 +1,8 @@
 'use client';
 
-import { JumboTitle } from '../JumboTitle/JumboTitle';
+import { useEffect, useState } from 'react';
+import { IconArrowRight, IconCircleCheckFilled } from '@tabler/icons-react';
+import { motion } from 'motion/react';
 import {
   BackgroundImage,
   Box,
@@ -8,15 +10,13 @@ import {
   Container,
   ContainerProps,
   Flex,
+  Image,
+  Overlay,
   Stack,
   Text,
   Title,
   useMantineTheme,
-  Overlay, 
-  Image
 } from '@mantine/core';
-import { IconArrowRight, IconCircleCheckFilled } from '@tabler/icons-react';
-import { motion } from 'motion/react';
 import classes from './index.module.css';
 
 type ImageItem = { src: string; alt: string };
@@ -28,6 +28,7 @@ type Hero03Props = ContainerProps & {
   description?: string[];
   rating?: number;
   ratingLabel?: string;
+  partner?: string;
 };
 
 const scrollToSection = (id: string) => {
@@ -39,22 +40,38 @@ const scrollToSection = (id: string) => {
   }
 };
 
-export const Hero03 = ({
+export  const Hero03 = ({
   badge = ' ',
-  title = 'More Material Less Red Tape',
-  description = [
-    'No financials required',
-    'Approvals in 24-48 hours',
-    'Credit score safe',
-  ],
+  description = ['No financials required', 'Approvals in 24-48 hours', 'Credit score safe'],
+  partner,
   ...containerProps
 }: Hero03Props) => {
   const theme = useMantineTheme();
+  const [isPageReady, setIsPageReady] = useState<boolean>(false);
+  const [hasLogo, setHasLogo] = useState<boolean>(false);
+
+  useEffect(() => {
+    const preloadHeroData = async () => {
+      if (!partner) {
+        setIsPageReady(true);
+        return;
+      }
+      try {
+        const logo = await fetch(`/${partner}/logo_black.png`, { method: 'HEAD' });
+        const contentLength = logo.headers.get('content-length');
+        const isValid = !!(logo.ok && contentLength && parseInt(contentLength, 10) > 0);
+        setHasLogo(isValid);
+      } catch (error) {
+        console.log('error');
+      }
+    };
+    preloadHeroData();
+  }, [partner]);
 
   return (
     <Container
       pos="relative"
-      h={{base: "100vh", md:"85vh"}}
+      h={{ base: '100vh', md: '85vh' }}
       mah={950}
       fluid
       style={{
@@ -62,36 +79,30 @@ export const Hero03 = ({
         background: `linear-gradient(45deg, ${theme.colors.primary[0]} 0%, ${theme.colors.secondary[0]} 75%)`,
       }}
     >
-      <Container
-        component="section"
-        h="100%"
-        mx="auto"
-        size="xl"
-        {...containerProps}
-      >
-              <Box
-                pos="absolute"
-                top={0}
-                left={0}
-                w="100%"
-                h="100%"
-                style={{ zIndex: 0, overflow: 'hidden' }}
-              >
-                <Overlay color="#000" backgroundOpacity={0.65}/>
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                >
-                  <source src="/construction.webm" type="video/webm" />
-                </video>
-              </Box>
+      <Container component="section" h="100%" mx="auto" size="xl" {...containerProps}>
+        <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          w="100%"
+          h="100%"
+          style={{ zIndex: 0, overflow: 'hidden' }}
+        >
+          <Overlay color="#000" backgroundOpacity={0.65} />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          >
+            <source src="/construction.webm" type="video/webm" />
+          </video>
+        </Box>
         <Box
           pos="absolute"
           top={0}
@@ -106,24 +117,19 @@ export const Hero03 = ({
           justify="center"
           align="center" // vertically center
         >
-          <Stack
-            maw="var(--mantine-breakpoint-md)"
-            align="center"
-            gap="md"
-            style={{ zIndex: 1 }}
-          >
-          {badge && (
+          <Stack maw="var(--mantine-breakpoint-md)" align="center" gap="md" style={{ zIndex: 1 }}>
+            {badge && (
               <Image
                 variant="default"
                 p="md"
-                src="/logo.svg"
+                src={hasLogo ? `/${partner}/logo_black.png`: "/logo.svg"}
                 mb={0}
                 style={{ textTransform: 'none' }}
-                maw={{base: "70vw", md: "30vw"}}
-                w={{base: "70wv"}}
+                maw={{ base: '70vw', md: '30vw' }}
+                w={{ base: '70wv' }}
               />
-          )}
-          <Image src="/subheading_white.png" pt={-10} mt={-20} pb="xl" w={300}/>
+            )}
+            <Image src="/subheading_white.png" pt={-10} mt={-20} pb="xl" w={300} />
             <motion.div
               initial={{ opacity: 0.0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -149,10 +155,7 @@ export const Hero03 = ({
             <Stack gap="xs" align="start">
               {description.map((item, index) => (
                 <Flex key={index} align="center" gap={10}>
-                  <IconCircleCheckFilled
-                    size={20}
-                    color={theme.colors.green[6]}
-                  />
+                  <IconCircleCheckFilled size={20} color={theme.colors.green[6]} />
                   <Text c="white" fz="lg">
                     {item}
                   </Text>
@@ -185,4 +188,4 @@ export const Hero03 = ({
       </Container>
     </Container>
   );
-};
+}

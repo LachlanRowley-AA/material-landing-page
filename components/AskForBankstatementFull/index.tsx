@@ -15,19 +15,22 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
-import { IconUpload, IconCheck, IconX } from '@tabler/icons-react';
+import { IconUpload, IconCheck, IconX, IconHourglassLow, IconCircleCheckFilled, IconCircleXFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
 import Link from 'next/link'
 
 export const AskForBankstatementFull = () => {
   const router = useRouter();
-  const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
   const [file, setFile] = useState<File[] | undefined>(undefined);
   const [licenseFront, setLicenseFront] = useState<File | null>(null);
+  const [licenseFrontUpload, setLicenseFrontUpload] = useState<boolean | null>(null);
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
+  const [licenseBackUpload, setLicenseBackUpload] = useState<boolean | null>(false);
+  const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null);
 
   const [userDetails, setUserDetails] = useState({
@@ -91,12 +94,11 @@ export const AskForBankstatementFull = () => {
       return true;
     }
 
-
     const userData = sessionStorage.getItem('userData');
     if (!userData) {
       setError('User data not found in session storage.');
       setLoading(false);
-      return;
+      return false;
     }
     const parsedUserData: UserDetails = JSON.parse(userData);
     let [first, ...lastArr] = parsedUserData.name.split(' ');
@@ -121,7 +123,6 @@ export const AskForBankstatementFull = () => {
         lendTimeframe = '44';
         break;
     }
-
     try {
       const res = await fetch('/api/send-lead', {
         method: 'POST',
@@ -154,34 +155,35 @@ export const AskForBankstatementFull = () => {
           ],
         }),
       });
-
       if (res.ok) {
         setSuccess('Application submitted successfully');
         setSuccess(null);
         handleStepChange('upload');
-      } else {
-          const text = await res.text();
-          let errorMessage = `Submission failed: ${res.status}`;
-
-          try {
-            const outer = JSON.parse(text);
-            if (outer.body) {
-              const inner = JSON.parse(outer.body);
-              if (inner.errors) {
-                errorMessage = inner.errors[0].error
-              }
-              if (inner.error) {
-                errorMessage = inner.error;
-              }
-            }
-          } catch {
-            // fallback to raw response text
-            errorMessage = text;
-          }
-          setError(errorMessage);
+        return true;
       }
-    } catch (err: any) {
-      setError(`Error: ${err.message}`);
+        const text = await res.text();
+        let errorMessage = `Submission failed: ${res.status}`;
+
+        try {
+          const outer = JSON.parse(text);
+          if (outer.body) {
+            const inner = JSON.parse(outer.body);
+            if (inner.errors) {
+              errorMessage = inner.errors[0].error
+            }
+            if (inner.error) {
+              errorMessage = inner.error;
+            }
+          }
+        } catch {
+          // fallback to raw response text
+          errorMessage = text;
+        }
+        setError(errorMessage);
+        return false;
+      } catch (err: any) {
+        setError(`Error: ${err.message}`);
+        return false;
     } finally {
       setLoading(false);
     }
@@ -218,49 +220,136 @@ export const AskForBankstatementFull = () => {
   };
 
   const handleIlionClick = () => {
-    handleUploadClick();
-    window.open('/bankstatements', '_blank');
+    if (loading) {return};
+    // sendGAEvent({ event: 'illionClicked', value: 'true'});
+
+    // Open new tab IMMEDIATELY on user click
+    const newTab = window.open('/bankstatements', '_blank');
+
+    // If popup was blocked, newTab will be null
+    if (!newTab) {
+      setError('Please allow pop-ups to open bank statement upload page.');
+      return;
+    }
+
+    setLoading(true);
+
+    // Proceed with async API logic in the background
+    handleUploadClick().then((success) => {
+      if (success) {
+        handleStepChange('thankyou');
+      }
+      setLoading(false);
+    }).catch((err) => {
+      setError(`Error: ${err.message}`);
+      setLoading(false);
+    });
   };
 
-
-  const handleUploadClick = () => {
-    if (file && file.length > 0) {
+  const handleIdUpload = async(spot : string, id: File): Promise<boolean> => {
+    setUploading(true);
+    try {
       const userData = sessionStorage.getItem('userData');
-      const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+      const parsedUserData: UserDetails = userData ? JSON.parse(userData) : setError('userData not found');
+      if(!userData) {
+        setUploading(false);
+        return false;
+      }
       const formData = new FormData();
-      file.forEach((f) => {
-        formData.append('invoices', f);
-      });
       formData.append('company_name', parsedUserData.company || 'Unknown Company');
-      formData.append('name', parsedUserData.name || 'Unknown User');
-      formData.append('ipAddress', ip || 'IP_FETCH_FAILED');
+      formData.append('spot', spot);
+      formData.append('file', id);
+      const response = await fetch('/api/uploadIdSingular',
+        {
+          method: 'POST',
+          body: formData
+        }
+      );
 
-      const date = new Date()
-      const formattedDate = date.toLocaleDateString('en-AU', {
-          day: '2-digit' as const,
-          month: '2-digit' as const,
-          year: 'numeric' as const
-      })
-      formData.append('date', formattedDate);
+      const contentType = response.headers.get('content-type') || '';
+      let data: any = {};
+      if (contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        data = { error: `Unexpected response format: ${text}` };
+      }
 
-      console.log('Uploading files:', formData);
-      fetch('/api/uploadBank', {
+      if (data.error) {
+        switch (spot) {
+          case 'front':
+            setLicenseFront(null);
+            setLicenseFrontUpload(false);
+            break;
+          case 'back':
+            setLicenseBack(null);
+            setLicenseBackUpload(false);
+        }
+        setError(`There was an issue uploading the ${spot} of your licence. Please try again`);
+        setUploading(false);
+        return false;
+      }
+      switch(spot) {
+        case 'front':
+          setLicenseFrontUpload(true);
+          break;
+        case 'back':
+          setLicenseBackUpload(true);
+          break;
+      }
+      setSuccess(`${spot} uploaded successfully`);
+      setUploading(false);
+      return true;
+    } catch (err : any) {
+      setError(`Error upload ${spot}: ${err.message}`)
+      setUploading(false);
+      return false;
+    }
+  }
+
+  const handleUploadClick = async (): Promise<boolean> => {
+    if(loading) {return false};
+    if((licenseFront && !licenseFrontUpload) || (licenseBack && !licenseBackUpload)) { return false } //don't submit until uploads are done
+    setLoading(true);
+    const userData = sessionStorage.getItem('userData');
+    const parsedUserData: UserDetails = userData ? JSON.parse(userData) : {};
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString('en-AU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    try {
+        const privacyRes = await fetch(`/api/generate_privacy`, {
         method: 'POST',
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.error) {
-            setError(data.error);
-          } else {
-            setSuccess('Files uploaded successfully');
-            setSuccess(null);
-            handleStepChange('thankyou');
-          }
-        })
-        .catch((err) => setError(`Upload failed: ${err.message}`));
-    } else {
-      handleStepChange('thankyou');
+        headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          name: parsedUserData.name,
+          ip,
+          date: formattedDate,
+          fileName: `${parsedUserData.company}-privacy-form.pdf`,
+          folder: `${parsedUserData.company}`
+          })
+        }
+      )
+      const contentType = privacyRes.headers.get('content-type') || '';
+      let data: any = {};
+      if (contentType.includes('application/json')) {
+        data = await privacyRes.json();
+      } else {
+        const text = await privacyRes.text();
+        data = { error: `Unexpected response format: ${text}` };
+      }
+      console.log(data)
+
+      setSuccess(`Submission successful`);
+      return true;
+    } catch (err: any) {
+      setError(`Failed to upload privacy form ${err.message}`);
+      setLoading(false);
+      return false;
     }
   };
 
@@ -374,13 +463,15 @@ export const AskForBankstatementFull = () => {
                 label="Upload or take a photo of the FRONT of your driver's licence"
                 placeholder="Choose a file or take a photo"
                 leftSection={<IconUpload size={18} />}
+                rightSection={licenseFrontUpload ? <IconCircleCheckFilled size={18} color='green' /> : ''}
                 radius="md"
                 withAsterisk
                 accept="image/jpeg, image/png" // allows gallery or camera
-                onChange={(event) => {
+                onChange={async (event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseFront(selected || null);
-                  if (selected) setFile((prev) => [...(prev || []), selected]);
+                  setLicenseFrontUpload(null);
+                  await handleIdUpload('front', selected);
                 }}
                 styles={{
                   input: {
@@ -399,13 +490,15 @@ export const AskForBankstatementFull = () => {
                 label="Upload or take a photo of the BACK of your driver's licence"
                 placeholder="Choose a file or take a photo"
                 leftSection={<IconUpload size={18} />}
+                rightSection={licenseBackUpload ? <IconCircleCheckFilled size={18} color='green' /> : ''}
                 radius="md"
                 withAsterisk
                 accept="image/jpeg, image/png"
-                onChange={(event) => {
+                onChange={async (event) => {
                   const selected = Array.isArray(event) ? event[0] : event;
                   setLicenseBack(selected || null);
-                  if (selected) setFile((prev) => [...(prev || []), selected]);
+                  setLicenseBackUpload(null);
+                  handleIdUpload('back', selected);
                 }}
                 styles={{
                   input: {
@@ -420,73 +513,68 @@ export const AskForBankstatementFull = () => {
                   },
                 }}
               />
-
-            {file && file.length > 0 && (
-              <Stack gap="xs">
-                {file.map((f, index) => (
-                  <Group key={index} justify="space-between">
-                    <Text size="sm">{f.name}</Text>
-                    <Button
-                      size="xs"
-                      color="red"
-                      variant="subtle"
-                      onClick={() => setFile((prev) => prev?.filter((_, i) => i !== index))}
-                    >
-                      Remove
-                    </Button>
-                  </Group>
-                ))}
-              </Stack>
-            )}
-
             <Tooltip label={licenseFront && licenseBack ? '' : "Please upload your ID first"} display={licenseFront && licenseBack ? 'none' : 'block'}>
-              <Button
-                fullWidth
-                radius="md"
-                size="md"
-                style={{
-                  backgroundColor: licenseFront && licenseBack ? '#fc8900' : '#ccc',
-                  color: 'white',
-                  fontWeight: 600,
-                }}
-                loading={loading}
-                loaderProps={{ type: 'oval'}}
-                onClick={handleIlionClick}
-                styles={{
-                  label: {
-                    whiteSpace: 'normal',
-                    lineHeight: 1.25,
-                    textAlign: 'center',
-                  },
-                }}
-                disabled={!licenseFront || !licenseBack}
-              >
-                Provide your bank statements through Illion (credit score safe)
-            </Button>
-
+                <Button
+                  fullWidth
+                  radius="md"
+                  size="md"
+                  style={{
+                    backgroundColor: licenseFrontUpload && licenseBackUpload ? '#fc8900' : '#ccc',
+                    color: 'white',
+                    fontWeight: 600,
+                  }}
+                  loading={loading}
+                  loaderProps={{ type: 'oval'}}
+                  onClick={
+                      handleIlionClick
+                  }
+                  styles={{
+                    label: {
+                      whiteSpace: 'normal',
+                      lineHeight: 1.25,
+                      textAlign: 'center',
+                    },
+                  }}
+                  disabled={!licenseFrontUpload || !licenseBackUpload}
+                >
+                  Provide your bank statements through Illion (credit score safe)
+              </Button>
             </Tooltip>
 
-            <Button
-              fullWidth
-              radius="md"
-              size="md"
-              variant="outline"
-              color="dark"
-              onClick={handleUploadClick}
-              styles={{
-                label: {
-                  whiteSpace: 'normal',
-                  lineHeight: 1.25,
-                  textAlign: 'center',
-                },
-              }}
-            >
-              {file && file.length > 0
-                ? 'Upload File(s) and Continue'
-                : 'Continue without Uploading'}
-            </Button>
-            <Text size="xs" c="dimmed" ta="center">
-              {file && file.length > 0
+          <Button
+            fullWidth
+            radius="md"
+            size="md"
+            variant="outline"
+            color="dark"
+            onClick={async () => {
+              // sendGAEvent({ event: 'illionSkipped', value: 'true'})
+              const success = await handleUploadClick();
+              if (success) {
+                handleStepChange('thankyou');
+              }
+            }}
+            loading={loading}
+            loaderProps={{ type: 'oval' }}
+            styles={{
+              label: {
+                whiteSpace: 'normal',
+                lineHeight: 1.25,
+                textAlign: 'center',
+              },
+            }}
+            disabled={!!licenseBack && !!licenseFront && (!licenseFrontUpload || !licenseBackUpload)}
+          >
+            {licenseBack && licenseFront
+              ? (
+                licenseBackUpload && licenseFrontUpload ?
+                  'Submit without bank statements' :
+                  'Uploading your ID'
+              )
+              : 'No thanks, continue without uploading'}
+          </Button>
+            <Text size="xs" ta="center" fw={550}>
+              {licenseFrontUpload && licenseBackUpload
                 ? 'You will need to provide your bank statements later'
                 : 'You will need to provide your ID and bank statements later'}
             </Text>
@@ -510,7 +598,11 @@ export const AskForBankstatementFull = () => {
           </div>
         )}
         
-
+        {uploading && (
+          <Notification icon={<IconHourglassLow />} color="green" title="Success" onClose={() => setSuccess(null)}>
+            Uploading your Id
+          </Notification>
+        )}
         {success && (
           <Notification
             icon={<IconCheck />}
