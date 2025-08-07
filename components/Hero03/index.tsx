@@ -76,13 +76,14 @@ export const Hero03 = ({
   return (
     <Container
       pos="relative"
-      h={{ base: '100vh', md: '85vh' }}
-      mah={950}
+      h={hasLogo ? { base: '80vh', md: '85vh' } : { base: '100vh', md: '85vh' }}
+      mah={hasLogo ? '750px' : '950px' }
       fluid
       style={{
         overflow: 'hidden',
         bg: 'white'
       }}
+      px={0}
     >
       <Container component="section" h="100%" mx="auto" size="xl" {...containerProps}>
         <Box
@@ -138,7 +139,7 @@ export const Hero03 = ({
                 w={{ base: '100wv' }}
               />
             )}
-            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={300} />
+            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={hasLogo ? "250px" : "300px"} />
             <motion.div
               initial={{ opacity: 0.0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
