@@ -50,7 +50,7 @@ export const AgreementWidget = ({ showDataShareCheckbox = true }: AgreementWidge
       return;
     }
     setError('');
-    sendGAEvent({ event: 'submitClicked', value: 'true' });
+    sendGAEvent('event', 'startApplicationClicked');
     if (uploadedFiles.length === 0) {
       open();
     } else {
