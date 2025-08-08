@@ -291,7 +291,7 @@ export const AskForBankstatement = () => {
 
   const handleIlionClick = () => {
     if (loading) {return};
-    // sendGAEvent({ event: 'illionClicked', value: 'true'});
+    sendGAEvent({ event: 'illionClicked', value: 'true'});
 
     // Open new tab IMMEDIATELY on user click
     const newTab = window.open('/bankstatements', '_blank');
@@ -427,7 +427,7 @@ export const AskForBankstatement = () => {
                 variant="outline"
                 color="dark"
                 onClick={async () => {
-                  // sendGAEvent({ event: 'illionSkipped', value: 'true'})
+                  sendGAEvent({ event: 'illionSkipped', value: 'true'})
                   const success = await handleUploadClick();
                   if (success) {
                     handleStepChange('thankyou');

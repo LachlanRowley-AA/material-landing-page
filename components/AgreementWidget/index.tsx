@@ -1,44 +1,42 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { sendGAEvent } from '@next/third-parties/google';
+import { BiInfoCircle } from 'react-icons/bi';
 import {
   Anchor,
+  Box,
   Button,
   Card,
   Checkbox,
+  FileInput,
   Group,
+  Image,
+  Modal,
   Stack,
   Text,
-  Image,
   Title,
-  Box,
   Tooltip,
-  FileInput,
-  Modal,
-  useMantineTheme
+  useMantineTheme,
 } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { useState } from 'react';
-import { BiInfoCircle } from "react-icons/bi";
-import { IconUpload } from '@tabler/icons-react';
-import { AskForBankstatement } from "@/components/AskForBankstatement";
-import { useDisclosure } from "@mantine/hooks";
-import { AskForBankstatementFull } from "@/components/AskForBankstatementFull";
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { AskForBankstatement } from '@/components/AskForBankstatement';
+import { AskForBankstatementFull } from '@/components/AskForBankstatementFull';
 import { useUnsavedChanges } from '@/components/unsavedChanges';
-import { sendGAEvent } from '@next/third-parties/google';
 
 type AgreementWidgetProps = {
-  showDataShareCheckbox ?: boolean;
-}
+  showDataShareCheckbox?: boolean;
+};
 
-export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidgetProps) => {
+export const AgreementWidget = ({ showDataShareCheckbox = true }: AgreementWidgetProps) => {
   const router = useRouter();
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [dataShareTicked, setDataShare] = useState(!showDataShareCheckbox); // Default to true if checkbox is not shown
   const [privacyPolicyTicked, setPrivacyPolicy] = useState(false);
   const [error, setError] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [opened, {open, close }] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(false);
   const theme = useMantineTheme();
   const { unsavedChanges } = useUnsavedChanges();
 
@@ -47,20 +45,18 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
       setError('You must agree to the above to proceed.');
       return;
     }
-    if( unsavedChanges ) {
+    if (unsavedChanges) {
       setError('You have unsaved changes to your account details');
       return;
     }
     setError('');
-    sendGAEvent({ event: 'submitClicked', value: 'true'})
-    if (uploadedFiles.length===0) {
-      open()
-    }
-    else {
+    sendGAEvent({ event: 'submitClicked', value: 'true' });
+    if (uploadedFiles.length === 0) {
+      open();
+    } else {
       // router.push('/application');
     }
   };
-
 
   return (
     <Card
@@ -80,14 +76,15 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
         <Title order={3} c={theme.colors.secondary[0]}>
           Let's get started
         </Title>
-        {showDataShareCheckbox && 
+        {showDataShareCheckbox && (
           <Checkbox
             label="I agree to share my data with Asset Alley"
             checked={dataShareTicked}
             onChange={(event) => setDataShare(event.currentTarget.checked)}
             size="md"
             w="100%"
-        />}
+          />
+        )}
         <Checkbox
           w="100%"
           size="md"
@@ -122,15 +119,14 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
                 boxShadow: '0 0 12px rgba(252, 137, 0, 0.5)',
               }}
               onClick={handleCompleteApplication}
-              rightSection={<BiInfoCircle size={14}/>}
-              >
+              rightSection={<BiInfoCircle size={14} />}
+            >
               Submit
             </Button>
           </Tooltip>
-            <Text size="sm" ta="center" mt="xs" fw="600">
-              This will not impact your credit score
-            </Text>
-
+          <Text size="sm" ta="center" mt="xs" fw="600">
+            This will not impact your credit score
+          </Text>
         </Box>
       </Stack>
       <Modal
@@ -149,13 +145,11 @@ export const AgreementWidget = ({ showDataShareCheckbox = true} : AgreementWidge
           },
         }}
       >
-        {showDataShareCheckbox && 
-          <AskForBankstatement />
-          }
-        {!showDataShareCheckbox && 
-          <AskForBankstatementFull /> // The full application process as no prefilled data is available
+        {showDataShareCheckbox && <AskForBankstatement />}
+        {
+          !showDataShareCheckbox && <AskForBankstatementFull /> // The full application process as no prefilled data is available
         }
       </Modal>
-  </Card>
+    </Card>
   );
 };
