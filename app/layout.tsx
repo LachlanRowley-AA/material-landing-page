@@ -8,8 +8,8 @@ import { GoogleAnalytics} from '@next/third-parties/google'
 
 
 export const metadata = {
-  title: 'eazytrade powered by Asset Alley',
-  description: 'eazytrade powered by Asset Alley landing page!',
+  title: 'Eazytrade powered by Asset Alley',
+  description: 'Eazytrade powered by Asset Alley landing page!',
 };
 
 export default function RootLayout({ children }: { children: any }) {

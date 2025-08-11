@@ -12,6 +12,9 @@ import {
 import {
     Footer01
 } from '@/components/footer/footer'
+import {
+    Example
+} from '@/components/Partner/Example'
 
 export default function PartnerPage() {
     return (
@@ -23,6 +26,7 @@ export default function PartnerPage() {
             <Features />
             <Comparison />
             <Journey />
+            <Example />
             <Testimonial />
             <section id ="contact"><ContactForm /></section>
             <Footer01 />

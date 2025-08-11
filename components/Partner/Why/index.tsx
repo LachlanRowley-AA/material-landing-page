@@ -20,7 +20,7 @@ import { useMediaQuery } from '@mantine/hooks';
 const reasons = [
   {
     title: 'Empower Your Customers with Flexible Finance',
-    description: `Offer your customers access to flexible financing for building materials—allowing them to take on larger projects without upfront strain. This opens the door to more frequent and higher-value purchases, increasing loyalty and trust in your business.`,
+    description: `Offer your customers access to flexible financing for building materials, allowing them to take on larger projects without upfront strain. This opens the door to more frequent and higher-value purchases, increasing loyalty and trust in your business.`,
   },
   {
     title: 'Increase Sales While Getting Paid Upfront',
@@ -28,7 +28,7 @@ const reasons = [
   },
   {
     title: 'Simple Setup, No Risk, No Fuss',
-    description: `You don’t need to worry about paperwork or approval processes—our finance broker handles everything. There's no impact on your operations, no cost to implement, and no risk to you. Start offering finance immediately without changing how you run your business.`,
+    description: `You don’t need to worry about paperwork or approval processes, our finance broker handles everything. There's no impact on your operations, no cost to implement, and no risk to you. Start offering finance immediately without changing how you run your business.`,
   },
 ];
 

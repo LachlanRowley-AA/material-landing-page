@@ -16,7 +16,7 @@ import {
 const faqData = [
   {
     question: "Will this impact my credit file?",
-    answer: "No. To confirm your eligibility, there will be no impact to your credit file.",
+    answer: "No. There will be no impact to your credit file when we confirm your eligibility.",
     icon: IconCreditCard,
     color: "#01E194"
   },
@@ -33,8 +33,8 @@ const faqData = [
     color: "#01E194"
   },
   {
-    question: "Is this a secured loan?",
-    answer: "No. This is an unsecured loan.",
+    question: "Will I need to provide security?",
+    answer: "No, we provide access to unsecured funding.",
     icon: IconShield,
     color: "#01E194"
   },

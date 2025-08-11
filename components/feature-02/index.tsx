@@ -37,7 +37,7 @@ const FEATURES: Feature[] = [
   {
     icon: <IconBuilding size={28} stroke={1.5} />,
     title: 'Use for Materials',
-    description: 'Works with all building material purchases — no restrictions.',
+    description: 'Works with all building material purchases. No restrictions.',
   },
   {
     icon: <IconClockBolt size={28} stroke={1.5} />,

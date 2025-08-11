@@ -30,7 +30,7 @@ const steps = [
   {
     icon: Phone,
     title: 'Immediate Response',
-    description: 'Speed is our priority — we contact you ASAP',
+    description: 'Speed is our priority, we contact you ASAP',
   },
   {
     icon: Search,

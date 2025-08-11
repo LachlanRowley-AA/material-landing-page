@@ -1,53 +1,55 @@
 'use client';
-import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
-import { useQRCode } from 'next-qrcode';
-import {
-  Container,
-  Paper,
-  Title,
-  Text,
-  Button,
-  Group,
-  Stack,
-  Box,
-  Loader,
-  TextInput,
-  Card,
-  Badge,
-  Grid,
-  FileInput,
-  Progress,
-  Alert,
-  Avatar,
-  ActionIcon,
-  ThemeIcon,
-  SimpleGrid,
-  Image,
-  rem,
-  Flex,
 
-} from '@mantine/core';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@supabase/supabase-js';
 import {
-  IconQrcode,
+  IconAlertCircle,
+  IconCheck,
+  IconCloudUpload,
   IconDownload,
+  IconHistory,
+  IconKey,
+  IconLogout,
+  IconMail,
+  IconPhoto,
+  IconPhotoSearch,
+  IconQrcode,
+  IconRefresh,
   IconUpload,
   IconUser,
-  IconMail,
-  IconLogout,
-  IconPhoto,
-  IconCheck,
-  IconAlertCircle,
-  IconHistory,
-  IconCloudUpload,
-  IconRefresh,
-  IconPhotoSearch,
-  IconKey,
-  IconWorld
+  IconWorld,
 } from '@tabler/icons-react';
-
-import { v4 as uuidv4} from 'uuid';
+import { signOut, useSession } from 'next-auth/react';
+import { useQRCode } from 'next-qrcode';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  ActionIcon,
+  Alert,
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  Card,
+  Container,
+  FileInput,
+  Flex,
+  Grid,
+  Group,
+  Image,
+  Loader,
+  NumberInput,
+  Notification,
+  Paper,
+  Progress,
+  rem,
+  SimpleGrid,
+  Stack,
+  Text,
+  TextInput,
+  ThemeIcon,
+  Title,
+} from '@mantine/core';
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -56,44 +58,58 @@ export default function AdminPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [uploadingToCloudinary, setUploadingToCloudinary] = useState<string[]>([]);
-  
+
   // QR Code states
   const [customerName, setcustomerName] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [customerPass, setcustomerPass] = useState('');
-  const [generatedQrCodes, setGeneratedQrCodes] = useState<Array<{
-    customerName: string;
-    url: string;
-    timestamp: string;
-    pass: string;
-  }>>([]);
-  const [companyNames, setCompanyNames] = useState<string[]>([])
+  const [generatedQrCodes, setGeneratedQrCodes] = useState<
+    Array<{
+      customerName: string;
+      url: string;
+      timestamp: string;
+      pass: string;
+    }>
+  >([]);
+  const [companyNames, setCompanyNames] = useState<string[]>([]);
 
   const { Canvas } = useQRCode();
 
+  //Update Partner consts
+  const [partnerName, setPartnerName] = useState('');
+  const [partnerBusName, setPartnerBusName] = useState('');
+  const [partnerPhone, setPartnerPhone] = useState('');
+  const [partnerAddress, setPartnerAddress] = useState('');
+  const [partnerBalance, setPartnerBalance] = useState(0);
+  const [updateSuccess, setUpdateSuccess] = useState<string>('');
+
   // Function to add green border to QR code canvas
-  const addBorderToCanvas = (canvas: HTMLCanvasElement, borderWidth: number = 10, borderColor: string = '#01E194') => {
+  const addBorderToCanvas = (
+    canvas: HTMLCanvasElement,
+    borderWidth: number = 10,
+    borderColor: string = '#01E194'
+  ) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       console.log('ctx error');
       return;
-    };
+    }
 
     // Get the original image data
     const originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    
+
     // Create new canvas with border
-    const newWidth = canvas.width + (borderWidth * 2);
-    const newHeight = canvas.height + (borderWidth * 2);
-    
+    const newWidth = canvas.width + borderWidth * 2;
+    const newHeight = canvas.height + borderWidth * 2;
+
     // Resize the canvas
     canvas.width = newWidth;
     canvas.height = newHeight;
-    
+
     // Fill with border color
     ctx.fillStyle = borderColor;
     ctx.fillRect(0, 0, newWidth, newHeight);
-    
+
     // Put the original QR code in the center
     ctx.putImageData(originalImageData, borderWidth, borderWidth);
   };
@@ -107,7 +123,6 @@ export default function AdminPage() {
 
   // Updated getImage function with better error handling
 
-
   // Load images on component mount (with error handling)
   useEffect(() => {
     if (session) {
@@ -115,13 +130,12 @@ export default function AdminPage() {
     }
   }, [session]);
 
-
   const generateQRCode = () => {
     if (!customerName.trim()) {
       return;
     }
     // Create the URL with customer name and tracking data
-    const baseUrl = 'https://demo-easypay.netlify.app/prefill?accountKey=';
+    const baseUrl = 'https://eazytrade.com.au/dbm/prefill?accountKey=';
     const trackingParams = new URLSearchParams({
       utm_source: 'invoice',
       utm_medium: 'qr',
@@ -129,7 +143,7 @@ export default function AdminPage() {
     });
     const pw = uuidv4();
     setcustomerPass(pw);
-    
+
     const fullUrl = `${baseUrl}${pw}&${trackingParams.toString()}`;
     setQrCodeUrl(fullUrl);
 
@@ -138,168 +152,166 @@ export default function AdminPage() {
       customerName: customerName,
       url: fullUrl,
       timestamp: new Date().toLocaleString(),
-      pass: pw
+      pass: pw,
     };
-    
-    setGeneratedQrCodes(prev => [newQrCode, ...prev]);
+
+    setGeneratedQrCodes((prev) => [newQrCode, ...prev]);
   };
 
-const downloadQRCode = (customerName: string) => {
-  // Find the canvas element in the DOM - the useQRCode Canvas component renders a canvas
-  const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-  
-  if (canvas) {
-    // Create a copy of the canvas to avoid modifying the original
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
-    
-    if (!tempCtx) {
-      console.log('Could not get canvas context');
-      return;
-    }
-    
-    // Copy the original canvas content
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    tempCtx.drawImage(canvas, 0, 0);
-    
-    // Add border to the copy
-    addBorderToCanvas(tempCanvas, 10, '#FC8900');
-    
-    // Download the modified canvas
-    const link = document.createElement('a');
-    link.download = `qr-code-${customerName.replace(/\s+/g, '_')}.png`;
-    link.href = tempCanvas.toDataURL();
-    link.click();
-  } else {
-    console.log('QR Code canvas not found');
-  }
-};
-
-// Levenshtein Distance (basic string similarity)
-function getLevenshteinDistance(a: string, b: string): number {
-  const matrix: number[][] = [];
-
-  for (let i = 0; i <= b.length; i++) {
-    matrix[i] = [i];
-  }
-  for (let j = 0; j <= a.length; j++) {
-    matrix[0][j] = j;
-  }
-
-  for (let i = 1; i <= b.length; i++) {
-    for (let j = 1; j <= a.length; j++) {
-      if (b.charAt(i - 1).toLowerCase() === a.charAt(j - 1).toLowerCase()) {
-        matrix[i][j] = matrix[i - 1][j - 1];
-      } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1, // substitution
-          matrix[i][j - 1] + 1,     // insertion
-          matrix[i - 1][j] + 1      // deletion
-        );
-      }
-    }
-  }
-
-  return matrix[b.length][a.length];
-}
-
-function getClosestMatch(name: string, list: string[]): string | null {
-  let closest = null;
-  let minDistance = Infinity;
-
-  for (const item of list) {
-    const dist = getLevenshteinDistance(name, item);
-    if (dist < minDistance) {
-      minDistance = dist;
-      closest = item;
-    }
-  }
-
-  // Only return if it's not too far off
-  return minDistance <= 5 ? closest : null;
-}
-
-const uploadQr = async (customerName: string) => {
-  try {
-    let names: string[] = companyNames;
-
-    // Cache company names if not already loaded
-    if (companyNames.length === 0) {
-      const res = await fetch('/api/getSheetNames');
-      const json = await res.json();
-      if (!json?.data || !Array.isArray(json.data)) {
-        throw new Error('Invalid response from /api/getSheetNames');
-      }
-      names = json.data;
-      setCompanyNames(names);
-    }
-
-    let matched = names.includes(customerName);
-
-    // If not matched, try re-fetching
-    if (!matched) {
-      const res = await fetch('/api/getSheetNames');
-      const json = await res.json();
-      if (!json?.data || !Array.isArray(json.data)) {
-        throw new Error('Invalid response from /api/getSheetNames');
-      }
-      names = json.data;
-      setCompanyNames(names);
-      matched = names.includes(customerName);
-    }
-
-    if (!matched) {
-      const suggestion = getClosestMatch(customerName, names);
-      const message = `Customer name "${customerName}" not found in company list.` +
-        (suggestion ? ` Did you mean "${suggestion}"?` : '');
-      throw new Error(message);
-    }
-
-    // Get the canvas and convert to blob
+  const downloadQRCode = (customerName: string) => {
+    // Find the canvas element in the DOM - the useQRCode Canvas component renders a canvas
     const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-    if (!canvas) {
-      throw new Error('QR Code canvas not found');
+
+    if (canvas) {
+      // Create a copy of the canvas to avoid modifying the original
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+
+      if (!tempCtx) {
+        console.log('Could not get canvas context');
+        return;
+      }
+
+      // Copy the original canvas content
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
+      tempCtx.drawImage(canvas, 0, 0);
+
+      // Add border to the copy
+      addBorderToCanvas(tempCanvas, 10, '#FC8900');
+
+      // Download the modified canvas
+      const link = document.createElement('a');
+      link.download = `qr-code-${customerName.replace(/\s+/g, '_')}.png`;
+      link.href = tempCanvas.toDataURL();
+      link.click();
+    } else {
+      console.log('QR Code canvas not found');
+    }
+  };
+
+  // Levenshtein Distance (basic string similarity)
+  function getLevenshteinDistance(a: string, b: string): number {
+    const matrix: number[][] = [];
+
+    for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j;
     }
 
-    // Create FormData and send
-    // We don't actually pass the QR as excel can't handle image upload
-    // Instead the API will call an online API service to generate QR codes
-    const formData = new FormData();
-    formData.append('customerName', customerName);
-    formData.append('pw', customerPass); // Include the password
-
-    console.log('Uploading QR code for:', customerName);
-    
-    const uploadRes = await fetch('/api/uploadQr', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!uploadRes.ok) {
-      const errorData = await uploadRes.json();
-      throw new Error(errorData.error || `Upload failed with status ${uploadRes.status}`);
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1).toLowerCase() === a.charAt(j - 1).toLowerCase()) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // substitution
+            matrix[i][j - 1] + 1, // insertion
+            matrix[i - 1][j] + 1 // deletion
+          );
+        }
+      }
     }
 
-    const result = await uploadRes.json();
-    console.log('QR uploaded successfully:', result);
-    
-    // Show success message to user
-    setUploadStatus(`QR code uploaded successfully for ${customerName}!`);
-    
-  } catch (error) {
-    console.error('Upload error:', error);
-    setUploadStatus(`Upload failed: ${error instanceof Error ? error.message : String(error)}`);
+    return matrix[b.length][a.length];
   }
-};
+
+  function getClosestMatch(name: string, list: string[]): string | null {
+    let closest = null;
+    let minDistance = Infinity;
+
+    for (const item of list) {
+      const dist = getLevenshteinDistance(name, item);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closest = item;
+      }
+    }
+
+    // Only return if it's not too far off
+    return minDistance <= 5 ? closest : null;
+  }
+
+  const uploadQr = async (customerName: string) => {
+    try {
+      let names: string[] = companyNames;
+
+      // Cache company names if not already loaded
+      if (companyNames.length === 0) {
+        const res = await fetch('/api/getSheetNames');
+        const json = await res.json();
+        if (!json?.data || !Array.isArray(json.data)) {
+          throw new Error('Invalid response from /api/getSheetNames');
+        }
+        names = json.data;
+        setCompanyNames(names);
+      }
+
+      let matched = names.includes(customerName);
+
+      // If not matched, try re-fetching
+      if (!matched) {
+        const res = await fetch('/api/getSheetNames');
+        const json = await res.json();
+        if (!json?.data || !Array.isArray(json.data)) {
+          throw new Error('Invalid response from /api/getSheetNames');
+        }
+        names = json.data;
+        setCompanyNames(names);
+        matched = names.includes(customerName);
+      }
+
+      if (!matched) {
+        const suggestion = getClosestMatch(customerName, names);
+        const message =
+          `Customer name "${customerName}" not found in company list.` +
+          (suggestion ? ` Did you mean "${suggestion}"?` : '');
+        throw new Error(message);
+      }
+
+      // Get the canvas and convert to blob
+      const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+      if (!canvas) {
+        throw new Error('QR Code canvas not found');
+      }
+
+      // Create FormData and send
+      // We don't actually pass the QR as excel can't handle image upload
+      // Instead the API will call an online API service to generate QR codes
+      const formData = new FormData();
+      formData.append('customerName', customerName);
+      formData.append('pw', customerPass); // Include the password
+
+      console.log('Uploading QR code for:', customerName);
+
+      const uploadRes = await fetch('/api/uploadQr', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        const errorData = await uploadRes.json();
+        throw new Error(errorData.error || `Upload failed with status ${uploadRes.status}`);
+      }
+
+      const result = await uploadRes.json();
+      console.log('QR uploaded successfully:', result);
+
+      // Show success message to user
+      setUploadStatus(`QR code uploaded successfully for ${customerName}!`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      setUploadStatus(`Upload failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  };
 
   const clearQRCode = () => {
     setcustomerName('');
     setQrCodeUrl('');
     setcustomerPass('');
   };
-
-  
 
   if (status === 'loading') {
     return (
@@ -309,7 +321,7 @@ const uploadQr = async (customerName: string) => {
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <Stack align="center" gap="md">
@@ -330,7 +342,7 @@ const uploadQr = async (customerName: string) => {
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <Text size="lg" c="white" fw={500}>
@@ -340,15 +352,45 @@ const uploadQr = async (customerName: string) => {
     );
   }
 
+
+  const submitPartnerData = async () => {
+    const data = {
+      id: 1,
+      name: partnerName,
+      company: partnerBusName,
+      phoneNumber: partnerPhone,
+      address: partnerAddress,
+      balance: partnerBalance,
+    };
+    console.log(data);
+    try {
+      const request = await fetch('/api/updateDemoData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await request.json();
+      console.log(result);
+      setUpdateSuccess("Success")
+      if (result.ok) {
+        return;
+      }
+    } catch (error: any) {
+      console.error('failed to update');
+    }
+  };
+
   return (
     <Box
-      p={{ base: '0px', md: 'md'}}
+      p={{ base: '0px', md: 'md' }}
       style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
       }}
     >
-      <Container size="" p={{ base: "0px", md: "sm" }}>
+      <Container size="" p={{ base: '0px', md: 'sm' }}>
         <Stack gap="xl">
           {/* Header */}
           <Paper
@@ -357,7 +399,7 @@ const uploadQr = async (customerName: string) => {
             shadow="sm"
             style={{
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white'
+              color: 'white',
             }}
           >
             <Group justify="space-between" align="center">
@@ -386,7 +428,7 @@ const uploadQr = async (customerName: string) => {
                   </Group>
                 </Stack>
               </Group>
-              
+
               <Button
                 leftSection={<IconLogout size={18} />}
                 variant="white"
@@ -397,7 +439,7 @@ const uploadQr = async (customerName: string) => {
                   background: 'rgba(255, 255, 255, 0.1)',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: 'white'
+                  color: 'white',
                 }}
               >
                 Sign Out
@@ -406,7 +448,7 @@ const uploadQr = async (customerName: string) => {
           </Paper>
 
           {/* QR Code Generator Section */}
-          <Paper p={{base:"xs", md:"md"}} radius="lg" shadow="sm">
+          <Paper p={{ base: 'xs', md: 'md' }} radius="lg" shadow="sm">
             <Stack gap="lg">
               <Card
                 withBorder
@@ -414,7 +456,7 @@ const uploadQr = async (customerName: string) => {
                 radius="md"
                 style={{
                   background: 'linear-gradient(145deg, #f0fdf4 0%, #ecfdf5 100%)',
-                  border: '2px dashed #10b981'
+                  border: '2px dashed #10b981',
                 }}
               >
                 <Stack gap="md">
@@ -427,7 +469,7 @@ const uploadQr = async (customerName: string) => {
                     size="md"
                     radius="md"
                   />
-                  
+
                   <Group>
                     <Button
                       onClick={generateQRCode}
@@ -555,7 +597,7 @@ const uploadQr = async (customerName: string) => {
                         </Text>
                       </Group>
                     </Group>
-                    
+
                     <Flex justify="space-between" align="center">
                       <Canvas
                         text={qr.url}
@@ -593,6 +635,95 @@ const uploadQr = async (customerName: string) => {
             </Paper>
           )}
 
+          <Paper p={{ base: 'xs', md: 'md' }} radius="lg" shadow="sm">
+            <Stack gap="lg">
+              <Title>Set Data for Partner Demo</Title>
+              <Card
+                withBorder
+                p="lg"
+                radius="md"
+                style={{
+                  background: 'linear-gradient(145deg, #f0fdf4 0%, #ecfdf5 100%)',
+                  border: '2px dashed #10b981',
+                }}
+              >
+                <Stack gap="md">
+                  <Group grow>
+                    <TextInput
+                      label="Customer Name"
+                      placeholder="Enter customer name..."
+                      value={partnerName}
+                      onChange={(e) => setPartnerName(e.currentTarget.value)}
+                      leftSection={<IconQrcode size={16} />}
+                      size="md"
+                      radius="md"
+                    />
+                    <TextInput
+                      label="Business Name"
+                      placeholder="Enter business name..."
+                      value={partnerBusName}
+                      onChange={(e) => setPartnerBusName(e.currentTarget.value)}
+                      leftSection={<IconQrcode size={16} />}
+                      size="md"
+                      radius="md"
+                    />
+                  </Group>
+                  <Group grow>
+                    <TextInput
+                      label="Phone Number"
+                      placeholder="Enter phone number..."
+                      value={partnerPhone}
+                      onChange={(e) => setPartnerPhone(e.currentTarget.value)}
+                      leftSection={<IconQrcode size={16} />}
+                      size="md"
+                      radius="md"
+                    />
+                    <TextInput
+                      label="Address"
+                      placeholder="Enter address..."
+                      value={partnerAddress}
+                      onChange={(e) => setPartnerAddress(e.currentTarget.value)}
+                      leftSection={<IconQrcode size={16} />}
+                      size="md"
+                      radius="md"
+                    />
+                  </Group>
+                  <NumberInput
+                    label="Balance"
+                    placeholder="Enter balance..."
+                    value={partnerBalance}
+                    onChange={(e) => setPartnerBalance(Number(e))}
+                    leftSection={<IconQrcode size={16} />}
+                    size="md"
+                    radius="md"
+                  />
+                  <Group>
+                    <Button
+                      onClick={submitPartnerData}
+                      variant="gradient"
+                      gradient={{ from: 'teal', to: 'green' }}
+                      leftSection={<IconQrcode size={16} />}
+                      size="md"
+                    >
+                      Set data
+                    </Button>
+                    <Button
+                      onClick={clearQRCode}
+                      variant="light"
+                      color="gray"
+                      leftSection={<IconRefresh size={16} />}
+                      size="md"
+                    >
+                      Clear (sets to default values)
+                    </Button>
+                  </Group>
+                  <Notification>
+                    {updateSuccess}
+                  </Notification>
+                </Stack>
+              </Card>
+            </Stack>
+          </Paper>
         </Stack>
       </Container>
     </Box>

@@ -28,7 +28,7 @@ const steps = [
   {
     icon: Phone,
     title: 'Immediate Response',
-    description: 'Speed is our priority — we contact your lead ASAP',
+    description: 'Speed is our priority. We contact your lead ASAP',
   },
   {
     icon: Search,
@@ -38,7 +38,7 @@ const steps = [
   {
     icon: CheckCircle,
     title: 'Fit Assessment',
-    description: 'Honest evaluation — we only proceed if we can genuinely help',
+    description: 'Honest evaluation; we only proceed if we can genuinely help',
   },
   {
     icon: Users,
@@ -66,7 +66,7 @@ const integrationSteps = [
   {
     icon: Phone,
     title: 'Immediate Response',
-    description: 'Speed is our priority — we contact you ASAP',
+    description: 'Speed is our priority, we contact you ASAP',
   },
   {
     icon: Search,
@@ -124,7 +124,7 @@ const ReferralJourneySection = () => {
           <Stack align="center" mb="xl">
             <Title order={1} fz={{md:"80"}}>The <Text inherit span c="#0e5287">eazy</Text><Text inherit span c="#149a91">trade</Text> Journey</Title>
             <Text size="lg" ta="center" maw={700}>
-              From initial contact to successful funding — here's exactly what happens
+              From initial contact to successful funding, here's exactly what happens
             </Text>
             <SegmentedControl
               value={selectedJourney}

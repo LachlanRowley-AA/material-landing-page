@@ -7,12 +7,10 @@ import DBM_DataLoaderContent from '@/components/DBM_DataLoaderServer';
 export default async function PrefillPage({ searchParams }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  // ✅ Await searchParams outside the JSX return
   const resolvedSearchParams = await searchParams;
   const rawKey = resolvedSearchParams.accountKey;
   const accountKey = typeof rawKey === 'string' ? rawKey : null;
 
-  // ✅ Still returns JSX immediately after that
   return (
     <Suspense fallback={
       <Center style={{ height: '100vh' }}>
