@@ -138,7 +138,7 @@ export const Hero03 = ({
                 w={{ base: '100wv' }}
               />
             )}
-            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={hasLogo ? "70vw" : "85vw"} maw={{base: '300px', md: '600px'}} />
+            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={hasLogo ? "60vw" : "85vw"} maw={{base: '300px', md: '450px'}} />
             <motion.div
               initial={{ opacity: 0.0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}

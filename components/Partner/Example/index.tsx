@@ -80,7 +80,7 @@ export const Example = () => {
               <Stack gap={0}>
                 <Canvas
                   key='qr-code'
-                  text='https://www.eazytrade.com.au'
+                  text='https://www.eazytrade.com.au/demo'
                 />
                 <Text ta="center">Scan me</Text>
               </Stack>
