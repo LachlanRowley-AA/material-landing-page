@@ -10,6 +10,8 @@ export async function POST(req: NextRequest) {
     const pdfAttachment = body.Attachments?.find(
       (att: any) => att.ContentType === 'application/pdf'
     );
+    const sender : string = body.FromFull.Email;
+    const subject : string = body.Subject;
 
     if (!pdfAttachment) {
       return NextResponse.json({ error: 'No PDF attachment found' }, { status: 400 });
@@ -41,14 +43,16 @@ export async function POST(req: NextRequest) {
     const updatedPdfBytes = await pdfDoc.save();
     const updatedPdfBase64 = Buffer.from(updatedPdfBytes).toString('base64');
 
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/eazytrademe_email`, {
+    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/eazytrademe_email`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
         subject: 'Updated PDF with QR Code',
         textBody: 'Please find attached your updated PDF.',
         pdfBase64: updatedPdfBase64,
-        filename: 'updated.pdf'
+        filename: 'updated.pdf',
+        to: subject,
+        cc: sender
     })
     });
 

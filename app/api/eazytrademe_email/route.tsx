@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { subject, textBody, pdfBase64, filename } = await req.json();
+    const { subject, textBody, pdfBase64, filename, to, cc } = await req.json();
 
     if (!subject || !textBody || !pdfBase64) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         From: 'lachlan@assetalley.com.au', // Must be a verified sender in Postmark
-        To: 'lachlan@assetalley.com.au',
+        To: to,
+        Cc: cc,
         Subject: subject,
         TextBody: textBody,
         Attachments: [
