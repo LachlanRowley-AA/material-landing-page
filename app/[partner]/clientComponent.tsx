@@ -6,12 +6,14 @@ import { Feature02 } from '@/components/feature-02';
 import { Footer01 } from '@/components/footer/footer';
 import { Hero03 } from '@/components/Hero03/index';
 import { IntroSection } from '@/components/Intro';
+import Login from '@/components/LoginComponent';
 import { Header } from '@/components/Partner';
 import { UnsavedChangesProvider } from '@/components/unsavedChanges';
 import { UseCases } from '@/components/UseCases/Usecases';
+import { Partner } from '@/lib/partnerConfig';
 
 interface LowTouchClientProps {
-  partner?: string;
+  partner?: Partner;
 }
 
 export default function LowTouchClient({ partner }: LowTouchClientProps) {
@@ -33,8 +35,9 @@ export default function LowTouchClient({ partner }: LowTouchClientProps) {
         }
       `}</style>
       <UnsavedChangesProvider>
-        <Hero03 partner={partner} />
+        <Hero03 partner={partner?.displayName} />
         <Feature02 />
+        <Login partner={partner} />
         <section id="contact">
           <Calculator prefilled={false} />
         </section>

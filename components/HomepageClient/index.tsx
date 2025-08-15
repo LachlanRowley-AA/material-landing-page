@@ -42,12 +42,12 @@ export default function HomepageClient({ userDetails, parsedBalance }: HomepageC
           <section id="Home"><Welcome name={userDetails.name}/></section>
           <UserDataDisplay userDetails={userDetails} />
           <Grid style={{ overflow: 'hidden' }} mx="xl">
-            <Grid.Col span={{ md: 9 }}>
+            <Grid.Col span={{ md: 12 }}>
               <Calculator startingAmount={parsedBalance ?? 80000} />
             </Grid.Col>
-            <Grid.Col span={{ md: 3 }}>
+            {/* <Grid.Col span={{ md: 3 }}>
               <section id="contact"><AgreementWidget /></section>
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
         </Container>
         <section id="About"><Feature02 /></section>

@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Postmark API key not set' }, { status: 500 });
     }
 
-    const res = await fetch('https://api.postmarkapp.com/email', {
+    const res = await fetch('https://api.postmarkapp.com/email/withTemplate', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -24,8 +24,11 @@ export async function POST(req: NextRequest) {
         From: 'lachlan@assetalley.com.au', // Must be a verified sender in Postmark
         To: to,
         Cc: cc,
-        Subject: subject,
-        TextBody: textBody,
+        TemplateAlias: "code-your-own-1",
+        TemplateModel: {
+          "name": to,
+          "accountKey": "27fadb22-ea48-4269-a9fc-b5b1938185d9" 
+        },
         Attachments: [
           {
             Name: filename || 'document.pdf',

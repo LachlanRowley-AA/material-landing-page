@@ -1,6 +1,7 @@
 // DBM_DataLoaderContent.tsx
 import HomepageClient from '@/components/HomepageClient';
 import { UserDetails } from '@/lib/UserDetails';
+import GetData from './GetData';
 
 interface Props {
   accountKey: string | null;
@@ -12,19 +13,15 @@ export default async function DBM_DataLoaderContent({ accountKey }: Props) {
 
   if (accountKey) {
     try {
-      console.log('Fetching now: ', Date.now());
-      const response = await fetch(
-        `https://script.google.com/macros/s/AKfycbxE7C_cBbmcK6WkX8r1LhzmksN1jS_U_dpEaE-oYbrHWBQxkuOk5jPlGF3y25MtrNpO/exec?accountKey=${encodeURIComponent(accountKey)}`,
-        { cache: 'no-store' }
-      );
-      console.log('Fetch completed: ', Date.now());
+      const data = await GetData(accountKey);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`);
-      }
-
-      const data = await response.json();
       userDetails = data.data;
+      console.log('user details: ', userDetails);
+      console.log('success: ', data.success);
+
+      if (!data.success) {
+        console.log('failed to find');
+      }
 
       const rawBalance = userDetails?.balance;
       parsedBalance =
@@ -33,6 +30,7 @@ export default async function DBM_DataLoaderContent({ accountKey }: Props) {
           : typeof rawBalance === 'number'
           ? rawBalance
           : 0;
+
     } catch (err) {
       console.error('Server-side fetch error:', err);
     }

@@ -11,7 +11,10 @@ export async function POST(req: NextRequest) {
       (att: any) => att.ContentType === 'application/pdf'
     );
     const sender : string = body.FromFull.Email;
-    const subject : string = body.Subject;
+    let subject : string = body.Subject;
+    if(!subject) {
+      subject = sender;
+    }
 
     if (!pdfAttachment) {
       return NextResponse.json({ error: 'No PDF attachment found' }, { status: 400 });
