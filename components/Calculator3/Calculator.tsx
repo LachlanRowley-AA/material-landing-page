@@ -436,10 +436,8 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
               </motion.div>
             </Container>
           </Grid.Col>
-          <Grid.Col span={isMobile ? 12 : 3}>
-            <Container px="xl">
-              <AgreementWidget showDataShareCheckbox={prefilled} />
-            </Container>
+          <Grid.Col span={isMobile ? 12 : 3} pt={isMobile ? 'xl' : 'md'} px="xl" pb="xl">
+            <AgreementWidget showDataShareCheckbox={false} />
           </Grid.Col>
         </Grid>
       </Box>

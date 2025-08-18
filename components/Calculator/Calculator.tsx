@@ -30,6 +30,7 @@ import {
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
+import { AgreementWidget } from '@/components/AgreementWidget';
 
 const DEFAULT_INTEREST_RATE = 13.95; // 13.95% annual interest
 
@@ -469,12 +470,18 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                   onChange={(event) => setShowGraph(event.currentTarget.checked)}
                   checked={showGraph}
                 />
-                <Text>Toggle graph display</Text>
+                <Text>Toggle graphs display</Text>
               </Group>
             </Stack>
           </motion.div>
         </Container>
       </Grid.Col>
+      {/* <Grid.Col span={isMobile ? 12 : 3}>
+        <Container px="xl">
+          <AgreementWidget showDataShareCheckbox/>
+        </Container>
+      </Grid.Col> */}
+
     </Grid>
   );
 };
