@@ -470,7 +470,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                   onChange={(event) => setShowGraph(event.currentTarget.checked)}
                   checked={showGraph}
                 />
-                <Text>Toggle graphs display</Text>
+                <Text>Toggle graph display</Text>
               </Group>
             </Stack>
           </motion.div>
