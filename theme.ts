@@ -8,7 +8,7 @@ export const theme = createTheme({
   colors: {
     primary: colorsTuple('#10578b'),
     secondary: ['#1fcfc3','#149a91','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3','#1fcfc3AA'],
-    tertiary: colorsTuple('#f6f6f6')
+    tertiary: ['#f6f6f6', '#fc8900','#fc8900', '#fc8900', '#fc8900', '#fc8900', '#fc8900', '#fc8900', '#fc8900', '#fc8900'],
   },
   components: {
     Loader: Loader.extend({

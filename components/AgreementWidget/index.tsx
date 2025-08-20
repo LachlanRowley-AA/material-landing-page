@@ -25,9 +25,10 @@ import { useUnsavedChanges } from '@/components/unsavedChanges';
 
 type AgreementWidgetProps = {
   showDataShareCheckbox?: boolean;
+  disableButton?: boolean
 };
 
-export const AgreementWidget = ({ showDataShareCheckbox = true }: AgreementWidgetProps) => {
+export const AgreementWidget = ({ showDataShareCheckbox = true, disableButton = false }: AgreementWidgetProps) => {
   const router = useRouter();
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [dataShareTicked, setDataShare] = useState(!showDataShareCheckbox); // Default to true if checkbox is not shown
@@ -111,13 +112,13 @@ export const AgreementWidget = ({ showDataShareCheckbox = true }: AgreementWidge
               size="md"
               color="#fc8900"
               style={{
-                backgroundColor: '#fc8900',
                 color: '#fff',
                 fontWeight: 600,
                 boxShadow: '0 0 12px rgba(252, 137, 0, 0.5)',
               }}
               onClick={handleCompleteApplication}
               rightSection={<BiInfoCircle size={14} />}
+              disabled={disableButton}
             >
               Submit
             </Button>

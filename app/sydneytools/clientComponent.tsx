@@ -1,6 +1,6 @@
 'use client';
 
-import { Calculator } from '@/components/Calculator3/Calculator';
+import { Calculator } from '@/components/CalculatorOptions/Calculator';
 import { FAQ } from '@/components/FAQ/Faq';
 import { Feature02 } from '@/components/feature-02';
 import { Footer01 } from '@/components/footer/footer';
@@ -11,19 +11,13 @@ import { Header } from '@/components/Partner';
 import { UnsavedChangesProvider } from '@/components/unsavedChanges';
 import { UseCases } from '@/components/UseCases/Usecases';
 import { Partner } from '@/lib/partnerConfig';
-import { useEffect } from 'react';
 
 interface LowTouchClientProps {
   partner?: Partner;
 }
 
 export default function LowTouchClient({ partner }: LowTouchClientProps) {
-  useEffect(() => {
-    // Store partner ID in sessionStorage for later use
-    if (partner?.referrerId) {
-      sessionStorage.setItem('partnerId', JSON.stringify(partner.referrerId));
-    }
-  }, [partner]);
+  console.log('LowTouchClient rendered with partner:', partner);
   return (
     <div
       style={{
@@ -44,7 +38,7 @@ export default function LowTouchClient({ partner }: LowTouchClientProps) {
       <UnsavedChangesProvider>
         <Hero03 partner={partner?.displayName} />
         <Feature02 />
-        {partner?.hasHighTouch && (<Login partner={partner} />)}
+        {/* <Login partner={partner} /> */}
         <section id="contact">
           <Calculator prefilled={false} />
         </section>
