@@ -436,6 +436,7 @@ export const AskForBankstatementFull = () => {
                 placeholder="Abc Pty Ltd"
                 value={userDetails.businessName}
                 onChange={(e) => handleInputChange('businessName', e.currentTarget.value)}
+                required
               />
               <TextInput
                 label="Phone Number"
