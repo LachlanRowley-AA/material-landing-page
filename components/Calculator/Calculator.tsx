@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconArrowUp } from '@tabler/icons-react';
 import { motion } from 'motion/react';
 import {
@@ -83,11 +83,15 @@ type CalculatorProps = {
 export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
   const startingBalance = startingAmount || 0;
   const [baseValue, setBaseValue] = useState(
-    startingAmount ? Math.max(Math.min(startingAmount, MAX_LOAN_AMOUNT), MIN_LOAN_AMOUNT) : 10000
+    startingAmount ? Math.max(Math.min(startingAmount, MAX_LOAN_AMOUNT), MIN_LOAN_AMOUNT) : 5000
   );
   const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
   const [customTimeframe, setCustomTimeframe] = useState('12');
   const [showGraph, setShowGraph] = useState(false);
+
+  useEffect(() => {
+    sessionStorage.setItem('loanAmount', baseValue.toString());
+  })
 
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);

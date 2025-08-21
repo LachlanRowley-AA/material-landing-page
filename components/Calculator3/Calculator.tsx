@@ -91,7 +91,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
   const timeframes = [6, 12, 24, 36];
 
   useEffect(() => {
-    if (!sessionStorage.getItem('loanAmount')) {
+    if (!sessionStorage.getItem('loanAmount') || (sessionStorage.getItem('loanAmount') === '0')) {
       sessionStorage.setItem('loanAmount', startingAmount.toString());
     }
     if (!sessionStorage.getItem('customTimeframe')) {

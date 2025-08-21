@@ -58,6 +58,14 @@ export const AgreementWidget = ({ showDataShareCheckbox = true, disableButton = 
         setError('Please fill in your business name before proceeding.');
         return;
       }
+      if (userData.phoneNumber === '') {
+        setError('Please fill in your phone number before proceeding.');
+        return;
+      }
+      if (userData.email === '') {
+        setError('Please fill in your email before proceeding.');
+        return;
+      }
     }
     setError('');
     sendGAEvent('event', 'startApplicationClicked');
