@@ -48,6 +48,17 @@ export const AgreementWidget = ({ showDataShareCheckbox = true, disableButton = 
       setError('You have unsaved changes to your account details');
       return;
     }
+    if (showDataShareCheckbox) {
+      const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+      if (userData.name === '') {
+        setError('Please fill in your name before proceeding.');
+        return;
+      }
+      if (userData.company === '') {
+        setError('Please fill in your business name before proceeding.');
+        return;
+      }
+    }
     setError('');
     sendGAEvent('event', 'startApplicationClicked');
     if (uploadedFiles.length === 0) {

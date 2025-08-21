@@ -1,7 +1,7 @@
 
 import DBM_GET from "@/components/DBM_DataLoaderServer/GetData";
 
-// Type for the function you want to store
+
 type AccountGetFn = (accountKey: string) => Promise<any>;
 
 export type Partner = {

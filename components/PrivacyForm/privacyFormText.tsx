@@ -55,7 +55,8 @@ const CreditProviders : React.FC = () => {
         { "name": "Azora Finance", "websites": ["http://www.azora.com.au/"] },
         { "name": "Lodge IQ Pty Ltd", "websites": ["https://www.lodge.finance"] },
         { "name": "MBF Leasing Pty Ltd / Metrics Business Finance Pty Ltd", "websites": ["https://www.metricsbusinessfinance.com.au/privacy-policy/"] },
-        { "name": "BANJO LOANS SME PTY LTD", "websites": ["https://www.banjoloans.com/"] }
+        { "name": "BANJO LOANS SME PTY LTD", "websites": ["https://www.banjoloans.com/"] },
+        { "name": "Prospa Advance Pty Ltd", "websites": ["www.prospa.com"]}
     ];
 
     

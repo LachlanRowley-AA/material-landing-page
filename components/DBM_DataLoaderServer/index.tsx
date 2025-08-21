@@ -19,18 +19,27 @@ export default async function DBM_DataLoaderContent({ accountKey }: Props) {
       console.log('user details: ', userDetails);
       console.log('success: ', data.success);
 
+      if(userDetails) {
+        userDetails.name = userDetails.name.replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9 &_-]/g, "_")
+        userDetails.company = userDetails.company.replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9 _&-]/g, "_")
+
+      }
+
       if (!data.success) {
         console.log('failed to find');
       }
 
-      const rawBalance = userDetails?.balance;
+      let rawBalance = userDetails?.balance;
+      if (rawBalance === '') {
+        rawBalance = 0;
+      }
       parsedBalance =
         typeof rawBalance === 'string'
           ? parseFloat(rawBalance.replace(/[\$,]/g, ''))
           : typeof rawBalance === 'number'
           ? rawBalance
           : 0;
-
+      console.log('parsedBalance: ', parsedBalance);
     } catch (err) {
       console.error('Server-side fetch error:', err);
     }

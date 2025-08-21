@@ -37,11 +37,11 @@ export default function LowTouchClient({ partner }: LowTouchClientProps) {
       `}</style>
       <UnsavedChangesProvider>
         <Hero03 partner={partner?.displayName} />
-        <Feature02 />
-        {/* <Login partner={partner} /> */}
         <section id="contact">
           <Calculator prefilled={false} />
         </section>
+        <Feature02 />
+        {/* <Login partner={partner} /> */}
         <UseCases />
         <FAQ />
         <Footer01 />
