@@ -1,234 +1,491 @@
 'use client';
 
-import { JumboTitle } from '../JumboTitle/JumboTitle';
-import { Badge, Box, BoxProps, Container, Grid, Stack, Text, rem, Group, useMantineTheme, Card, Divider } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { IconArrowUp } from '@tabler/icons-react';
 import { motion } from 'motion/react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Group,
+  rem,
+  SegmentedControl,
+  Slider,
+  Stack,
+  Switch,
+  Text,
+  TextInput,
+  useMantineTheme,
+} from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
+import { AgreementWidget } from '@/components/AgreementWidget';
 
-const DEFAULT_INTEREST_RATE = 15.95; // 15.95% annual interest
-const DAYS_IN_YEAR = 365;
-const WEEKS_IN_YEAR = 52;
-const MONTHS_IN_YEAR = 12;
-const DAYS_IN_WEEK = 7;
-const DAYS_IN_MONTH = 365 / 12; // Average days per month
-const LOAN_TERM_YEARS = 5;
-const EXAMPLE_AMOUNT = 30000;
+const DEFAULT_INTEREST_RATE = 13.95; // 13.95% annual interest
 
-const calculateRepayment = (loanAmount: number, interestRate: number, isWeekly: boolean) => {
-  if (loanAmount <= 0) return 0;
+const MAX_LOAN_AMOUNT = 500000; // Maximum loan amount
+const MIN_LOAN_AMOUNT = 5000; // Minimum loan amount
+
+const calculateCustomRepayment = (loanAmount: number, interestRate: number, months: number) => {
+  if (loanAmount <= 0) {
+    return 0;
+  }
 
   const annualRate = interestRate / 100;
-  const totalPayments = isWeekly ? LOAN_TERM_YEARS * WEEKS_IN_YEAR : LOAN_TERM_YEARS * MONTHS_IN_YEAR;
-  const dailyRate = annualRate / DAYS_IN_YEAR;
-  const daysBetweenPayments = isWeekly ? DAYS_IN_WEEK : DAYS_IN_MONTH;
+  const monthlyRate = annualRate / 12;
 
-  // Effective period rate with daily compounding
-  const effectivePeriodRate = (1 + dailyRate) ** daysBetweenPayments - 1;
+  if (monthlyRate === 0) {
+    return loanAmount / months;
+  }
 
   return (
-    loanAmount *
-    ((effectivePeriodRate * (1 + effectivePeriodRate) ** totalPayments) /
-      ((1 + effectivePeriodRate) ** totalPayments - 1))
+    loanAmount * ((monthlyRate * (1 + monthlyRate) ** months) / ((1 + monthlyRate) ** months - 1))
   );
 };
 
-const calculateTotalInterest = (loanAmount: number, interestRate: number, isWeekly: boolean) => {
-  const totalPayments = isWeekly ? LOAN_TERM_YEARS * WEEKS_IN_YEAR : LOAN_TERM_YEARS * MONTHS_IN_YEAR;
-  const repayment = calculateRepayment(loanAmount, interestRate, isWeekly);
-  return (repayment * totalPayments) - loanAmount;
+const CustomTooltip = ({ active, payload, label }: any) => {
+  const theme = useMantineTheme();
+  if (active && payload && payload.length) {
+    return (
+      <Box
+        p="sm"
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        }}
+      >
+        <Text fw="500" c="black">{`${label}`}</Text>
+        <Text
+          c={theme.colors.secondary[0]}
+        >{`Est. Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
+      </Box>
+    );
+  }
+  return null;
 };
 
-const ExampleCard = ({ 
-  title, 
-  amount, 
-  period, 
-  highlight = false 
-}: { 
-  title: string; 
-  amount: string; 
-  period?: string; 
-  highlight?: boolean; 
-}) => (
-  <motion.div
-    initial={{ opacity: 0.0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, ease: 'easeInOut' }}
-    viewport={{ once: true }}
-  >
-    <Card 
-      padding="md" 
-      radius="md" 
-      bg={highlight ? "rgba(1, 225, 148, 0.1)" : "rgba(255, 255, 255, 0.05)"}
-      style={{ 
-        border: highlight ? "2px solid #01E194" : "1px solid rgba(255, 255, 255, 0.1)",
-        backdropFilter: "blur(10px)"
-      }}
-    >
-      <Stack align="center" gap="xs">
-        <Text size="sm" c="rgba(255, 255, 255, 0.7)" ta="center" fw={500}>
-          {title}
-        </Text>
-        <Text fz={{base: rem(24), md: rem(36)}} fw="bold" c={highlight ? "#01E194" : "white"} ta="center">
-          {amount}
-        </Text>
-        {period && (
-          <Text size="xs" c="rgba(255, 255, 255, 0.6)" ta="center">
-            {period}
-          </Text>
-        )}
-      </Stack>
-    </Card>
-  </motion.div>
-);
-
-const CalculationBreakdown = () => {
-  const weeklyRepayment = calculateRepayment(EXAMPLE_AMOUNT, DEFAULT_INTEREST_RATE, true);
-  const monthlyRepayment = calculateRepayment(EXAMPLE_AMOUNT, DEFAULT_INTEREST_RATE, false);
-  const totalInterestWeekly = calculateTotalInterest(EXAMPLE_AMOUNT, DEFAULT_INTEREST_RATE, true);
-  const totalInterestMonthly = calculateTotalInterest(EXAMPLE_AMOUNT, DEFAULT_INTEREST_RATE, false);
-
-  return (
-    <Container size="sm" p={0}>
-      <Stack gap="lg">
-        <motion.div
-          initial={{ opacity: 0.0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-          viewport={{ once: true }}
-        >
-          <Box ta="center" mb="xl">
-            <Badge 
-              size="lg" 
-              variant="light" 
-              color="rgba(1, 225, 148, 0.2)"
-              c="#01E194"
-              fw={500}
-              mb="md"
-            >
-              Loan Example
-            </Badge>
-            <Text size="md" c="rgba(255, 255, 255, 0.7)" mb="xs">
-              Here's what your repayments would look like for a
-            </Text>
-            <Text size={rem(36)} fw="bold" c="white">
-              ${EXAMPLE_AMOUNT.toLocaleString()} loan
-            </Text>
-            <Text size="xs" c="rgba(255, 255, 255, 0.6)" mt="xs">
-              Paid off in 3 months
-            </Text>
-          </Box>
-        </motion.div>
-
-        <Grid gutter="md">
-          <Grid.Col span={6}>
-            <ExampleCard 
-              title="Weekly Repayment"
-              amount={`$${weeklyRepayment.toFixed(2)}`}
-              period=""
-              highlight={true}
-            />
-          </Grid.Col>
-          {/* <Grid.Col span={6}>
-            <ExampleCard 
-              title="Monthly Repayment"
-              amount={`$${monthlyRepayment.toFixed(2)}`}
-              period="12 payments per year"
-            />
-          </Grid.Col> */}
-          <Grid.Col span={6}>
-            <ExampleCard 
-              title="Total Charges (incl. interest)"
-              amount="$1,176.26"
-              period=""
-            />
-          </Grid.Col>
-
-        </Grid>
-
-        <Divider color="rgba(255, 255, 255, 0.1)" />
-
-          {/* <Grid.Col span={6}>
-            <ExampleCard 
-              title="Total Interest (Monthly)"
-              amount={`$${totalInterestMonthly.toFixed(2)}`}
-              period="Over full loan term"
-            />
-          </Grid.Col> */}
-
-        {/* <motion.div
-          initial={{ opacity: 0.0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeInOut', delay: 0.2 }}
-        >
-          <Card 
-            padding="lg" 
-            radius="md" 
-            bg="rgba(1, 225, 148, 0.05)"
-            style={{ 
-              border: "1px solid rgba(1, 225, 148, 0.2)",
-            }}
-          >
-            <Group justify="space-between" align="center">
-              <Stack gap="xs">
-                <Text size="sm" c="#01E194" fw={600}>
-                  💡 Why Weekly Payments?
-                </Text>
-                <Text size="xs" c="rgba(255, 255, 255, 0.8)">
-                  Weekly payments can save you ${(totalInterestMonthly - totalInterestWeekly).toFixed(2)} in interest over the loan term
-                </Text>
-              </Stack>
-            </Group>
-          </Card>
-        </motion.div> */}
-      </Stack>
-    </Container>
+type CalculatorProps = {
+  startingAmount?: number;
+};
+export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
+  const startingBalance = startingAmount || 0;
+  const [baseValue, setBaseValue] = useState(
+    startingAmount ? Math.max(Math.min(startingAmount, MAX_LOAN_AMOUNT), MIN_LOAN_AMOUNT) : 5000
   );
-};
+  const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
+  const [customTimeframe, setCustomTimeframe] = useState('12');
+  const [showGraph, setShowGraph] = useState(false);
 
-export const Calculator = () => {
+  useEffect(() => {
+    sessionStorage.setItem('loanAmount', baseValue.toString());
+  })
+
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
-  
+
+  // Calculate data for all timeframes
+  const timeframes = [6, 12, 24, 36];
+  const chartData = timeframes.map((months) => {
+    const monthlyPayment =
+      months === 6
+        ? calculateCustomRepayment(baseValue, 20.0, months)
+        : calculateCustomRepayment(baseValue, interestRate, months);
+    const totalInterest = monthlyPayment * months - baseValue;
+    const isSelected = months === parseInt(customTimeframe, 10);
+    return {
+      months: months,
+      monthlyPayment: Math.round(monthlyPayment),
+      totalInterest: Math.round(Math.max(0, totalInterest)),
+      label: `${months} months`,
+      color: isSelected ? '#FFA500' : theme.colors.secondary[0], // Orange for selected, green for others
+    };
+  });
+
   return (
-    <Box
-      bg="black"
-      py="xl"
-      px={{ base: "xs", md: "xl" }}
-      style={{ minHeight: "80vh" }}
+    <Grid
+      gutter={isMobile ? 'sm' : 'xl'}
+      my={0}
+      mx={0}
+      px="0px"
+      style={{
+        marginTop: '0px',
+        paddingTop: '0px',
+        minHeight: '100%',
+        height: 'auto',
+      }}
+      overflow="hidden"
+      bg="white"
     >
-      <Container size="lg" ta="center">
-        <motion.div
-          initial={{ opacity: 0.0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-          viewport={{ once: true }}
+      {/* First Column - Original Calculator */}
+      <Grid.Col
+        span={isMobile ? 12 : 6}
+        bg="white"
+        pt={isMobile ? 'xs' : 'md'}
+        px={isMobile ? 'xs' : 'md'}
+        pb={isMobile ? 'md' : 'xl'}
+        style={{ minHeight: '100%' }}
+      >
+        <Stack align="center" gap="xs" my={isMobile ? 'md' : 'xl'}>
+          <motion.div
+            initial={{ opacity: 0.0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            style={{ width: '100%' }}
+          >
+            <Grid align="center" gutter="xl">
+              <Grid.Col span={12}>
+                <span>
+                  <JumboTitle
+                    order={3}
+                    fz="xs"
+                    ta="center"
+                    style={{ textWrap: 'balance' }}
+                    c={{ base: 'black', md: 'black' }}
+                    fw={600}
+                  >
+                    Set your
+                  </JumboTitle>
+                  <JumboTitle
+                    order={3}
+                    fz="xs"
+                    ta="center"
+                    style={{ textWrap: 'balance' }}
+                    c={{ base: '01E194', md: theme.colors.secondary[0] }}
+                    fw={600}
+                  >
+                    Loan Amount
+                  </JumboTitle>
+                </span>
+              </Grid.Col>
+            </Grid>
+          </motion.div>
+        </Stack>
+
+        <Container
+          size="lg"
+          mt="xl"
+          ta="center"
+          pt={isMobile ? 0 : 'xs'}
+          px={isMobile ? 0 : 'md'}
+          pb={isMobile ? 'md' : 'xl'}
+          style={{ height: '100%' }}
         >
-          <Stack align="center" gap="lg" mb="xl">
-            <JumboTitle 
-              order={2} 
-              fz="md"
-              ta="center" 
-              style={{ textWrap: 'balance' }} 
-              c="#01E194"
-              fw={700}
+          <motion.div
+            initial={{ opacity: 0.0, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Stack gap={isMobile ? 'sm' : 'md'}>
+              <TextInput
+                type="text"
+                value={baseValue.toLocaleString()}
+                onChange={(event) => {
+                  const raw = event.currentTarget.value;
+                  const parsed = Number(raw.replace(/,/g, ''));
+
+                  if (!isNaN(parsed)) {
+                    const capped = Math.min(parsed, MAX_LOAN_AMOUNT);
+                    setBaseValue(capped);
+                    sessionStorage.setItem('loanAmount', capped.toString());
+                  }
+                }}
+                onKeyDown={(e) => {
+                  const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+
+                  // Allow control keys
+                  if (allowed.includes(e.key)) {
+                    return;
+                  }
+
+                  // Allow one dot if not already present
+                  if (e.key === '.') {
+                    if (e.currentTarget.value.includes('.')) {
+                      e.preventDefault(); // prevent multiple dots
+                    }
+
+                    return;
+                  }
+
+                  // Allow digits 0–9
+                  if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault(); // block everything else
+                  }
+                }}
+                onBlur={() => {
+                  const raw = baseValue.toString();
+                  const parsed = Number(raw.replace(/,/g, ''));
+                  if (!isNaN(parsed)) {
+                    const capped = Math.max(5000, parsed);
+                    setBaseValue(capped);
+                    sessionStorage.setItem('loanAmount', capped.toString());
+                  }
+                }}
+                leftSection="$"
+                size="xl"
+                styles={{
+                  input: { fontSize: isMobile ? rem(28) : rem(40), color: 'black' },
+                  label: { fontSize: isMobile ? rem(28) : rem(40), color: 'black' },
+                  section: { fontSize: isMobile ? rem(28) : rem(40), color: 'black' },
+                }}
+                ta="center"
+                c={{ base: 'white', md: theme.colors.secondary[0] }}
+                rightSection={
+                  <Button
+                    size="xs"
+                    variant="subtle"
+                    onClick={() => {
+                      setBaseValue(Math.min(startingAmount, MAX_LOAN_AMOUNT));
+                      sessionStorage.setItem('loanAmount', startingAmount.toString());
+                      console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+                    }}
+                  >
+                    Reset
+                  </Button>
+                }
+                rightSectionWidth={100}
+              />
+              <Stack gap={0}>
+                <Text size="sm" fs="italic">
+                  Finance available between $5,000 and $500,000 regardless of outstanding balance
+                </Text>
+                <Slider
+                  px="xl"
+                  min={MIN_LOAN_AMOUNT}
+                  max={MAX_LOAN_AMOUNT}
+                  step={1000}
+                  value={baseValue}
+                  onChange={(value) => {
+                    setBaseValue(Math.max(0, value));
+                    sessionStorage.setItem('loanAmount', value.toString());
+                    console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+                  }}
+                  c={{ base: 'white', md: theme.colors.secondary[0] }}
+                  mx={isMobile ? 'xs' : 0}
+                  marks={
+                    startingBalance > 0
+                      ? [
+                          {
+                            value: startingBalance,
+                            label: (
+                              <div>
+                                <IconArrowUp
+                                  style={{ marginBottom: '0px', paddingBottom: '0px' }}
+                                />
+                                <p style={{ margin: '0px' }}>Your balance</p>
+                                <p style={{ margin: '0px' }}>with DBM</p>
+                              </div>
+                            ),
+                          },
+                        ]
+                      : []
+                  }
+                  size="xl"
+                  styles={{
+                    markLabel: {
+                      color: 'orange',
+                    },
+                  }}
+                />
+              </Stack>
+            </Stack>
+          </motion.div>
+        </Container>
+      </Grid.Col>
+
+      {/* Second Column - Chart */}
+      <Grid.Col
+        span={isMobile ? 12 : 6}
+        pt={isMobile ? 'xl' : 'md'}
+        px={isMobile ? 'xs' : 'md'}
+        pb={isMobile ? 'md' : 'xl'}
+      >
+        <Stack align="center" gap="x" my={isMobile ? 'md' : 'xl'}>
+          <motion.div
+            initial={{ opacity: 0.0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            style={{ width: '100%' }}
+          >
+            <JumboTitle
+              order={3}
+              fz="xs"
+              ta="center"
+              style={{ textWrap: 'balance' }}
+              c={{ base: 'black', md: 'black' }}
+              fw={600}
             >
-              Example
+              Compare and select payment options
             </JumboTitle>
-            <JumboTitle 
-              order={2} 
-              fz="md"
-              ta="center" 
-              style={{ textWrap: 'balance' }} 
-              c="white"
-              fw={700}
-            >
-              Loan Repayment
-            </JumboTitle>
-          </Stack>
-        </motion.div>
-        
-        <CalculationBreakdown />
-      </Container>
-    </Box>
+            <Text pt="md" ta="center" fs="italic">
+              All plans may be paid out at any time without paying any remaining interest
+            </Text>
+          </motion.div>
+        </Stack>
+
+        <Container
+          size="lg"
+          mt="md"
+          ta="center"
+          pt={isMobile ? 0 : 'md'}
+          px={isMobile ? 0 : 'md'}
+          pb={isMobile ? 'md' : 'xl'}
+          style={{ height: '100%' }}
+        >
+          <motion.div
+            initial={{ opacity: 0.0, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Stack gap={isMobile ? 'md' : 'xs'}>
+              {showGraph && (
+                <Box style={{ height: '400px' }}>
+                  <Container size="lg" ta="center" px={isMobile ? 0 : 'md'} pb={0}>
+                    <motion.div
+                      initial={{ opacity: 0.0, y: 0 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8 }}
+                    >
+                      <Stack gap={isMobile ? 'md' : 'xl'}>
+                        <SegmentedControl
+                          value={customTimeframe}
+                          onChange={(value) => {
+                            setCustomTimeframe(value);
+                            sessionStorage.setItem('customTimeframe', value);
+                            console.log(
+                              'Custom Timeframe set to:',
+                              sessionStorage.getItem('customTimeframe')
+                            );
+                          }}
+                          data={[
+                            { label: '6 months', value: '6' },
+                            { label: '12 months', value: '12' },
+                            { label: '24 months', value: '24' },
+                            { label: '36 months', value: '36' },
+                          ]}
+                          size="md"
+                          styles={{
+                            root: {
+                              backgroundColor: '#f8f9fa',
+                            },
+                            control: {
+                              '&[dataActive]': {
+                                backgroundColor: theme.colors.secondary[0],
+                                color: 'white',
+                              },
+                            },
+                          }}
+                        />
+                      </Stack>
+                    </motion.div>
+                  </Container>
+                  <ResponsiveContainer width="100%" height="90%">
+                    <BarChart
+                      layout="vertical"
+                      data={chartData}
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+
+                      <XAxis
+                        type="number"
+                        tickFormatter={(value) => `${value.toLocaleString()}`}
+                        fontSize={12}
+                      />
+
+                      <YAxis dataKey="label" type="category" fontSize={12} width={100} />
+
+                      <Tooltip content={<CustomTooltip />} />
+
+                      <Bar
+                        dataKey="monthlyPayment"
+                        name="Estimated Monthly Payment"
+                        radius={[0, 4, 4, 0]}
+                      >
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Box>
+              )}
+              {!showGraph && (
+                <Box
+                  h={400}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <Grid gutter="md" w="100%">
+                    {chartData.map((item, index) => (
+                      <Grid.Col span={12} key={index}>
+                        <Button
+                          fullWidth
+                          p="sm"
+                          style={{
+                            border: `1px solid ${item.color}`,
+                            borderRadius: '8px',
+                            backgroundColor: item.color === '#FFA500' ? '#FFF3E0' : '#f8f9fa',
+                            height: '95%',
+                          }}
+                          onClick={() => {
+                            setCustomTimeframe(String(item.months));
+                            sessionStorage.setItem('customTimeframe', String(item.months));
+                            console.log(
+                              'Custom Timeframe set to:',
+                              sessionStorage.getItem('customTimeframe')
+                            );
+                          }}
+                        >
+                          <Box w="100%">
+                            <Text fw="600" c="black" fz="sm" ta="center">
+                              {item.months} months
+                            </Text>
+                            <Text c={item.color} fz="lg" fw="bold" ta="center">
+                              ${item.monthlyPayment.toLocaleString()}
+                            </Text>
+                            <Text c="dimmed" fz="xs" ta="center">
+                              estimated monthly payment
+                            </Text>
+                          </Box>
+                        </Button>
+                      </Grid.Col>
+                    ))}
+                  </Grid>
+                </Box>
+              )}
+              <Group justify="flex-end" w="100%" visibleFrom="md">
+                <Switch
+                  onChange={(event) => setShowGraph(event.currentTarget.checked)}
+                  checked={showGraph}
+                />
+                <Text>Toggle graph display</Text>
+              </Group>
+            </Stack>
+          </motion.div>
+        </Container>
+      </Grid.Col>
+      {/* <Grid.Col span={isMobile ? 12 : 3}>
+        <Container px="xl">
+          <AgreementWidget showDataShareCheckbox/>
+        </Container>
+      </Grid.Col> */}
+
+    </Grid>
   );
 };

@@ -1,25 +1,22 @@
 'use client';
 
-import { JumboTitle } from '../JumboTitle/JumboTitle';
+import { useEffect, useState } from 'react';
+import { IconArrowRight, IconCircleCheckFilled } from '@tabler/icons-react';
+import { motion } from 'motion/react';
 import {
-  ActionIcon,
-  Avatar,
-  AvatarGroup,
-  Badge,
+  BackgroundImage,
   Box,
+  Button,
   Container,
   ContainerProps,
   Flex,
   Image,
-  Rating,
+  Overlay,
   Stack,
   Text,
-  TextInput,
-  Button
+  Title,
+  useMantineTheme,
 } from '@mantine/core';
-import { IconArrowRight } from '@tabler/icons-react';
-import { motion } from 'motion/react';
-import NextImage from 'next/image';
 import classes from './index.module.css';
 
 type ImageItem = { src: string; alt: string };
@@ -28,80 +25,177 @@ type Hero03Props = ContainerProps & {
   avatarItems?: ImageItem[];
   badge?: string;
   title?: string;
-  description?: string;
+  description?: string[];
   rating?: number;
   ratingLabel?: string;
+  partner?: string;
+};
+
+const scrollToSection = (id: string) => {
+  const section = document.getElementById(id);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    console.log('section not found');
+  }
 };
 
 export const Hero03 = ({
-  badge = 'Build faster with AI-powered tools',
-  title = 'Pay Over Time \n Not Upfont',
-  description = 'No financials required, Approvals in 24-28 hours. Credit score safe ',
+  badge = ' ',
+  description = ['No financials required', 'Approvals in 24-48 hours', 'Credit score safe'],
+  partner,
   ...containerProps
-}: Hero03Props) => (
-  <Container pos="relative" h="80vh" mah={950} style={{ overflow: 'hidden' }} fluid>
-    <Container component="section" h="80vh" mah={950} mx="auto" size="xl" {...containerProps}>
-      <Box
-        pos="absolute"
-        top={0}
-        left={0}
-        h="100%"
-        w="100%"
-        className={classes['vertical-backdrop']}
-      />
-      <Flex h="100%" align="center" pos="relative" justify="center">
-        <Stack
-          pt={{ base: 'xl', sm: 0 }}
-          maw="var(--mantine-breakpoint-md)"
-          align="center"
-          gap="lg"
-          style={{ zIndex: 1 }}
+}: Hero03Props) => {
+  const theme = useMantineTheme();
+  const [isPageReady, setIsPageReady] = useState<boolean>(false);
+  const [hasLogo, setHasLogo] = useState<boolean>(false);
+  const [textColour, setTextColor] = useState<string>('white');
+
+  useEffect(() => {
+    const preloadHeroData = async () => {
+      if (!partner) {
+        setIsPageReady(true);
+        return;
+      }
+      try {
+        const logo = await fetch(`/${partner}/logo_black.png`, { method: 'HEAD' });
+        const contentLength = logo.headers.get('content-length');
+        const isValid = !!(logo.ok && contentLength && parseInt(contentLength, 10) > 0);
+        setHasLogo(isValid);
+        if(isValid) {
+          setTextColor('black');
+          console.log('valid');
+        }
+      } catch (error) {
+        console.log('error');
+      }
+    };
+    preloadHeroData();
+  }, [partner]);
+
+  return (
+    <Container
+      pos="relative"
+      h={hasLogo ? { base: '80vh', md: '85vh' } : { base: '100vh', md: '85vh' }}
+      fluid
+      style={{
+        overflow: 'hidden',
+        bg: 'white'
+      }}
+      px={0}
+    >
+      <Container component="section" h="100%" mx="auto" size="xl" {...containerProps}>
+        <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          w="100%"
+          h="100%"
+          style={{ zIndex: 0, overflow: 'hidden' }}
+          bg="white"
         >
-          {badge && (
+          {!hasLogo && <Overlay color="#000" backgroundOpacity={0.65} />}
+          {!hasLogo && (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            >
+              <source src="/construction.webm" type="video/webm" />
+            </video>
+          )}{' '}
+        </Box>
+        <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          h="100%"
+          w="100%"
+          className={classes['vertical-backdrop']}
+        />
+        <Flex
+          h="100%"
+          pos="relative"
+          justify="center"
+          align={hasLogo? "" : "center"} // vertically center
+          pt={hasLogo? "80px" : "xs"}
+        >
+          <Stack maw="var(--mantine-breakpoint-md)" align="center" gap="md" style={{ zIndex: 1 }}>
+            {badge && (
               <Image
                 variant="default"
-                p="md"
-                bg="var(--mantine-color-body)"
-                src="/Pretend_logo_black.png"
-                mb="lg"
+                py="md"
+                src={hasLogo ? `/${partner}/logo_black.png` : '/logo.svg'}
+                mb={0}
                 style={{ textTransform: 'none' }}
+                maw={{ base: '100vw', md: '50vw' }}
+                w={{ base: '100wv' }}
               />
-          )}
-          <motion.div
-            initial={{ opacity: 0.0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
-            viewport={{ once: true }}
-          >
-            <JumboTitle ta="center" order={1} fz="lg" style={{ textWrap: 'balance' }}>
-              {title}
-            </JumboTitle>
-            </motion.div>
-            <Text
-              ta="center"
-              maw="var(--mantine-breakpoint-xs)"
-              fz="xl"
-              style={{ textWrap: 'balance' }}
+            )}
+            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={hasLogo ? "60vw" : "85vw"} maw={{base: '300px', md: '450px'}} />
+            <motion.div
+              initial={{ opacity: 0.0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: 'easeInOut' }}
+              viewport={{ once: true }}
             >
-              {description}
-            </Text>
+              <Title fz={{ base: 40, md: 80 }} ta="center" c={textColour}>
+                More Material
+                <BackgroundImage src="./tape.png">
+                  <Text
+                    span
+                    inherit
+                    px={{ base: '20px', md: '100px' }}
+                    ta="center"
+                    style={{ textWrap: 'balance' }}
+                    c="white"
+                  >
+                    Less Red Tape
+                  </Text>
+                </BackgroundImage>
+              </Title>
+            </motion.div>
+
+            <Stack gap="xs" align="start">
+              {description.map((item, index) => (
+                <Flex key={index} align="center" gap={10}>
+                  <IconCircleCheckFilled size={20} color={theme.colors.green[6]} />
+                  <Text c={textColour} fz="lg">
+                    {item}
+                  </Text>
+                </Flex>
+              ))}
+            </Stack>
+
             <Button
               size="lg"
-              bg="rgba(1, 225, 148, 0.2)"
-              mt="xl"
-              c="#01E194"
+              bg="rgba(1, 1, 1, 0.8)"
+              mt="md"
+              c={theme.colors.secondary[0]}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#01E194';
+                e.currentTarget.style.backgroundColor = theme.colors.secondary[0];
                 e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(1, 225, 148, 0.2)';
-                e.currentTarget.style.color = '#01E194';
-              }}>
+                e.currentTarget.style.backgroundColor = 'rgba(1, 1, 1, 0.8)';
+                e.currentTarget.style.color = theme.colors.secondary[0];
+              }}
+              onClick={(e: any) => {
+                e.preventDefault();
+                scrollToSection('contact');
+              }}
+            >
               Get Started
             </Button>
-        </Stack>
-      </Flex>
+          </Stack>
+        </Flex>
+      </Container>
     </Container>
-  </Container>
-);
+  );
+};

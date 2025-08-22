@@ -16,7 +16,7 @@ import {
 const faqData = [
   {
     question: "Will this impact my credit file?",
-    answer: "No. To confirm your eligibility, there will be no impact to your credit file.",
+    answer: "No. There will be no impact to your credit file when we confirm your eligibility.",
     icon: IconCreditCard,
     color: "#01E194"
   },
@@ -33,8 +33,8 @@ const faqData = [
     color: "#01E194"
   },
   {
-    question: "Is this a secured loan?",
-    answer: "No. This is an unsecured loan.",
+    question: "Will I need to provide security?",
+    answer: "No, we provide access to unsecured funding.",
     icon: IconShield,
     color: "#01E194"
   },
@@ -207,6 +207,17 @@ const AccordionFAQ = () => {
   );
 };
 
+const scrollToSection = (id: string) => {
+    const section = document.getElementById(id);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+    else {
+      console.log('section not found');
+    }
+  };
+
+
 export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) => {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
@@ -244,7 +255,7 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
               fz="md" 
               ta="center" 
               style={{ textWrap: 'balance' }} 
-              c="#01E194"
+              c={theme.colors.secondary[0]}
               fw={700}
               mb="md"
             >
@@ -292,14 +303,14 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
             fullWidth
             styles={{
               root: {
-                background: "linear-gradient(135deg, rgba(1, 225, 148, 0.2) 0%, rgba(1, 225, 148, 0.2) 100%)",
+                background: `${theme.colors.secondary[9]}`,
                 border: "1px solid rgba(1, 225, 148, 0.2)",
                 padding: rem(24),
                 height: "auto",
                 marginTop: rem(40),
                 transition: "all 0.3s ease",
                 '&:hover': {
-                  background: "rgba(1, 225, 148, 0.3)",
+                  background: `${theme.colors.secondary[9]}`,
                   transform: "translateY(-2px)",
                 }
               },
@@ -316,18 +327,21 @@ export const FAQ = ({ variant = 'cards' }: { variant?: 'cards' | 'accordion' }) 
               }
             }}
             onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(1, 225, 148, 0.4)";
+                e.currentTarget.style.background = "#1fcfc3";
             }}
             onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(1, 225, 148, 0.2)";
+                e.currentTarget.style.background = `${theme.colors.secondary[9]}`;
+            }}
+            onClick={(e:any) => {
+              e.preventDefault;scrollToSection('contact')
             }}
 
           >
             <Stack align="center" gap="md">
-              <Text size="xl" fw={600} c="#01E194" ta="center">
+              <Text size="xl" fw={600} c="white" ta="center">
                 Still have questions?
               </Text>
-                <Text size="md" c="rgba(255, 255, 255, 0.8)" w="100%" ta="center" style={{wordWrap: "break-word", }}>
+                <Text size="md" c="rgba(255, 255, 255, 0.9)" w="100%" ta="center" style={{wordWrap: "break-word", }}>
                 Our team is here to help you understand how we can work for your specific situation.
                 </Text>
             </Stack>
