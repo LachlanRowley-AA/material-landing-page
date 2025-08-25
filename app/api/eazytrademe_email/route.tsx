@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Partner information missing' }, { status: 401 });
     }
 
-    if (!subject || !textBody || !pdfBase64) {
+    if (!subject || !textBody) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 402 });
     }
 
@@ -35,13 +35,13 @@ export async function POST(req: NextRequest) {
           "p_name": partnerName,
           "p_key": partnerKey,
         },
-        Attachments: [
+        ...(pdfBase64 && { Attachments: [
           {
             Name: filename || 'document.pdf',
             Content: pdfBase64,
             ContentType: 'application/pdf'
           }
-        ]
+        ]})
       }),
     });
 
