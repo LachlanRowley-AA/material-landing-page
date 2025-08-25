@@ -53,9 +53,9 @@ export async function POST(req: NextRequest) {
       ) || [];
 
     const partnerName = partnerObj?.displayName;
+    console.log('Identified partner:', partnerKey, partnerName);
 
-
-    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/eazytrademe_email`, {
+    await fetch(`https://www.eazytrade.com.au/api/eazytrademe_email`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

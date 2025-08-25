@@ -18,4 +18,5 @@ export const partnerConfig: Record<string, Partner> = {
   sydneytools: { displayName: 'Sydney Tools', hasHighTouch: false },
   nordin: { displayName: 'Nordin', hasHighTouch: false },
   bmsyd: { displayName: 'BM Sydney', hasHighTouch: false },
+  assetalley: { displayName: 'Asset Alley', hasHighTouch: false, email: 'louie@assetalley.com.au' },
 };

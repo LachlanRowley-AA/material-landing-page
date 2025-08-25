@@ -5,11 +5,11 @@ export async function POST(req: NextRequest) {
     const { subject, textBody, pdfBase64, filename, to, cc, partnerName, partnerKey } = await req.json();
 
     if(!partnerKey || !partnerName) {
-      return NextResponse.json({ error: 'Partner information missing' }, { status: 400 });
+      return NextResponse.json({ error: 'Partner information missing' }, { status: 401 });
     }
 
     if (!subject || !textBody || !pdfBase64) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 402 });
     }
 
     const postmarkApiKey = process.env.POSTMARK_API_KEY;
