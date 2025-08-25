@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import {
   Card,
   Button,
@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import { UserDetails } from '@/lib/UserDetails';
 import Link from 'next/link'
 import { sendGAEvent } from '@next/third-parties/google';
+import { PartnerContext } from '../PartnerContext';
 
 export const AskForBankstatement = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ export const AskForBankstatement = () => {
   const [licenseBack, setLicenseBack] = useState<File | null>(null);
   const [licenseBackUpload, setLicenseBackUpload] = useState<boolean | null>(false);
   const [step, setStep] = useState<'form' | 'upload' | 'thankyou'>('form');
+  const partner = useContext(PartnerContext);
 
 
   const sendToLendAPI = async () => {
@@ -96,7 +98,7 @@ export const AskForBankstatement = () => {
             company_registration_date: '1444/11/11',
             campaign: 'Test Campaign',
             loan_term_requested: lendTimeframe,
-            ...(process.env.NEXT_PUBLIC_LEND_MODE === 'live' && { referrer_person_ref: 'Z2RLL54' }),
+            ...(process.env.NEXT_PUBLIC_LEND_MODE === 'live' && { referrer_person_ref: partner?.referrerId }),
           },
           lead_notes: [
             {

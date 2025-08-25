@@ -11,7 +11,7 @@ import {
   IconPlus,
   IconRepeat,
 } from '@tabler/icons-react';
-import { motion } from 'motion/react';
+import { m, motion } from 'motion/react';
 import {
   Box,
   Button,
@@ -21,6 +21,7 @@ import {
   Flex,
   Grid,
   Group,
+  Image,
   Radio,
   rem,
   SegmentedControl,
@@ -67,11 +68,7 @@ const calculateDailyInterest = (loanAmount: number, interestRate: number, days: 
   return loanAmount * dailyRate * days;
 };
 
-const Icon = ({ children }: { children: ReactNode }) => (
-  <Card radius="xl" p={4} withBorder>
-    <Center>{children}</Center>
-  </Card>
-);
+const Icon = ({ children }: { children: ReactNode }) => <Center>{children}</Center>;
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   const theme = useMantineTheme();
@@ -116,15 +113,19 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
   const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
 
   type Product = {
+    minimumAmount?: number;
     key: string;
     title: string;
     items?: { text: string; icon: ReactNode }[];
     terms?: { length: number; rate: number }[];
     layout?: (product: Product) => ReactNode;
-  }
+    logo?: string;
+  };
 
   const products = [
     {
+      minimumAmount: 0,
+      logo: '/Sydney Tools/sydney_tools.svg',
       key: 'Sydney Tools Pay',
       title: 'Sydney Tools Pay',
       items: [
@@ -135,6 +136,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
       ],
     },
     {
+      minimumAmount: 10000,
       key: 'FlexPay',
       title: 'FlexPay',
       terms: [
@@ -165,7 +167,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
           icon: <IconCashOff size={18} />,
         },
       ],
-      layout: (product : Product) => (
+      layout: (product: Product) => (
         <Grid px="xs" py="xs" align="center" justify="center">
           <Grid.Col span={12} mb={0}>
             <Text c="black" fz="md" ta="center" fw={600}>
@@ -179,14 +181,14 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
               const isSelected = selectedTerm === term.length;
 
               return (
-                <Grid.Col span={6} key={term.length} mb="xs">
+                <Grid.Col span={{ base: 12, md: 6 }} key={term.length} mb="xs">
                   <Button
                     p={2}
                     w="100%"
                     style={{
                       border: `2px solid ${isSelected ? theme.colors.secondary[0] : '#ccc'}`,
                       borderRadius: '8px',
-                      backgroundColor: isSelected ? '#46e0d6' : '#f8f3f3ff',
+                      backgroundColor: isSelected ? '#46e0d666' : '#f8f3f3ff',
                       transition: 'all 0.3s ease',
                       height: '100%',
                     }}
@@ -223,6 +225,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
       ),
     },
     {
+      minimumAmount: 10000,
       key: 'RevolvePay',
       title: 'RevolvePay',
       items: [
@@ -235,61 +238,98 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
           icon: <IconCreditCardPay size={18} />,
         },
       ],
-      layout: (product : Product) => (
+      layout: (product: Product) => (
         <div>
-          <Text c="black" fz="md" ta="center" fw="bold">
+          <Text c="black" fz="md" ta="center" fw="bold" mb={4}>
             Rates starting from 0.03% a day.
           </Text>
 
-          <Flex align="stretch" gap="md">
+          <Flex align="stretch" gap="xs" mb="xs">
             <Box
               w="100%"
               py={0}
               my={0}
-              mx="sm"
-              h="auto"
+              ml={{ base: 'sm', md: 'xl' }}
               style={{
+                display: 'flex',
+                flexDirection: 'column',
                 border: `2px solid ${theme.colors.secondary[0]}`,
                 borderRadius: '8px',
-                backgroundColor: '#46e0d6',
+                backgroundColor: 'white',
                 transition: 'all 0.3s ease',
               }}
             >
-              <Text c="black" fz="lg" fw="bold" ta="center" mt={4}>
-                ${baseValue.toLocaleString()}
-              </Text>
-              <Text fw={600} c="black" fz="sm" ta="center" my={0}>
-                Principal
-              </Text>
-            </Box>{' '}
-            <IconPlus size={48} height="auto"/>
-            <Box
-              w="100%"
-              py={0}
-              my={0}
-              mx="sm"
-              h="auto"
-              style={{
-                border: `2px solid ${theme.colors.secondary[0]}`,
-                borderRadius: '8px',
-                backgroundColor: '#46e0d6',
-                transition: 'all 0.3s ease',
-              }}
-            >
-                <Text fw={600} c="black" fz="sm" ta="center" my={0}>
-                </Text>
-                <Text c="black" fz="lg" fw="bold" ta="center" mt={4}>
-                  $
-                  {calculateDailyInterest(baseValue, 0.04, 31).toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}{' '}
-                  / month
-                </Text>
-                <Text fw={600} c="black" fz="sm" ta="center" my={0}>
-                  Until principal is paid off
+              {/* Top half */}
+              <Box
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}
+                mt={4}
+              >
+                <Text fw={600} c="black" fz="sm" ta="center">
+                  Principal
                 </Text>
               </Box>
+              <Box
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                }}
+                mt={4}
+              >
+                <Text c="black" fz={{ base: 'md', md: 'lg' }} fw="bold" ta="center">
+                  ${baseValue.toLocaleString()}
+                </Text>
+              </Box>
+
+              {/* Bottom half */}
+              <Box
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                }}
+              />
+            </Box>{' '}
+            <IconPlus size={48} height="auto" />
+            <Box
+              w="100%"
+              py={0}
+              px={1}
+              my={0}
+              mr={{ base: 'sm', md: 'xl' }}
+              h="auto"
+              style={{
+                border: `2px solid ${theme.colors.secondary[0]}`,
+                borderRadius: '8px',
+                backgroundColor: 'white',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              <Text fw={600} c="black" fz="sm" ta="center" my={0}>
+                An additional
+              </Text>
+              <Text c="black" fz={{ base: 'md', md: 'lg' }} fw="bold" ta="center" mt={4}>
+                $
+                {calculateDailyInterest(baseValue, 0.04, 31).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{' '}
+                / month
+              </Text>
+              <Text fw={600} c="black" fz="sm" ta="center" my={0}>
+                Until principal is paid off
+              </Text>
+            </Box>
           </Flex>
         </div>
       ),
@@ -308,7 +348,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
   return (
     <Box
       bg="#F2F5F8"
-      px={isMobile ? 'sm' : 'xl'}
+      px={isMobile ? 'xs' : 'xl'}
       py={isMobile ? 'sm' : 'xl'}
       style={{
         width: '100%',
@@ -408,6 +448,15 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                         setBaseValue(capped);
                         sessionStorage.setItem('loanAmount', capped.toString());
                       }
+
+                      if (selectedProduct) {
+                        const product = products.find((p) => p.key === selectedProduct);
+                        if (product && baseValue < (product.minimumAmount || 0)) {
+                          setSelectedProduct(null);
+                          setSelectedTerm(null);
+                          sessionStorage.removeItem('notes');
+                        }
+                      }
                     }}
                     onKeyDown={(e) => {
                       const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
@@ -477,6 +526,15 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                         setBaseValue(Math.max(0, value));
                         sessionStorage.setItem('loanAmount', value.toString());
                         console.log('Loan Amount set to:', sessionStorage.getItem('loanAmount'));
+
+                        if (selectedProduct) {
+                          const product = products.find((p) => p.key === selectedProduct);
+                          if (product && value < (product.minimumAmount || 0)) {
+                            setSelectedProduct(null);
+                            setSelectedTerm(null);
+                            sessionStorage.removeItem('notes');
+                          }
+                        }
                       }}
                       c={theme.colors.secondary[0]}
                       size="xl"
@@ -508,11 +566,16 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                   <Card
                     key={product.key}
                     onClick={() => {
+                      if (baseValue < (product.minimumAmount || 0)) {
+                        return;
+                      }
                       setSelectedProduct(product.key);
                       setSelectedTerm(null);
                       sessionStorage.setItem('notes', product.key);
                     }}
                     style={{}}
+                    mb={0}
+                    pb={0}
                   >
                     <Card
                       key={product.key}
@@ -520,42 +583,56 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                         border: `1px solid ${isSelected ? HIGHLIGHT_COLOR : theme.colors.secondary[0]}`,
                         borderRadius: '8px',
                         backgroundColor: isSelected ? '#FFF3E0' : '#f8f9fa',
-                        boxShadow: '0px 3px 2px rgba(0,0,0,0.6)',
                       }}
                       pb={4}
                       pt={0}
                       px={0}
                       mx="lg"
                     >
-                      <Group bg={theme.colors.secondary[0]} px="md" py="xs">
-                        <Radio value={product.key} checked={isSelected} readOnly/>
-                        <Text
-                          fw={600}
-                          c={isSelected ? 'black' : 'black'}
-                          fz="lg"
-                          ta="center"
-                          bg={theme.colors.secondary[0]}
-                          py="md"
-                        >
-                          {product.title}
-                        </Text>
-                      </Group>
-                      <Group mt="xs" grow align="center" justify="center" wrap="nowrap">
-                        {product.items &&
-                          product.items.map((item) => (
-                            <Group key={item.text} gap="xs" align="center" justify="center" px="xs">
+                      <Flex
+                        wrap="wrap"
+                        gap="xs"
+                        px="md"
+                        py="xs"
+                        align="center"
+                        justify="start"
+                        style={{ flex: `1 1 auto`, minWidth: 0 }}
+                      >
+                        <Group gap={0} align="center" mr="md">
+                          <Radio
+                            value={product.key}
+                            checked={isSelected}
+                            readOnly
+                            pr="xs"
+                            disabled={baseValue < product.minimumAmount}
+                          />
+                          {/* {product.logo && (<Image src={product.logo || null} w={170} my={-10} py={-10}/>) } */}
+                          <Text fw={600} c="black" fz={{ base: 'md', md: 'lg' }} ta="center" pl={0}>
+                            {product.title}
+                          </Text>
+                        </Group>
+                        <Flex gap="lg">
+                          {product.items?.map((item) => (
+                            <Flex key={item.text} align="center" gap={4}>
                               <Icon>{item.icon}</Icon>
                               <Text
-                                c={isSelected ? HIGHLIGHT_COLOR : 'black'}
-                                fz="sm"
-                                ta="center"
+                                c="black"
+                                fz={{ base: 'xs', md: 'sm' }}
                                 fw={600}
+                                style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}
                               >
                                 {item.text}
                               </Text>
-                            </Group>
+                            </Flex>
                           ))}
-                      </Group>
+                        </Flex>
+                          {baseValue < (product.minimumAmount || 0) && (
+                            <Text c="red" fz="sm" fw={600}>
+                              Minimum ${product.minimumAmount?.toLocaleString()} required
+                            </Text>
+                          )}
+                      </Flex>
+
                       {isSelected && product.layout?.(product)}
                     </Card>
                   </Card>

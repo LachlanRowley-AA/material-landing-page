@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { subject, textBody, pdfBase64, filename, to, cc } = await req.json();
+    const { subject, textBody, pdfBase64, filename, to, cc, partnerName, partnerKey } = await req.json();
+
+    if(!partnerKey || !partnerName) {
+      return NextResponse.json({ error: 'Partner information missing' }, { status: 400 });
+    }
 
     if (!subject || !textBody || !pdfBase64) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -27,7 +31,9 @@ export async function POST(req: NextRequest) {
         TemplateAlias: "code-your-own-1",
         TemplateModel: {
           "name": to,
-          "accountKey": "27fadb22-ea48-4269-a9fc-b5b1938185d9" 
+          "accountKey": "423550",
+          "p_name": partnerName,
+          "p_key": partnerKey,
         },
         Attachments: [
           {

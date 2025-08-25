@@ -62,7 +62,7 @@ export const Hero03 = ({
         const contentLength = logo.headers.get('content-length');
         const isValid = !!(logo.ok && contentLength && parseInt(contentLength, 10) > 0);
         setHasLogo(isValid);
-        if(isValid) {
+        if (isValid) {
           setTextColor('black');
           console.log('valid');
         }
@@ -80,7 +80,7 @@ export const Hero03 = ({
       fluid
       style={{
         overflow: 'hidden',
-        bg: 'white'
+        bg: 'white',
       }}
       px={0}
     >
@@ -91,8 +91,23 @@ export const Hero03 = ({
           left={0}
           w="100%"
           h="100%"
-          style={{ zIndex: 0, overflow: 'hidden' }}
-          bg="white"
+          style={{
+            zIndex: 0,
+            overflow: 'hidden',
+    //         border: '20px solid', // thickness of the "tape"
+    //         borderImage: `
+    //   repeating-linear-gradient(
+    //     135deg,
+    //     #000000 0 15px,
+    //     #ffff00 15px 30px
+    //   ) 30
+    // `,
+
+          }}
+          // bg={`linear-gradient(270deg, #0e5287aa, #149a91ff)`}
+          bg={`linear-gradient(180deg, white, 80%, #149a9122)`}
+          // bg='white'
+          // bg='grey'
         >
           {!hasLogo && <Overlay color="#000" backgroundOpacity={0.65} />}
           {!hasLogo && (
@@ -123,8 +138,8 @@ export const Hero03 = ({
           h="100%"
           pos="relative"
           justify="center"
-          align={hasLogo? "" : "center"} // vertically center
-          pt={hasLogo? "80px" : "xs"}
+          align={hasLogo ? '' : 'center'} // vertically center
+          pt={hasLogo ? '80px' : 'xs'}
         >
           <Stack maw="var(--mantine-breakpoint-md)" align="center" gap="md" style={{ zIndex: 1 }}>
             {badge && (
@@ -138,7 +153,14 @@ export const Hero03 = ({
                 w={{ base: '100wv' }}
               />
             )}
-            <Image src={hasLogo ? "/subheading.png" : "/subheading_white.png"} pt={-10} mt={-20} pb="xl" w={hasLogo ? "60vw" : "85vw"} maw={{base: '300px', md: '450px'}} />
+            <Image
+              src={hasLogo ? '/subheading.png' : '/subheading_white.png'}
+              pt={-10}
+              mt={-20}
+              pb="xl"
+              w={hasLogo ? '60vw' : '85vw'}
+              maw={{ base: '300px', md: '450px' }}
+            />
             <motion.div
               initial={{ opacity: 0.0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}

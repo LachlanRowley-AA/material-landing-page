@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { sendGAEvent } from '@next/third-parties/google';
@@ -27,6 +27,7 @@ import {
 } from '@mantine/core';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { UserDetails } from '@/lib/UserDetails';
+import { PartnerContext } from '@/components/PartnerContext';
 
 export const AskForBankstatementFull = () => {
   const router = useRouter();
@@ -40,6 +41,8 @@ export const AskForBankstatementFull = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const partner = useContext(PartnerContext);
 
   const [userDetails, setUserDetails] = useState({
     firstName: '',
@@ -155,7 +158,7 @@ export const AskForBankstatementFull = () => {
             company_registration_date: '1444/11/11',
             campaign: 'Test Campaign',
             loan_term_requested: lendTimeframe,
-            ...(process.env.NEXT_PUBLIC_LEND_MODE === 'live' && { referrer_person_ref: 'Z2RLL54' }),
+            ...(process.env.NEXT_PUBLIC_LEND_MODE === 'live' && { referrer_person_ref: partner?.referrerId }),
           },
           lead_notes: [
             {

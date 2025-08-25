@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument } from 'pdf-lib';
 import QRCode from 'qrcode';
+import { partnerConfig } from '@/lib/partnerConfig';
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,9 +11,9 @@ export async function POST(req: NextRequest) {
     const pdfAttachment = body.Attachments?.find(
       (att: any) => att.ContentType === 'application/pdf'
     );
-    const sender : string = body.FromFull.Email;
-    let subject : string = body.Subject;
-    if(!subject) {
+    const sender: string = body.FromFull.Email;
+    let subject: string = body.Subject;
+    if (!subject) {
       subject = sender;
     }
 
@@ -46,22 +47,32 @@ export async function POST(req: NextRequest) {
     const updatedPdfBytes = await pdfDoc.save();
     const updatedPdfBase64 = Buffer.from(updatedPdfBytes).toString('base64');
 
+    const [partnerKey, partnerObj] =
+      Object.entries(partnerConfig).find(
+        ([, value]) => value.email === sender
+      ) || [];
+
+    const partnerName = partnerObj?.displayName;
+
+
     await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/eazytrademe_email`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         subject: 'Updated PDF with QR Code',
         textBody: 'Please find attached your updated PDF.',
         pdfBase64: updatedPdfBase64,
         filename: 'updated.pdf',
         to: subject,
-        cc: sender
-    })
+        cc: sender,
+        partnerName: partnerName || '',
+        partnerKey: partnerKey || ''
+      }),
     });
 
     return NextResponse.json({
       message: 'QR added successfully',
-      updatedPdfBase64
+      updatedPdfBase64,
     });
   } catch (err: any) {
     console.error(err);
@@ -69,7 +80,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-    // 5. Send to target API
+// 5. Send to target API
 //     const apiRes = await fetch(targetApiUrl, {
 //       method: 'POST',
 //       headers: { 'Content-Type': 'application/json' },
