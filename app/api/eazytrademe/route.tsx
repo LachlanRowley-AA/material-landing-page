@@ -63,7 +63,8 @@ export async function POST(req: NextRequest) {
         to: subject,
         cc: sender,
         partnerName: partnerName || '',
-        partnerKey: partnerKey || '',
+        partnerKey: partnerName
+         || '',
       }),
     });
 
