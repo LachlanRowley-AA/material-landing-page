@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { subject, textBody, pdfBase64, filename, to, cc, partnerName, partnerKey } = await req.json();
+    const { subject, textBody, to, cc, partnerName, partnerKey } = await req.json();
 
     if(!partnerKey || !partnerName) {
       return NextResponse.json({ error: 'Partner information missing' }, { status: 401 });
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         'X-Postmark-Server-Token': postmarkApiKey,
       },
       body: JSON.stringify({
-        From: 'lachlan@assetalley.com.au', // Must be a verified sender in Postmark
+        From: 'partner@eazytrade.com.au', // Must be a verified sender in Postmark
         To: to,
         Cc: cc,
         TemplateAlias: "code-your-own-1",
@@ -35,13 +35,6 @@ export async function POST(req: NextRequest) {
           "p_name": partnerName,
           "p_key": partnerKey,
         },
-        ...(pdfBase64 && { Attachments: [
-          {
-            Name: filename || 'document.pdf',
-            Content: pdfBase64,
-            ContentType: 'application/pdf'
-          }
-        ]})
       }),
     });
 
