@@ -4,6 +4,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import {
   IconArrowUp,
   IconCashOff,
+  IconCheck,
+  IconCircleCheck,
   IconCirclePercentageFilled,
   IconClock,
   IconCreditCardPay,
@@ -11,17 +13,20 @@ import {
   IconPlus,
   IconRepeat,
 } from '@tabler/icons-react';
-import { m, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import {
+  Accordion,
   Box,
   Button,
   Card,
   Center,
   Container,
+  Divider,
   Flex,
   Grid,
   Group,
   Image,
+  Modal,
   Radio,
   rem,
   SegmentedControl,
@@ -30,10 +35,11 @@ import {
   Switch,
   Text,
   TextInput,
+  Title,
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { AgreementWidget } from '@/components/AgreementWidget';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 
@@ -111,6 +117,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
   const HIGHLIGHT_COLOR = '#FFA500';
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
+  const [opened, { open, close }] = useDisclosure(false);
 
   type Product = {
     minimumAmount?: number;
@@ -134,6 +141,10 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
           icon: <IconCirclePercentageFilled size={18} />,
         },
       ],
+      moreInfo: {
+        desc: 'Buy now and get between 30 & 60 days interest free',
+        reasons: ['You have worked queued up', 'You are waiting for invoices to be paid'],
+      },
     },
     {
       minimumAmount: 10000,
@@ -167,6 +178,11 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
           icon: <IconCashOff size={18} />,
         },
       ],
+      moreInfo: {
+        desc: 'Enjoy longer term lengths to minimise the impact to your cashflow',
+        reasons: ['You need to make a large one-off payment'],
+        interest: 'Starting from 13.95% p.a',
+      },
       layout: (product: Product) => (
         <Grid px="xs" py="xs" align="center" justify="center">
           <Grid.Col span={12} mb={0}>
@@ -238,6 +254,14 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
           icon: <IconCreditCardPay size={18} />,
         },
       ],
+      moreInfo: {
+        desc: 'Set up a revolving line of credit',
+        reasons: [
+          'You need a payment extension for your account',
+          'You need to make frequent purchases',
+        ],
+        interest: 'Starting from 0.03% per day',
+      },
       layout: (product: Product) => (
         <div>
           <Text c="black" fz="md" ta="center" fw="bold" mb={4}>
@@ -335,6 +359,108 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
       ),
     },
   ];
+
+  const moreInfo = (
+    <Modal
+      opened={opened}
+      onClose={close}
+      size="auto"
+      styles={{ content: { background: '#f5f5f5' }, header: { background: '#f5f5f5' } }}
+      overlayProps={{
+        backgroundOpacity: 0.8,
+        c: theme.colors.secondary[0],
+        blur: 5,
+      }}
+    >
+      <Title mb="lg" ta="center" order={1} fw={500}>
+        Eazytrade Products
+      </Title>
+      <Grid maw="90vw" w={{ base: '80vw', md: '80vw' }} h={{ base: '70vh', md: '60vh' }}>
+        {products.map((product) => (
+          <Grid.Col span={{ base: 12, md: 4 }} key={product.key}>
+            <Card
+              shadow="0 4px 5px rgba(0,0,0,0.1)"
+              withBorder
+              mx={{ base: 'xs', md: 'lg' }}
+              px={{ base: 'xs', md: 'xl' }}
+              h="100%"
+              radius="md"
+            >
+              <Text fw={700} mb="md" fz="xl">
+                {product.title}
+              </Text>
+              {product.moreInfo?.desc && <Text mb="sm">{product.moreInfo.desc}</Text>}
+              <Accordion
+                multiple
+                defaultValue={isMobile ? [] : ['features', 'reasons']}
+                styles={{
+                  label: {
+                    fontWeight: 700,
+                  },
+                  control: {
+                    borderTop: '1px solid black',
+                    borderBottom: '1px solid black',
+                  },
+                  root: {
+                    height: '100%',
+                  },
+                }}
+              >
+                {/* <Accordion.Item key='product' value={product.moreInfo?.reason || ''} /> */}
+                <Accordion.Item key="reasons" value="reasons" mb={-2}>
+                  <Accordion.Control>Ideal when</Accordion.Control>
+                  <Accordion.Panel>
+                    {product.moreInfo.reasons.map((reason) => (
+                      <Group align="flex-start" key={reason}>
+                        <IconCheck color="green" />
+                        <Text style={{ wordBreak: 'break-word', whiteSpace: 'normal', flex: 1 }}>
+                          {reason}
+                        </Text>
+                      </Group>
+                    ))}
+                    <div style={{ marginBottom: '40px' }} />
+                  </Accordion.Panel>
+                </Accordion.Item>
+                <Accordion.Item key="features" value="features" mt={0}>
+                  <Accordion.Control>Features</Accordion.Control>
+                  <Accordion.Panel>
+                    {product.items.map((item) => (
+                      <Group align="flex-start" key={item.text} mb="xs">
+                        <IconCircleCheck color="green" />
+                        <Text style={{ wordBreak: 'break-word', whiteSpace: 'normal', flex: 1 }}>
+                          {item.text}
+                        </Text>
+                      </Group>
+                    ))}
+                    {product.moreInfo.interest && (
+                      <Group key={product.moreInfo.interest}>
+                        <IconCircleCheck color="green" />
+                        <Text style={{ wordBreak: 'break-word', whiteSpace: 'normal', flex: 1 }}>
+                          {product.moreInfo.interest}
+                        </Text>
+                      </Group>
+                    )}
+                  </Accordion.Panel>
+                </Accordion.Item>
+              </Accordion>
+              <Flex align="flex-end" justify="center">
+                <Button
+                  mt="xl"
+                  onClick={() => {
+                    setSelectedProduct(product.key);
+                    sessionStorage.setItem('notes', product.key);
+                    close();
+                  }}
+                >
+                  Select
+                </Button>
+              </Flex>
+            </Card>
+          </Grid.Col>
+        ))}
+      </Grid>
+    </Modal>
+  );
 
   useEffect(() => {
     if (!sessionStorage.getItem('loanAmount')) {
@@ -626,11 +752,11 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                             </Flex>
                           ))}
                         </Flex>
-                          {baseValue < (product.minimumAmount || 0) && (
-                            <Text c="red" fz="sm" fw={600}>
-                              Minimum ${product.minimumAmount?.toLocaleString()} required
-                            </Text>
-                          )}
+                        {baseValue < (product.minimumAmount || 0) && (
+                          <Text c="red" fz="sm" fw={600}>
+                            Minimum ${product.minimumAmount?.toLocaleString()} required
+                          </Text>
+                        )}
                       </Flex>
 
                       {isSelected && product.layout?.(product)}
@@ -638,6 +764,11 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                   </Card>
                 );
               })}
+              <Group justify="right" mx="xl">
+                <Button ml="xl" onClick={open}>
+                  Learn More
+                </Button>
+              </Group>
             </Stack>
           </Grid.Col>
           <Grid.Col span={isMobile ? 12 : 3} pt={isMobile ? 'xl' : 'md'} px="xl" pb="xl">
@@ -652,6 +783,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
             />
           </Grid.Col>
         </Grid>
+        {moreInfo}
       </Box>
     </Box>
   );

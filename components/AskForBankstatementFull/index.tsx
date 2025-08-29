@@ -254,6 +254,7 @@ export const AskForBankstatementFull = () => {
     handleUploadClick()
       .then((success) => {
         if (success) {
+          router.push('/thanks')
           handleStepChange('thankyou');
         }
         setLoading(false);
@@ -570,6 +571,7 @@ export const AskForBankstatementFull = () => {
                 sendGAEvent('event','illionSkipped');
                 const success = await handleUploadClick();
                 if (success) {
+                  router.push('/thanks')
                   handleStepChange('thankyou');
                 }
               }}
@@ -603,7 +605,7 @@ export const AskForBankstatementFull = () => {
         {step === 'thankyou' && (
           <div>
             <Text ta="center" size="lg" fw={600} c="green">
-              Thanks for submitting your details. We'll be in touch soon!
+              Thank you for submitting your details. We'll be in touch soon!
             </Text>
             <Text ta="center" size="sm" fw={400} c="black">
               Click outside this box to close

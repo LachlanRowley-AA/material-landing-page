@@ -14,9 +14,9 @@ export type Partner = {
 
 export const partnerConfig: Record<string, Partner> = {
   default: { displayName: 'Eazytrade Partner', hasHighTouch: false },
-  dbm: { displayName: 'DBM', accountGet: DBM_GET, referrerId: 'Z2RLL54', hasHighTouch: true, email: 'lachlan@assetalley.com.au'},
+  dbm: { displayName: 'DBM', accountGet: DBM_GET, referrerId: 'Z2RLL54', hasHighTouch: true},
   sydneytools: { displayName: 'Sydney Tools', hasHighTouch: false },
   nordin: { displayName: 'Nordin', hasHighTouch: false },
-  bmsyd: { displayName: 'BM Sydney', hasHighTouch: false },
+  bmsyd: { displayName: 'BM Sydney', hasHighTouch: false, email: 'lachlan@assetalley.com.au', referrerId: 'eoLZqdr' },
   assetalley: { displayName: 'AssetAlley', hasHighTouch: false, email: 'lachlan.rowley1@hotmail.com.au' },
 };

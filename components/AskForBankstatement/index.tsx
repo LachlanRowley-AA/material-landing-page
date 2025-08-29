@@ -309,6 +309,7 @@ export const AskForBankstatement = () => {
     // Proceed with async API logic in the background
     handleUploadClick().then((success) => {
       if (success) {
+        router.push('/thanks')
         handleStepChange('thankyou');
       }
       setLoading(false);
