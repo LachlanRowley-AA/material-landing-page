@@ -8,6 +8,7 @@ import {
     Testimonial,
     Why,
     Intro,
+    Products
  } from '@/components/Partner'
 import {
     Footer01
@@ -27,6 +28,7 @@ export default function PartnerPage() {
             <Comparison />
             <Journey />
             <Example />
+            {/* <Products /> */}
             <Testimonial />
             <section id ="contact"><ContactForm /></section>
             <Footer01 />

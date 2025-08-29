@@ -6,12 +6,13 @@ import { UnsavedChangesProvider } from '@/components/unsavedChanges';
 // import Login from '@/components/LoginComponent';
 import { Calculator as NewOpt } from '@/components/CalculatorOptions/Calculator';
 import { Calculator as CalculatorMerged } from '@/components/CalculatorMerged/Calculator';
-
+import { Products } from '@/components/Partner'
 
 export default function Page() {
     return(
-        <UnsavedChangesProvider>
-            <CalculatorMerged />
-        </UnsavedChangesProvider>
+        // <UnsavedChangesProvider>
+        //     <CalculatorMerged />
+        // </UnsavedChangesProvider>
+        <Products />
     )
 }

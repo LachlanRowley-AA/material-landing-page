@@ -2,14 +2,13 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import {
-  IconArrowUp,
   IconCashOff,
   IconCheck,
   IconCircleCheck,
   IconCirclePercentageFilled,
   IconClock,
   IconCreditCardPay,
-  IconLockOpenOff,
+  IconLockOpen2,
   IconPlus,
   IconRepeat,
 } from '@tabler/icons-react';
@@ -21,22 +20,16 @@ import {
   Card,
   Center,
   Container,
-  Divider,
   Flex,
   Grid,
   Group,
-  Image,
   Modal,
   Radio,
   rem,
-  SegmentedControl,
   Slider,
   Stack,
-  Switch,
   Text,
   TextInput,
-  Title,
-  UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
@@ -76,44 +69,19 @@ const calculateDailyInterest = (loanAmount: number, interestRate: number, days: 
 
 const Icon = ({ children }: { children: ReactNode }) => <Center>{children}</Center>;
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-  const theme = useMantineTheme();
-  if (active && payload && payload.length) {
-    return (
-      <Box
-        p="sm"
-        style={{
-          backgroundColor: 'white',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-        }}
-      >
-        <Text fw="500" c="black">{`${label}`}</Text>
-        <Text
-          c={theme.colors.secondary[0]}
-        >{`Est. Monthly Payment: $${payload[0].value.toLocaleString()}`}</Text>
-      </Box>
-    );
-  }
-  return null;
-};
 
 type CalculatorProps = {
   startingAmount?: number;
   prefilled?: boolean;
 };
 
-export const Calculator = ({ startingAmount = 20000, prefilled = true }: CalculatorProps) => {
+export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
   const [baseValue, setBaseValue] = useState(
     startingAmount ? Math.max(Math.min(startingAmount, MAX_LOAN_AMOUNT), MIN_LOAN_AMOUNT) : 10000
   );
-  const [interestRate, setInterestRate] = useState(DEFAULT_INTEREST_RATE);
-  const [customTimeframe, setCustomTimeframe] = useState('12');
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
 
-  const timeframes = [6, 12, 24, 36];
   const HIGHLIGHT_COLOR = '#FFA500';
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
@@ -181,7 +149,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
       moreInfo: {
         desc: 'Enjoy longer term lengths to minimise the impact to your cashflow',
         reasons: ['You need to make a large one-off payment'],
-        interest: 'Starting from 13.95% p.a',
+        interest: 'Interest starting from 11.45% p.a',
       },
       layout: (product: Product) => (
         <Grid px="xs" py="xs" align="center" justify="center">
@@ -260,9 +228,9 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
           'You need a payment extension for your account',
           'You need to make frequent purchases',
         ],
-        interest: 'Starting from 0.03% per day',
+        interest: 'Interest starting from 0.03% per day',
       },
-      layout: (product: Product) => (
+      layout: () => (
         <div>
           <Text c="black" fz="md" ta="center" fw="bold" mb={4}>
             Rates starting from 0.03% a day.
@@ -360,33 +328,32 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
     },
   ];
 
+  const modalbg = '#f6f6f6';
   const moreInfo = (
     <Modal
       opened={opened}
       onClose={close}
       size="auto"
-      styles={{ content: { background: '#f5f5f5' }, header: { background: '#f5f5f5' } }}
+      styles={{ content: { background: modalbg }, header: { background: modalbg } }}
       overlayProps={{
         backgroundOpacity: 0.8,
-        c: theme.colors.secondary[0],
+        c: 'red',
         blur: 5,
       }}
+      radius="lg"
     >
-      <Title mb="lg" ta="center" order={1} fw={500}>
-        Eazytrade Products
-      </Title>
-      <Grid maw="90vw" w={{ base: '80vw', md: '80vw' }} h={{ base: '70vh', md: '60vh' }}>
+      <Grid w="100%">
         {products.map((product) => (
-          <Grid.Col span={{ base: 12, md: 4 }} key={product.key}>
+          <Grid.Col span={{ base: 12, md: 4 }} key={product.key} style={{ minWidth: 0 }}>
             <Card
-              shadow="0 4px 5px rgba(0,0,0,0.1)"
+              shadow="0 3px 8px rgba(0,0,0,0.2)"
               withBorder
               mx={{ base: 'xs', md: 'lg' }}
               px={{ base: 'xs', md: 'xl' }}
               h="100%"
-              radius="md"
+              radius="lg"
             >
-              <Text fw={700} mb="md" fz="xl">
+              <Text fw={700} mb="md" fz="xl" ta="center">
                 {product.title}
               </Text>
               {product.moreInfo?.desc && <Text mb="sm">{product.moreInfo.desc}</Text>}
@@ -407,26 +374,40 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                 }}
               >
                 {/* <Accordion.Item key='product' value={product.moreInfo?.reason || ''} /> */}
-                <Accordion.Item key="reasons" value="reasons" mb={-2}>
+                <Accordion.Item key="reasons" value="reasons" mb={-2} w="100%">
                   <Accordion.Control>Ideal when</Accordion.Control>
                   <Accordion.Panel>
                     {product.moreInfo.reasons.map((reason) => (
                       <Group align="flex-start" key={reason}>
-                        <IconCheck color="green" />
-                        <Text style={{ wordBreak: 'break-word', whiteSpace: 'normal', flex: 1 }}>
+                        <IconCheck color="#01E194" />
+                        <Text
+                          style={{
+                            wordBreak: 'break-word',
+                            whiteSpace: 'normal',
+                            flex: 1,
+                            maxWidth: '100%', // keeps inside the card
+                          }}
+                        >
                           {reason}
-                        </Text>
+                        </Text>{' '}
                       </Group>
                     ))}
                     <div style={{ marginBottom: '40px' }} />
                   </Accordion.Panel>
                 </Accordion.Item>
-                <Accordion.Item key="features" value="features" mt={0}>
+                <Accordion.Item key="features" value="features" mt={0} bd="0px">
                   <Accordion.Control>Features</Accordion.Control>
                   <Accordion.Panel>
+                    <Group align="flex-start" mb="xs">
+                      <IconLockOpen2 color="#01E194" />
+                      <Text style={{ wordBreak: 'break-word', whiteSpace: 'normal', flex: 1 }}>
+                        Unsecured
+                      </Text>
+                    </Group>
+
                     {product.items.map((item) => (
                       <Group align="flex-start" key={item.text} mb="xs">
-                        <IconCircleCheck color="green" />
+                        <IconCircleCheck color="#01E194" />
                         <Text style={{ wordBreak: 'break-word', whiteSpace: 'normal', flex: 1 }}>
                           {item.text}
                         </Text>
@@ -434,7 +415,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                     ))}
                     {product.moreInfo.interest && (
                       <Group key={product.moreInfo.interest}>
-                        <IconCircleCheck color="green" />
+                        <IconCircleCheck color="#01E194" />
                         <Text style={{ wordBreak: 'break-word', whiteSpace: 'normal', flex: 1 }}>
                           {product.moreInfo.interest}
                         </Text>
@@ -443,14 +424,19 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                   </Accordion.Panel>
                 </Accordion.Item>
               </Accordion>
+              <Text fw={600}>
+                Minimum financed amount: ${product.minimumAmount.toLocaleString()}
+              </Text>
               <Flex align="flex-end" justify="center">
                 <Button
+                  bg="#1fcfc3"
                   mt="xl"
                   onClick={() => {
                     setSelectedProduct(product.key);
                     sessionStorage.setItem('notes', product.key);
                     close();
                   }}
+                  disabled={product.minimumAmount > baseValue}
                 >
                   Select
                 </Button>
@@ -765,7 +751,7 @@ export const Calculator = ({ startingAmount = 20000, prefilled = true }: Calcula
                 );
               })}
               <Group justify="right" mx="xl">
-                <Button ml="xl" onClick={open}>
+                <Button ml="xl" onClick={open} bg="#1fcfc3">
                   Learn More
                 </Button>
               </Group>
