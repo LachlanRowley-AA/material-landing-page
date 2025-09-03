@@ -79,10 +79,13 @@ export const Example = () => {
               </Stack>
               <Stack gap={0}>
                 <Canvas
+                  options={{
+                    width: 100
+                  }}
                   key='qr-code'
                   text='https://www.eazytrade.com.au/demo'
                 />
-                <Text ta="center">Scan me</Text>
+                <Text ta="center" pt={0} mt={0}>Scan me</Text>
               </Stack>
             </Group>
 
@@ -125,12 +128,6 @@ export const Example = () => {
                   <td>$100.00</td>
                   <td>$300.00</td>
                 </tr>
-                <tr>
-                  <td>Material</td>
-                  <td>1</td>
-                  <td>$12.00</td>
-                  <td>$12.00</td>
-                </tr>
               </tbody>
             </Table>
 
@@ -141,16 +138,16 @@ export const Example = () => {
               <Stack gap={4} style={{ minWidth: rem(200) }}>
                 <Group align="apart">
                   <Text color="dimmed">Subtotal</Text>
-                  <Text>$1,312.00</Text>
+                  <Text>$1,300.00</Text>
                 </Group>
                 <Group align="apart">
                   <Text color="dimmed">GST (10%)</Text>
-                  <Text>$131.20</Text>
+                  <Text>$130.00</Text>
                 </Group>
                 <Divider />
                 <Group align="apart" fw={700} style={{ fontSize: rem(18) }}>
                   <Text>Total</Text>
-                  <Text>$1,443.20</Text>
+                  <Text>$1,430.00</Text>
                 </Group>
               </Stack>
             </Group>

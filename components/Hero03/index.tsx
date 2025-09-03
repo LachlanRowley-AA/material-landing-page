@@ -64,7 +64,6 @@ export const Hero03 = ({
         setHasLogo(isValid);
         if (isValid) {
           setTextColor('black');
-          console.log('valid');
         }
       } catch (error) {
         console.log('error');
@@ -94,20 +93,8 @@ export const Hero03 = ({
           style={{
             zIndex: 0,
             overflow: 'hidden',
-    //         border: '20px solid', // thickness of the "tape"
-    //         borderImage: `
-    //   repeating-linear-gradient(
-    //     135deg,
-    //     #000000 0 15px,
-    //     #ffff00 15px 30px
-    //   ) 30
-    // `,
-
           }}
-          // bg={`linear-gradient(270deg, #0e5287aa, #149a91ff)`}
-          bg={`linear-gradient(180deg, white, 80%, #149a9122)`}
-          // bg='white'
-          // bg='grey'
+          bg='linear-gradient(180deg, white, 80%, #149a9122)'
         >
           {!hasLogo && <Overlay color="#000" backgroundOpacity={0.65} />}
           {!hasLogo && (

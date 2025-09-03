@@ -11,13 +11,17 @@ import { Header } from '@/components/Partner';
 import { UnsavedChangesProvider } from '@/components/unsavedChanges';
 import { UseCases } from '@/components/UseCases/Usecases';
 import { Partner } from '@/lib/partnerConfig';
+import { Calculator as CalculatorMerged } from '@/components/CalculatorMergedSlider/Calculator';
+import { useMediaQuery } from '@mantine/hooks';
+import { useMantineTheme } from '@mantine/core';
 
 interface LowTouchClientProps {
   partner?: Partner;
 }
 
 export default function LowTouchClient({ partner }: LowTouchClientProps) {
-  console.log('LowTouchClient rendered with partner:', partner);
+  const theme = useMantineTheme();
+    const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
   return (
     <div
       style={{
@@ -38,7 +42,8 @@ export default function LowTouchClient({ partner }: LowTouchClientProps) {
       <UnsavedChangesProvider>
         <Hero03 partner={partner?.displayName} />
         <section id="contact">
-          <Calculator prefilled={false} />
+          {/* <Calculator prefilled={false} /> */}
+          {isMobile ? <Calculator prefilled={false} /> : <CalculatorMerged /> }
         </section>
         <Feature02 />
         {/* <Login partner={partner} /> */}

@@ -69,6 +69,7 @@
     "@types/qrcode": "^1",
     "@types/react": "19.0.12",
     "babel-loader": "^10.0.0",
+    "babel-plugin-react-compiler": "^19.1.0-rc.3",
     "eslint": "^9.23.0",
     "eslint-config-mantine": "^4.0.3",
     "eslint-plugin-jsx-a11y": "^6.10.2",

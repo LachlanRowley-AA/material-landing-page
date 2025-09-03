@@ -69,7 +69,6 @@ const calculateDailyInterest = (loanAmount: number, interestRate: number, days: 
 
 const Icon = ({ children }: { children: ReactNode }) => <Center>{children}</Center>;
 
-
 type CalculatorProps = {
   startingAmount?: number;
   prefilled?: boolean;
@@ -138,11 +137,11 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
       ],
       items: [
         {
-          text: 'Longer term lengths',
+          text: '6-36 month term lengths',
           icon: <IconClock size={18} />,
         },
         {
-          text: 'No penalty interest for early payout',
+          text: 'For if you\'re purchasing everything at once',
           icon: <IconCashOff size={18} />,
         },
       ],
@@ -165,7 +164,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
               const isSelected = selectedTerm === term.length;
 
               return (
-                <Grid.Col span={{ base: 12, md: 6 }} key={term.length} mb="xs">
+                <Grid.Col span={{ base: 6, md: 6 }} key={term.length} mb="xs">
                   <Button
                     p={2}
                     w="100%"
@@ -184,10 +183,10 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                     mb="xs"
                   >
                     <Box w="100%" py={0} my={0}>
-                      <Text fw={600} c="black" fz="sm" ta="center" my={0}>
+                      <Text fw={600} c="black" fz="xs" ta="center" my={0}>
                         {term.length} months
                       </Text>
-                      <Text c="black" fz="lg" fw="bold" ta="center" mt={4}>
+                      <Text c="black" fz="md" fw="bold" ta="center" mt={4}>
                         $
                         {calculateCustomRepayment(baseValue, term.rate, term.length).toLocaleString(
                           'en-US',
@@ -197,7 +196,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                           }
                         )}
                       </Text>
-                      <Text c="black" fz="xs" ta="center">
+                      <Text c="black" fz="xs" ta="center" style={{textWrap: 'balance'}}>
                         {isMobile ? 'est.' : 'estimated'} monthly repayment
                       </Text>
                     </Box>
@@ -218,7 +217,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
           icon: <IconRepeat size={18} />,
         },
         {
-          text: 'Payout anytime',
+          text: 'For if you need to make frequent purchases',
           icon: <IconCreditCardPay size={18} />,
         },
       ],
@@ -236,7 +235,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
             Rates starting from 0.03% a day.
           </Text>
 
-          <Flex align="stretch" gap="xs" mb="xs">
+          <Flex align="stretch" gap={4} mb="xs">
             <Box
               w="100%"
               py={0}
@@ -307,10 +306,10 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                 transition: 'all 0.3s ease',
               }}
             >
-              <Text fw={600} c="black" fz="sm" ta="center" my={0}>
+              <Text c="black" fz="xs" ta="center" my={0}>
                 An additional
               </Text>
-              <Text c="black" fz={{ base: 'md', md: 'lg' }} fw="bold" ta="center" mt={4}>
+              <Text c="black" fz={{ base: 'sm', md: 'lg' }} fw="bold" ta="center" mt={4}>
                 $
                 {calculateDailyInterest(baseValue, 0.04, 31).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
@@ -318,7 +317,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                 })}{' '}
                 / month
               </Text>
-              <Text fw={600} c="black" fz="sm" ta="center" my={0}>
+              <Text fw='normal' c="black" fz="xs" ta="center" my={0}>
                 Until principal is paid off
               </Text>
             </Box>
@@ -341,6 +340,8 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
         blur: 5,
       }}
       radius="lg"
+      fullScreen={isMobile}
+      title=""
     >
       <Grid w="100%">
         {products.map((product) => (
@@ -349,11 +350,11 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
               shadow="0 3px 8px rgba(0,0,0,0.2)"
               withBorder
               mx={{ base: 'xs', md: 'lg' }}
-              px={{ base: 'xs', md: 'xl' }}
+              px={{ base: 'xl', md: 'xl' }}
               h="100%"
               radius="lg"
             >
-              <Text fw={700} mb="md" fz="xl" ta="center">
+              <Text fw={800} mb="md" fz="xl" ta="center">
                 {product.title}
               </Text>
               {product.moreInfo?.desc && <Text mb="sm">{product.moreInfo.desc}</Text>}
@@ -372,6 +373,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                     height: '100%',
                   },
                 }}
+                py="sm"
               >
                 {/* <Accordion.Item key='product' value={product.moreInfo?.reason || ''} /> */}
                 <Accordion.Item key="reasons" value="reasons" mb={-2} w="100%">
@@ -392,7 +394,7 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                         </Text>{' '}
                       </Group>
                     ))}
-                    <div style={{ marginBottom: '40px' }} />
+                    {!isMobile && (<div style={{ marginBottom: '40px' }} />)}
                   </Accordion.Panel>
                 </Accordion.Item>
                 <Accordion.Item key="features" value="features" mt={0} bd="0px">
@@ -728,10 +730,9 @@ export const Calculator = ({ startingAmount = 20000 }: CalculatorProps) => {
                             <Flex key={item.text} align="center" gap={4}>
                               <Icon>{item.icon}</Icon>
                               <Text
-                                c="black"
-                                fz={{ base: 'xs', md: 'sm' }}
-                                fw={600}
-                                style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}
+                                c="black"                              
+                                fw={500}
+                                style={{ whiteSpace: 'normal', fontSize: 11 }}
                               >
                                 {item.text}
                               </Text>
