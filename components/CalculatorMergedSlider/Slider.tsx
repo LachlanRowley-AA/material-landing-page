@@ -143,7 +143,7 @@ export default function CalculatorSlider() {
             />
             <Stack gap={0}>
               <Text size="sm" fs="italic">
-                Finance available between $5,000 and $500,000* regardless of outstanding balance.
+                Finance available between $10,000 and $500,000
                 (Subject to lender approval and eligibility criteria)
               </Text>
               <Slider

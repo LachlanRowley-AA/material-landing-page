@@ -1,48 +1,35 @@
 'use client';
 
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import {
   IconCashOff,
-  IconCheck,
   IconCircleCheck,
   IconCirclePercentageFilled,
   IconClock,
   IconCreditCardPay,
-  IconLockOpen2,
-  IconPlus,
   IconRepeat,
 } from '@tabler/icons-react';
 import {
   Accordion,
-  Box,
   Button,
   Card,
-  Center,
   Flex,
   Grid,
   Group,
-  Modal,
-  Radio,
-  Stack,
   Text,
   Title,
   useMantineTheme,
 } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery } from '@mantine/hooks';
 import { JumboTitle } from '@/components/JumboTitle/JumboTitle';
 import { CalculatorContext } from './CalculatorContext';
 
-const Icon = ({ children }: { children: ReactNode }) => <Center>{children}</Center>;
 
 export default function CalculatorModal() {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.md})`);
   const ctx = useContext(CalculatorContext);
   const { baseValue, defaultInterestRate } = ctx;
-
-  const HIGHLIGHT_COLOR = '#FFA500';
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-  const [selectedTerm, setSelectedTerm] = useState<number | null>(null);
 
   type Product = {
     minimumAmount?: number;
@@ -158,7 +145,6 @@ export default function CalculatorModal() {
     },
   ];
 
-  const modalbg = '#f6f6f6';
   const moreInfo = (
     <div>
       <Group justify="center" py="md">
@@ -268,7 +254,6 @@ export default function CalculatorModal() {
                   bg="#1fcfc3"
                   mt="xl"
                   onClick={() => {
-                    setSelectedProduct(product.key);
                     sessionStorage.setItem('notes', product.key);
                     close();
                   }}

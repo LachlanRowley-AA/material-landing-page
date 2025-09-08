@@ -2,7 +2,6 @@
 
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import {
-  IconCashOff,
   IconCheck,
   IconCircleCheck,
   IconCirclePercentageFilled,
@@ -72,22 +71,22 @@ export default function CalculatorProducts({ onProductClick, incompleteClick }: 
   };
 
   const products = [
-    {
-      minimumAmount: 0,
-      logo: '/Sydney Tools/sydney_tools.svg',
-      key: 'Sydney Tools Pay',
-      title: 'Sydney Tools Pay',
-      items: [
-        {
-          text: 'Interest free account for 30 - 60 days',
-          icon: <IconCirclePercentageFilled size={18} />,
-        },
-      ],
-      moreInfo: {
-        desc: 'Buy now and get between 30 & 60 days interest free',
-        reasons: ['You have worked queued up', 'You are waiting for invoices to be paid'],
-      },
-    },
+    // {
+    //   minimumAmount: 0,
+    //   logo: '/Sydney Tools/sydney_tools.svg',
+    //   key: 'Sydney Tools Pay',
+    //   title: 'Sydney Tools Pay',
+    //   items: [
+    //     {
+    //       text: 'Interest free account for 30 - 60 days',
+    //       icon: <IconCirclePercentageFilled size={18} />,
+    //     },
+    //   ],
+    //   moreInfo: {
+    //     desc: 'Buy now and get between 30 & 60 days interest free',
+    //     reasons: ['You have worked queued up', 'You are waiting for invoices to be paid'],
+    //   },
+    // },
     {
       minimumAmount: 10000,
       key: 'FlexPay',
@@ -286,7 +285,7 @@ export default function CalculatorProducts({ onProductClick, incompleteClick }: 
                 transition: 'all 0.3s ease',
               }}
             >
-              <Text fw={600} c="black" fz="xs" ta="center" my={0}>
+              <Text fw={600} c="black" fz="sm" ta="center" my={0}>
                 An additional
               </Text>
               <Text c="black" fz={{ base: 'md', md: 'lg' }} fw="bold" ta="center" mt={4}>
@@ -324,7 +323,7 @@ export default function CalculatorProducts({ onProductClick, incompleteClick }: 
     >
       <Grid w="100%">
         {products.map((product) => (
-          <Grid.Col span={{ base: 12, md: 4 }} key={product.key} style={{ minWidth: 0 }}>
+          <Grid.Col span={{ base: 12, md: 6 }} key={product.key} style={{ minWidth: 0 }}>
             <Card
               shadow="0 3px 8px rgba(0,0,0,0.2)"
               withBorder
@@ -439,7 +438,7 @@ export default function CalculatorProducts({ onProductClick, incompleteClick }: 
   });
 
   useEffect(() => {
-    let p = products.find((i) => i.key === selectedProduct);
+    const p = products.find((i) => i.key === selectedProduct);
     if (!p || p?.minimumAmount > baseValue) {
       setSelectedProduct('');
       incompleteClick();

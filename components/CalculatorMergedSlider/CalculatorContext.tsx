@@ -2,9 +2,9 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 
 // Constants
 export const MAX_LOAN_AMOUNT = 500000;
-export const MIN_LOAN_AMOUNT = 5000;
+export const MIN_LOAN_AMOUNT = 10000;
 export const DEFAULT_INTEREST_RATE = 13.95;
-export const startingAmount = 5000;
+export const startingAmount = 10000;
 export const calculateCustomRepayment = (
   loanAmount: number,
   interestRate: number,
