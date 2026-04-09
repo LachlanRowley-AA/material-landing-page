@@ -2886,19 +2886,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pdfme/schemas@npm:^5.4.0":
-  version: 5.4.2
-  resolution: "@pdfme/schemas@npm:5.4.2"
+"@pdfme/schemas@npm:^5.5.10":
+  version: 5.5.10
+  resolution: "@pdfme/schemas@npm:5.5.10"
   dependencies:
     "@pdfme/pdf-lib": "npm:*"
     air-datepicker: "npm:^3.6.0"
-    bwip-js: "npm:^4.6.0"
+    bwip-js: "npm:^4.8.0"
     date-fns: "npm:^4.1.0"
+    dompurify: "npm:^3.3.3"
     fontkit: "npm:^2.0.2"
-    lucide: "npm:^0.525.0"
+    lucide: "npm:^0.577.0"
   peerDependencies:
     "@pdfme/common": "*"
-  checksum: 10c0/0ab33c71936b3b8807d091ec7fd6d1859cfe6829adf27b2e66a11f1523b69b50e3d04349c8bdb370f7be5d9cfa19413d1582cb247bdfc54021e2c42c304545e7
+  checksum: 10c0/3239cd44f7649db6e56756c389bb12dbfae134ef09d9083969593df35a3c347643fd3640a6563141ffe5ac5ca8aa5f950b62d43101adee80f4754727a9b52716
   languageName: node
   linkType: hard
 
@@ -5507,12 +5508,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bwip-js@npm:^4.6.0":
-  version: 4.7.0
-  resolution: "bwip-js@npm:4.7.0"
+"bwip-js@npm:^4.8.0":
+  version: 4.9.0
+  resolution: "bwip-js@npm:4.9.0"
   bin:
     bwip-js: bin/bwip-js.js
-  checksum: 10c0/e1c7bb2e1394fa07d0314726a93bf296237edba85ad26c0c91028e124b3dddb622612a1678c368c5e979d74ff276291f5b47c047df0c3b649a29f1732809c2e4
+  checksum: 10c0/dbc3f4ea88f2581a5f3e13ef46b8a89305717cce40fa05b57bf5e92b20a810d69c5c1641dc7a1b20fe89d986f1a343ef4a2641d676c22f36ad34baa0692c57d0
   languageName: node
   linkType: hard
 
@@ -6879,6 +6880,18 @@ __metadata:
     "@types/trusted-types":
       optional: true
   checksum: 10c0/c8f8e5b0879a0d93c84a2e5e78649a47d0c057ed0f7850ca3d573d2cca64b84fb1ff85bd4b20980ade69c4e5b80ae73011340f1c2ff375c7ef98bb8268e1d13a
+  languageName: node
+  linkType: hard
+
+"dompurify@npm:^3.3.3":
+  version: 3.3.3
+  resolution: "dompurify@npm:3.3.3"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10c0/097c14a21a3f6cb95beded9ecd255f7c3512c42767b048390c747b0fe35736f6a71e02320fc50a9ac2be645834b463e4760915d595d502a56452daf339d0ea9c
   languageName: node
   linkType: hard
 
@@ -10362,10 +10375,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide@npm:^0.525.0":
-  version: 0.525.0
-  resolution: "lucide@npm:0.525.0"
-  checksum: 10c0/14ab51b6ab84289dbe4cdde4aa78b2e72a007513ec855f908b02b8bd0bf80a562cf6f19052965665c583b3ba295c97bac1f4578e554455b24c9446f9a32d2fc7
+"lucide@npm:^0.577.0":
+  version: 0.577.0
+  resolution: "lucide@npm:0.577.0"
+  checksum: 10c0/82ec050e03a21268d00c76158accb0caf35c3417964e0f5755a6681a46d91022c224305059e8157fa0b117c8abab83f08392e4332e4ee31cf4098e7cacacb89f
   languageName: node
   linkType: hard
 
@@ -10454,7 +10467,7 @@ __metadata:
     "@next/third-parties": "npm:^15.3.3"
     "@pdfme/common": "npm:^5.4.0"
     "@pdfme/generator": "npm:^5.4.0"
-    "@pdfme/schemas": "npm:^5.4.0"
+    "@pdfme/schemas": "npm:^5.5.10"
     "@pdfme/ui": "npm:^5.4.0"
     "@storybook/nextjs": "npm:^8.6.8"
     "@storybook/react": "npm:^8.6.8"
