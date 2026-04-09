@@ -27,7 +27,7 @@
     "@next/third-parties": "^15.3.3",
     "@pdfme/common": "^5.4.0",
     "@pdfme/generator": "^5.4.0",
-    "@pdfme/schemas": "^5.4.0",
+    "@pdfme/schemas": "^5.5.10",
     "@pdfme/ui": "^5.4.0",
     "@supabase/supabase-js": "^2.52.0",
     "@tabler/icons-react": "^3.31.0",
