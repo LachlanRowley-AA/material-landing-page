@@ -2874,15 +2874,15 @@ __metadata:
   linkType: hard
 
 "@pdfme/pdf-lib@npm:*":
-  version: 5.4.2
-  resolution: "@pdfme/pdf-lib@npm:5.4.2"
+  version: 6.0.6
+  resolution: "@pdfme/pdf-lib@npm:6.0.6"
   dependencies:
     "@pdf-lib/standard-fonts": "npm:^1.0.0"
     "@pdf-lib/upng": "npm:^1.0.1"
     color: "npm:^4.2.3"
-    node-html-better-parser: "npm:^1.5.1"
+    node-html-better-parser: "npm:^1.5.8"
     pako: "npm:^2.1.0"
-  checksum: 10c0/2a8d9c3cff1040d71f6a2c3e5cb8328e52e68b05214cd39da268b91c4d6a3dad5bd55bcacf06afd792cd28600da5c624aa5c6abb48e8ea58f22a30f67e4db305
+  checksum: 10c0/cb0a6f571f19d7706ce6de7329f655abe08079af97b54e8bb5975e57c68e4c10bf5320c22d68648e31ff1e6b8e1b68367f69751313d52ea18064f2f92ef3822d
   languageName: node
   linkType: hard
 
@@ -11065,12 +11065,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-html-better-parser@npm:^1.5.1":
-  version: 1.5.3
-  resolution: "node-html-better-parser@npm:1.5.3"
+"node-html-better-parser@npm:^1.5.8":
+  version: 1.5.8
+  resolution: "node-html-better-parser@npm:1.5.8"
   dependencies:
     html-entities: "npm:^2.3.2"
-  checksum: 10c0/90cb8564a36da8da228790ab4df2e36deb411aae549d44478f7b2bf4b2c3a6e3cf836999b2a17378333342790768afa7441ffe0f8a7ce625964f076bb70e3962
+  checksum: 10c0/e51ba2a58223bcf21dc6205bbb7bd3d4f16e3557b6eea4e3b4b79a657a3b7230083be0be129e372d6d3f164978f9c2275ee9453a929773aa2c575927464b204c
   languageName: node
   linkType: hard
 
